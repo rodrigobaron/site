@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title><![CDATA[Rodrigo Baron]]></title>
+        <description><![CDATA[Rodrigo Baron]]></description>
+        <link>https://rodrigobaron.com</link>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Thu, 09 Dec 2021 01:42:03 GMT</lastBuildDate>
+        <atom:link href="https://rodrigobaron.com/rss.xml" rel="self" type="application/rss+xml"/>
+        <item>
+            <title><![CDATA[Hello K8s: Installation]]></title>
+            <description><![CDATA[The first post of a series of three to setup kubernetes local lab/dev using Ubuntu Server 20.04 as master and node.]]></description>
+            <link>/posts/hello-k8s-install</link>
+            <guid isPermaLink="true">/posts/hello-k8s-install</guid>
+            <category><![CDATA[post-series]]></category>
+            <category><![CDATA[k8s]]></category>
+            <category><![CDATA[ubuntu]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Thu, 09 Dec 2021 00:00:00 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

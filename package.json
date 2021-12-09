@@ -1,0 +1,26 @@
+{
+  "name": "site",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rodrigo Baorn <baron.rodrigo0@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "node ./scripts/gen-rss.js && next build",
+    "format": "prettier --write \"**/*.{js,jsx,json,md,mdx}\""
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.2",
+    "next": "^10.0.0",
+    "nextra": "^0.2.6",
+    "nextra-theme-blog": "^0.1.2",
+    "prism-react-renderer": "^1.1.1",
+    "prismjs": "^1.22.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "rss": "^1.2.2"
+  },
+  "devDependencies": {
+    "prettier": "2.0.5"
+  }
+}
