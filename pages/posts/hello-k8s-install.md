@@ -225,7 +225,7 @@ kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/
 
 ### Next steps
 
-We reached the end of first section where we covered the installation and the setup of basic network components, in the next section we will see about the storage setup.
+We reached the end of first post where we covered the installation and the setup of basic network components in the next post we will see about resources management.
 
 ## References
 
