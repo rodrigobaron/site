@@ -4,14 +4,14 @@
         <description><![CDATA[Rodrigo Baron]]></description>
         <link>https://rodrigobaron.com</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Thu, 09 Dec 2021 01:42:03 GMT</lastBuildDate>
+        <lastBuildDate>Thu, 09 Dec 2021 02:25:46 GMT</lastBuildDate>
         <atom:link href="https://rodrigobaron.com/rss.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Hello K8s: Installation]]></title>
             <description><![CDATA[The first post of a series of three to setup kubernetes local lab/dev using Ubuntu Server 20.04 as master and node.]]></description>
             <link>/posts/hello-k8s-install</link>
             <guid isPermaLink="true">/posts/hello-k8s-install</guid>
-            <category><![CDATA[post-series]]></category>
+            <category><![CDATA[tutorial]]></category>
             <category><![CDATA[k8s]]></category>
             <category><![CDATA[ubuntu]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
