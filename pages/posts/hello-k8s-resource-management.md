@@ -1,0 +1,162 @@
+---
+title: "Hello K8s: Resource Management"
+date: 2021/12/16
+description: This is the second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.
+tag: tutorial, k8s, ingress
+author: Rodrigo Baron
+---
+
+# Hello K8s: Resource Management
+
+This is the second post from the series of K8s lab/dev setup, [previous](/posts/hello-k8s-install) we installed the container engine and setup kubeadm. This post cover ingress and storage resource management along with Kubernetes Dashboard deployment, allowing manage the platform using an web application. I actually don't use much the Dashboard but that could be useful to have and help understand K8s components.
+
+## Storage
+
+While most common workloads is stateless, running stateful services is the core feature of an application. Containers have ephemeral storage which means the data is lost when the container shutdown, to provide an persistent storage in K8s we need have an [StorageClass]([https://kubernetes.io/docs/concepts/storage/storage-classes/](https://kubernetes.io/docs/concepts/storage/storage-classes/)) implementation and then describe an [Volume]([https://kubernetes.io/docs/concepts/storage/volumes/](https://kubernetes.io/docs/concepts/storage/volumes/)), we can attach the volume directly or claim it by [PersistentVolumeClaim]([https://kubernetes.io/docs/concepts/storage/persistent-volumes/](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)). The earlier K8s version the recommend approach was having an persistent service setup outside of K8s because of the complexity to bring persistence services like databases however with the new storage design this complexity drop significantly.
+
+Here we will have two `StorageClass` implementation, thew first one is `manual` for the case we wanna specify the path where the files will be persisted and the second case is `local-path` with `local-path-provisioner` where we just claim an volume, that dynamically create a local path for us. 
+
+For the `manual` storage setup just run:
+
+```
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/storage/manual-storage.yaml
+```
+
+The `local-path-provisioner` it's an [Rancher project]([https://github.com/rancher/local-path-provisioner](https://github.com/rancher/local-path-provisioner)) to make possible use node storage in the workloads. We create it by running:
+
+```
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/storage/local-path-storage.yaml
+```
+
+To verify if is all working we can check the status:
+
+```
+kubectl -n local-path-storage get pod
+```
+
+And define `local-path`as default storage:
+
+```
+kubectl patch storageclass local-path -p '{"metadata": {"annotations": {"storageclass.kubernetes.io/is-default-class": "true"}}}'
+```
+
+We can check it listing the `StorageClass` objects:
+
+```
+kubectl get sc
+NAME                   PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+local-path (default)   rancher.io/local-path          Delete          WaitForFirstConsumer   false                  3m
+```
+
+## Ingress Controller
+
+Ingress is the component which exposes the HTTP and HTTPS routes from outside the cluster by defined rules. Ingress controller is responsible to route the network to Ingress usually using a load balance handled by a proxy technologies such as Envoy, NGINX or HAProxy. I'll use [ingress-nginx]([https://kubernetes.github.io/ingress-nginx/](https://kubernetes.github.io/ingress-nginx/)) and install as follows:
+
+```
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/ingress-nginx/deploy.yaml
+```
+
+This deployment use a modified version to allow host network that was done by editing `ingress-nginx-controller` deployment:
+
+```yaml
+template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: ingress-nginx
+        app.kubernetes.io/instance: ingress-nginx
+        app.kubernetes.io/component: controller
+    spec:
+      hostNetwork: true
+```
+
+To check if all is running just run the command below and wait few minutes until all is ready:
+
+```bash
+kubectl get pods -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx
+```
+
+After the controller is ready we ca check the version by running:
+
+```bash
+POD_NAMESPACE=ingress-nginx
+POD_NAME=$(kubectl get pods -n $POD_NAMESPACE -l app.kubernetes.io/name=ingress-nginx --field-selector=status.phase=Running -o jsonpath='{.items[0].metadata.name}')
+kubectl exec -it $POD_NAME -n $POD_NAMESPACE -- /nginx-ingress-controller --version
+```
+
+Should output something like this:
+
+```bash
+-------------------------------------------------------------------------------
+NGINX Ingress controller
+  Release:       v1.0.4
+  Build:         9b78b6c197b48116243922170875af4aa752ee59
+  Repository:    https://github.com/kubernetes/ingress-nginx
+  nginx version: nginx/1.19.9
+
+-------------------------------------------------------------------------------
+```
+
+## Kubernetes Dashboard
+
+Dashboard is an web application which allow inspect and manage cluster services and workloads, after deploy the web application we need setup an service account to allow login later:
+
+```
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/dashboard/deployment.yaml
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/dashboard/service-account.yaml
+```
+
+To access the Dashboard we have some options, we can either forward the pod ports or expose by the ingress controller. I prefer just expose the service and access through an sub-domain name like:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-dashboard
+  namespace: kubernetes-dashboard
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+    kubernetes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts:
+      - dash.k8s.rodrigobaron.com
+      secretName: tls-secret
+  rules:
+  - host: dash.k8s.rodrigobaron.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 443
+```
+
+Remember to update your DNS rules or add the entry in your hosts file to point the cluster IP address. For example my `/etc/hosts` have this entry:
+
+```
+192.168.0.222 k8s.rodrigobaron.com
+```
+
+Finally to access it we need get the authentication token by running:
+
+```
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep k8s-admin | awk '{print $1}')
+```
+
+Then at end should be able to access in your browser.. eg.: `https://dash.k8s.rodrigobaron.com`.
+
+![Kubernetes Dashboard](/images/hello-k8s-resource-management/kubernetes-dashboard.png)
+
+### Next steps
+
+We completed the basic resource managment, we can create stateful applications, expose them and manage using an web application. Next post we will see about logging and monitoring.
+
+## References
+
+- [https://kubernetes.io/docs/concepts/services-networking/ingress/](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+- [https://kubernetes.github.io/ingress-nginx/](https://kubernetes.github.io/ingress-nginx/)
+- [https://github.com/rancher/local-path-provisioner](https://github.com/rancher/local-path-provisioner)
