@@ -19,13 +19,13 @@ Here we will have two `StorageClass` implementation, thew first one is `manual` 
 For the `manual` storage setup just run:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/storage/manual-storage.yaml
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/manual-storage/deployment.yaml
 ```
 
 The `local-path-provisioner` it's an [Rancher project]([https://github.com/rancher/local-path-provisioner](https://github.com/rancher/local-path-provisioner)) to make possible use node storage in the workloads. We create it by running:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/storage/local-path-storage.yaml
+kubectl create -f https://raw.githubusercontent.com/rodrigobaron/manifests/main/local-path-storage/deployment.yaml
 ```
 
 To verify if is all working we can check the status:
@@ -45,7 +45,8 @@ We can check it listing the `StorageClass` objects:
 ```
 kubectl get sc
 NAME                   PROVISIONER                    RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
-local-path (default)   rancher.io/local-path          Delete          WaitForFirstConsumer   false                  3m
+local-path (default)   rancher.io/local-path          Delete          WaitForFirstConsumer   false                  38s
+manual                 kubernetes.io/no-provisioner   Delete          WaitForFirstConsumer   false                  2m5s
 ```
 
 ## Ingress Controller
