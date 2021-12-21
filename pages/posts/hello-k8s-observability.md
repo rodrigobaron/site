@@ -2,7 +2,7 @@
 title: "Hello K8s: Observability"
 date: 2021/12/21
 description: The last post of K8s dev/lab tutorial series which we'll setup Metrics Server, Kube State Metrics, Prometheus and Grafana.
-tag: tutorial, k8s, ingress
+tag: tutorial, k8s, prometheus, grafana
 author: Rodrigo Baron
 ---
 
