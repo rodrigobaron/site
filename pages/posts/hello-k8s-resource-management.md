@@ -1,7 +1,7 @@
 ---
 title: "Hello K8s: Resource Management"
 date: 2021/12/16
-description: This is the second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.
+description: The second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.
 tag: tutorial, k8s, ingress
 author: Rodrigo Baron
 ---
