@@ -8,7 +8,7 @@ author: Rodrigo Baron
 
 # Hello K8s: Observability
 
-The last post about tutorial series of K8s dev/lab previous we [install](/posts/) and then setup the [resource management](/posts) 💪, this is the last post from the tutorial series which we'll setup [Metrics Server](#metrics-server), [Kube State Metrics](#kube-state-metrics), [Prometheus](#prometheus) and [Grafana](#grafana). The key component to ensure performance and reliability is an real-time monitoring with alerting capability, observability is one of core DevOps practices allowing granular insights to help develop good metrics and keep the system healthy. In this section we will incorporate Metrics server, Kube State Metrics, Prometheus and Grafana as the observability stack.
+The last post about tutorial series of K8s dev/lab previous we [install](/posts/hello-k8s-install) and then setup the [resource management](/posts/hello-k8s-resource-management) 💪, this is the last post from the tutorial series which we'll setup [Metrics Server](#metrics-server), [Kube State Metrics](#kube-state-metrics), [Prometheus](#prometheus) and [Grafana](#grafana). The key component to ensure performance and reliability is an real-time monitoring with alerting capability, observability is one of core DevOps practices allowing granular insights to help develop good metrics and keep the system healthy. In this section we will incorporate Metrics server, Kube State Metrics, Prometheus and Grafana as the observability stack.
 
 ### Metrics server
 
