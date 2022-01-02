@@ -2,7 +2,7 @@
 title: "Quick-Deploy"
 date: 2022/01/02
 description: Announcing the first release of Quick-Deploy a tools to optimize, convert and deploy machine learning models as fast inference API.
-tag: quick-deploy, transformers, mlops
+tag: quick-deploy, transformers, sklearn, mlops
 author: Rodrigo Baron
 ---
 
@@ -151,8 +151,6 @@ with open("iris_cls.bin", "wb") as p_file:
 ```
 
 Now we have a trained model unlike transformers model we don’t know anything about the model inputs and output, so we need provide a configuration YAML with that information:
-
-```
 
 ```yaml
 kind: IOSchema

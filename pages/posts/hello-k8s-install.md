@@ -2,7 +2,7 @@
 title: "Hello K8s: Installation"
 date: 2021/12/09
 description: The first post of a series of three to setup kubernetes local lab/dev using Ubuntu Server 20.04 as master and node.
-tag: tutorial, k8s, ubuntu
+tag: tutorial, k8s, ubuntu, docker
 author: Rodrigo Baron
 ---
 
