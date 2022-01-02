@@ -16,7 +16,7 @@ In next releases may have (or not) support for many others backends and serving 
 
 ## Install
 
-Before diving into install process we have think how we can use it.. there an [docker container]() available for the full version (the others are coming soon) and a python library `quick-deploy`. Wait what? full version?? That’s right there a full version which have the dependencies to handle all models deployment however we can use a minimal version to handle the target model only. In production environment is important to kept just the used libraries, less code less errors 😜.
+Before diving into install process we have think how we can use it.. there an [docker container](https://hub.docker.com/r/rodrigobaron/quick-deploy/tags) available for the full version (the others are coming soon) and a python library `quick-deploy`. Wait what? full version?? That’s right there a full version which have the dependencies to handle all models deployment however we can use a minimal version to handle the target model only. In production environment is important to kept just the used libraries, less code less errors 😜.
 
 For example if we have a SKLearn model trained and we just need deploy that we could install the correspondent version by:
 
