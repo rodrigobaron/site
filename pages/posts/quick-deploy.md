@@ -10,15 +10,15 @@ author: Rodrigo Baron
 
 I’m happy to announce the first release of [Quick-Deploy](https://github.com/rodrigobaron/quick-deploy), one of my OSS projects which was be working on spare time for some months. Quick-Deploy provide tools to optimize, convert and deploy machine learning models as fast inference API (low latency and high throughput) by [Triton Inference Server](https://github.com/triton-inference-server/server) using [Onnx Runtime](https://github.com/microsoft/onnxruntime) backend. It support 🤗 transformers, PyToch, Tensorflow, SKLearn and XGBoost models.
 
-I had the idea and some prototype tool which optimize and deploy any kind of machine learning model but after the announcement of [Infinity](https://huggingface.co/infinity) gave more energy to keep building the tool and after [Benesty](https://towardsdatascience.com/hugging-face-transformer-inference-under-1-millisecond-latency-e1be0057a51c) post got even more fuel.
+I had the idea to build a tool which optimize and deploy any kind of machine learning model, the announcement of [Infinity](https://huggingface.co/infinity) gave more energy to keep building the tool and after [Benesty](https://towardsdatascience.com/hugging-face-transformer-inference-under-1-millisecond-latency-e1be0057a51c) post gave even more fuel.
 
-In next releases may have (or not) support for many others backends and serving platforms however the focus now is the ability to easily move machine learning models to high performance production API. In this blog post aim to be able install Quick-Deploy and deploy some toy models walking trough the process and available features.
+In the future releases of Quick-Deploy may have (or not) support for many others backends and serving platforms however the focus now is the ability to easily move machine learning models to high performance production API. This blog post aim to demonstrate how to install Quick-Deploy and deploy some toy models walking trough the process and available features.
 
 ## Install
 
-Before diving into install process we have think how we can use it.. there an [docker container](https://hub.docker.com/r/rodrigobaron/quick-deploy/tags) available for the full version (the others are coming soon) and a python library `quick-deploy`. Wait what? full version?? That’s right there a full version which have the dependencies to handle all models deployment however we can use a minimal version to handle the target model only. In production environment is important to kept just the used libraries, less code less errors 😜.
+Before diving into install process we have think how we can use it.. there an [docker container](https://hub.docker.com/r/rodrigobaron/quick-deploy/tags) available for the full version (the others are coming soon) and a python library `quick-deploy`. Wait what? full version?? That’s right, there a full version which have the dependencies to handle all models deployment however we should use a minimal version to handle the target model only. In production environment is important to kept just the used libraries, less code less errors 😜.
 
-For example if we have a SKLearn model trained and we just need deploy that we could install the correspondent version by:
+For example if we have a SKLearn model trained and we just need deploy that model then could install the correspondent version by:
 
 ```bash
 $ pip install quick-deploy[sklearn]
@@ -232,4 +232,4 @@ For more examples and use cases please check the [examples](https://github.com/r
 
 ## Ending
 
-So I hope you enjoy the [project](https://github.com/rodrigobaron/quick-deploy) and it can be useful for you, I see it could be potentially awesome tool to engineers and scientists have in the workflow speeding up the proof of concept and production machine learning models. Feel free to reach me or the project for more details or contributions, happy hacking 🙂
+So I hope you enjoy the [project](https://github.com/rodrigobaron/quick-deploy) and it can be useful for you, I see it as an awesome tool to engineers and scientists have in their workflow speeding up the proof of concept and production machine learning models deployment. Feel free to reach me or the project for more details or contributions, happy hacking 🙂.
