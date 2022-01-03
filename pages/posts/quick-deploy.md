@@ -12,7 +12,7 @@ I’m happy to announce the first release of [Quick-Deploy](https://github.com/r
 
 I had the idea to build a tool which optimize and deploy any kind of machine learning model, the announcement of [Infinity](https://huggingface.co/infinity) gave more energy to keep building the tool and after [Benesty](https://towardsdatascience.com/hugging-face-transformer-inference-under-1-millisecond-latency-e1be0057a51c) post gave even more fuel.
 
-In the future releases of Quick-Deploy may have (or not) support for many others backends and serving platforms however the focus now is the ability to easily move machine learning models to high performance production API. This blog post aim to demonstrate how to install Quick-Deploy and deploy some toy models walking trough the process and available features.
+In the future releases of Quick-Deploy may have (or not) support for many others backends and serving platforms however the focus now is the ability to easily move machine learning models to high performance production API. This blog post aim to demonstrate how to install Quick-Deploy and deploy some toy models walking through the process and available features.
 
 ## Install
 
