@@ -27,7 +27,7 @@ $ pip install quick-deploy[sklearn]
 Now since we are aware of this for this post we use the full version 😅 since we will have more than one target model library:
 
 ```bash
-$ pip install quick-deploy[full]
+$ pip install quick-deploy[all]
 ```
 
 ## Transformers
