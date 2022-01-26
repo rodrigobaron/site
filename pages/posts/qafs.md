@@ -24,7 +24,7 @@ Using the same features at training and serving time is far the main advantage o
 
 Code bugs are harder to find and fix until you see data bugs then the "hard" definition will be in another level. Code testing and documentation is an standard software engineer task in any project but an ML project is basically code + data which make engineers life even harder to put these projects in production. The concept of "data is correct" change over time depending of the application some validation done yesterday can be invalid for tomorrow's data, btw a interesting paper [Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks](https://arxiv.org/abs/2103.14749) shows that bad data can effectively reduce model capacity by 3 times (if you like papers 😉).  
 
-So **QAFS** couple the feature store and data quality checks concepts by integrating [pandera](https://pandera.readthedocs.io/) an dataframe validation library when registering features. In this way we can easily build and extend the data validations checks.
+So **QAFS** couple the feature store and data quality checks concepts by integrating [pandera](https://pandera.readthedocs.io/) an dataframe validation library when registering features. In this way we can easily build and extend the data validations  to any kind e.g., perform data distribuition check (data/model drift).
 
 ## Install
 
@@ -97,7 +97,7 @@ print(df_query.tail(1))
 
 ## Monitoring
 
-At training time doing data validation checks can lead to a breaking pipeline so we can stop and carefully think about the data but at serving time this will end up into a broken application. **QAFS** have the ability to log the data validations errors and avoid applications breaks, for that we must set the environment variable `QAFS_RAISE_ERROR=false` which make use of `logging.error` where an existing application monitoring stack excel in tasks such log grouping, filtering.. build reports and send notifications. 
+At training time doing data validation checks can lead to a breaking pipeline so we can stop and carefully think about the data but at serving time this will end up into a broken application. **QAFS** have the ability to log the data validations errors and avoid applications breaks, for that we must set the environment variable `QAFS_RAISE_ERROR=false` which make use of `logging.error` where an existing application monitoring stack excel in tasks such log grouping, filtering.. build reports and send notifications.  
 
 ## Ending
 
