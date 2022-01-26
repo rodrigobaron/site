@@ -4,7 +4,7 @@
         <description><![CDATA[Rodrigo Baron]]></description>
         <link>https://rodrigobaron.com</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Tue, 21 Dec 2021 10:40:17 GMT</lastBuildDate>
+        <lastBuildDate>Wed, 26 Jan 2022 04:58:12 GMT</lastBuildDate>
         <atom:link href="https://rodrigobaron.com/rss.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Hello K8s: Installation]]></title>
@@ -14,6 +14,7 @@
             <category><![CDATA[tutorial]]></category>
             <category><![CDATA[k8s]]></category>
             <category><![CDATA[ubuntu]]></category>
+            <category><![CDATA[docker]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
             <pubDate>Thu, 09 Dec 2021 00:00:00 GMT</pubDate>
         </item>
@@ -30,6 +31,18 @@
             <pubDate>Tue, 21 Dec 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
+            <title><![CDATA[QAFS - Quality Aware Feature Store]]></title>
+            <description><![CDATA[..]]></description>
+            <link>/posts/qafs</link>
+            <guid isPermaLink="true">/posts/qafs</guid>
+            <category><![CDATA[qafs]]></category>
+            <category><![CDATA[feature-store]]></category>
+            <category><![CDATA[data-quality]]></category>
+            <category><![CDATA[mlops]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Wed, 26 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
             <title><![CDATA[Hello K8s: Resource Management]]></title>
             <description><![CDATA[The second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.]]></description>
             <link>/posts/hello-k8s-resource-management</link>
@@ -39,6 +52,18 @@
             <category><![CDATA[ingress]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
             <pubDate>Thu, 16 Dec 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Quick-Deploy]]></title>
+            <description><![CDATA[Announcing the first release of Quick-Deploy a tools to optimize, convert and deploy machine learning models as fast inference API.]]></description>
+            <link>/posts/quick-deploy</link>
+            <guid isPermaLink="true">/posts/quick-deploy</guid>
+            <category><![CDATA[quick-deploy]]></category>
+            <category><![CDATA[transformers]]></category>
+            <category><![CDATA[sklearn]]></category>
+            <category><![CDATA[mlops]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Sun, 02 Jan 2022 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>
