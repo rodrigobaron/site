@@ -1,7 +1,7 @@
 ---
 title: "QAFS - Quality Aware Feature Store"
 date: 2022/01/26
-description: ..
+description: Just released QAFS another machine learning engineering tool to help build and maintain ML products.
 tag: qafs, feature-store, data-quality, mlops
 author: Rodrigo Baron
 ---
@@ -24,7 +24,7 @@ Using the same features at training and serving time is far the main advantage o
 
 Code bugs are harder to find and fix until you see data bugs then the "hard" definition will be in another level. Code testing and documentation is an standard software engineer task in any project but an ML project is basically code + data which make engineers life even harder to put these projects in production. The concept of "data is correct" change over time depending of the application some validation done yesterday can be invalid for tomorrow's data, btw a interesting paper [Pervasive Label Errors in Test Sets Destabilize Machine Learning Benchmarks](https://arxiv.org/abs/2103.14749) shows that bad data can effectively reduce model capacity by 3 times (if you like papers 😉).  
 
-So **QAFS** couple the feature store and data quality checks concepts by integrating [pandera](https://pandera.readthedocs.io/) an dataframe validation library when registering features.
+So **QAFS** couple the feature store and data quality checks concepts by integrating [pandera](https://pandera.readthedocs.io/) an dataframe validation library when registering features. In this way we can easily build and extend the data validations checks.
 
 ## Install
 
