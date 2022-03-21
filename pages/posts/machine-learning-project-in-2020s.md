@@ -65,7 +65,7 @@ There’s no right way of manage and develop ML projects, however we can use our
 
 ## Ending
 
-I’ve tried to summarize much as possible keeping just the main points so you can always reach me over the social networks, mail or in this [github issue](https://github.com/rodrigobaron/site/issues/13) to discuss more about this topic. I’ll update this in case of missed any other important point 👋.
+I've tried to summarize as much as possible keeping only the main points, so you can always reach me over the social networks, mail or in this [github issue](https://github.com/rodrigobaron/site/issues/13) to discuss more about this topic. I’ll update this in case of missed any other important point 👋.
 
 ## References
 
