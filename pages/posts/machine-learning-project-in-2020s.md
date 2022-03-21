@@ -60,7 +60,7 @@ There’s no right way of manage and develop ML projects, however we can use our
 3. **Infrastructure** — Get infrastructure done (or almost done) before first experiment development. Make model development and deployment iteration as fast as possible.
 4. **Simple models first** — Prefer most of the time (not always) to develop simple models first as baseline which is easier to understand, then iterate to complex ones.
 5. **Test everything** — Test infrastructure: make sure the infrastrucure is right; Test data: clean data give better results than model design; Test code: unit testing and integration testing; Test deployments: A/B testing and so.
-6. **Monitoing** — Monitor you models in production and compare their metrics over time and over environments.
+6. **Monitoring** — Monitor you models in production and compare their metrics over time and over environments.
 7. **Research** — After have a good model in stabilished try whenever possible build more complex solutions looking at machine learning research community or your own research development.
 
 ## Ending
