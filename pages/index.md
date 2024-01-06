@@ -6,21 +6,20 @@ date: 2021-12-01
 
 # Rodrigo Baron
 
-<img style={{height: '260px', width: '260', 'object-fit': 'cover', 'border-radius': '50%'}} alt="" width="260" height="260" src="/images/profile.jpeg" />
+<Image src="/images/profile-round.png" width= '260' height= '260' />
 
-👋 Hello, I am Rodrigo Baron. I am from Brazil currently living in Toledo - PR. I have Software Engineering background and really love to code, have more than 10 years of SWE experience. Also worked as Data Scientist and currently as Machine Learning Engineer at [GAVB](https://www.gavb.com.br/)+[GB](https://www.grupoboticario.com.br/).  
+👋 Hello! My name is Rodrigo Baron. I am from Brazil and live in Toledo-PR. I have over ten years of software engineering experience and seven years as a Machine Learning Engineer, currently working as an MLOps consultant at [GAVB](https://www.gavb.com.br/)+[GB](https://www.grupoboticario.com.br/).
 
-Worked in many production sofware soluctions, then after many hours study machine learning (tensorflow 1.x at time) got a job to work as Data Scientist using deeplearning. After some years naturally got a position of Machine Learning Engineer working with Data Scientists and Data Engineers to put models in production. Also love learn and do OSS projects.  
+Throughout my career, I have worked on numerous production software solutions. Then, I transitioned into machine learning engineering, where I built statistical models and deep learning for computer vision applications. Over time, I also developed pipelines and platforms to deploy models in production.
 
-Outside of job title and sofware in general I like listen Rock n' Roll such Metallica, Pearl Jam and so .. drink some beer 🍺 and travel. The traveling part is one thing I would like do more than I'm doing actually..
+In addition to my professional roles, I have managed data projects as a principal ML engineer and taken on leadership responsibilities.
 
+I also enjoy listening to rock 'n' roll bands like Metallica, Pearl Jam, and others... drinking beer 🍺 and traveling.
 
-[Subscribe](/rss.xml),
-and get in touch via [Twitter](https://twitter.com/rodrigobaron_) DM
-or email baron.rodrigo0@gmail.com. I also have an [instagram](https://www.instagram.com/rodrigobar0n) but that could hurt your eyes.
+[Subscribe](/rss.xml), or follow me on [X](https://x.com/rodrigobaron_) to get content about Machine Learning, DevOps and programing.
 
 ## Links
 
 - [GitHub](https://github.com/rodrigobaron)
-- [Twitter](https://twitter.com/rodrigobaron_)
+- [X](https://x.com/rodrigobaron_)
 - [Linkedin](https://www.linkedin.com/in/rodrigobaron)

@@ -7,65 +7,61 @@ author: Rodrigo Baron
 ---
 
 # Machine Learning Project in 2020s
+Hey there! In this post, I'm gonna share some challenges I faced while working on a machine learning project. I'm not gonna explain what machine learning is or why it's important - I'm assuming you already know that stuff (or can look it up on your own, as homework assignment 😛).
 
-The first non-technical post where I point out some issues when trying to implement a machine learning project. I refuse to give an introduction to what machine learning (ML) is and how important it is for a company, so this part is for homework 😛.
+## Managers Often Don’t Understand Data Science
 
-## Managers Don’t Understand Data Science
+It might sound harsh, but managers often overlook two super important parts of machine learning projects: data and experimentation. It's like they think ML is some kind of magic trick - just hire some ML magicians, tell them what you want, and boom, you've got yourself a fancy new AI system. But that's not how it works, and managers often end up in situations like these:  
+* They don't analyze data requirements (like, do we even have the right data? Is there enough of it? Do we need to label it?).
+* They don't set a value metric (like, is 95% accuracy actually good? Is this metric even related to our goal?).
+* They set a deadline with some random "good" number in mind (like, make a model that's 95% accurate in three months).
+* They expect a fully automated "AI" solution (like, a system that can sell houses without any human help at all).  
 
-This might sounds unfair, but surprisingly managers forget two most important pieces of machine learning project: Data and Experimentation. Actually seems they look at ML as a kind of magic, just hire ML magicians and tell them what you want and when.. they often put themselves in this kind of situation:
+Let me break it down for you:  
 
-- They plan to develop an ML project without any data requirements analysis (eg, do we have relevant data? is it enough? do we need to label it?);
-- They have an plan without value metric (eg, it’s 95% accuracy valuable? The metric is really related to reaching the goal?);
-- They set the deadline with a metric that they think is a “good number” without any reference (eg, you have 3 months to develop a model that achieves 95% accuracy);
-- The solution is an fully automated “AI” (eg, the system should sell houses without any humman intervention or assistency).
+**Data** - Just because you have a big database doesn't mean you've "got data" for your project. There might not be any relevant info, or you might need to label the data or get a domain expert to connect the dots between the data and the goal.  
 
-So for context..
-
-**Data** - you can have a database with millions rows but that doens’t mean you “have data” for your project.. maybe there’s no relavant information or maybe you need label it or have some domain expert as integral time to connect the understanding about the data and the objective.
-
-**experiment** - is the heart of any science project it can show good, bad or “interesting” result. So unlike an regular software planning, experiment developing is not same as a regular software developing where is most of cases know that will works.
+**Experimentation** - Experimentation is the heart of any science project. It can show good, bad, or "interesting" results. Unlike regular software planning, experiment development isn't the same as regular software development - you can't always predict what's gonna happen.  
 
 ## Project Management and Tooling
 
-Trying fit ML projects into regular software project management and tooling this is natural choice since along the years we developed tools and best practices for software development, so just reuse what we know. Also make sense because at end we are delivering software isn’t? Yes in the most part is software, however the “piece” called data is more important than the software.
+It's natural to try and fit ML projects into regular software project management and tooling. I mean, we've got all these tools and best practices for software development, so why not use it? Plus, at the end of the day, we're still delivering software, right? Well, mostly. But the "piece" called data is actually more important than the software itself.  
 
-Most cases project managers (PM’s) are confortable with agile practices and frameworks like [Scrum](https://www.scrum.org/resources/what-is-scrum) so why not just use it? Yes we can but need keep in mind Scrum was made for regular software project so it doens’t fit completely for an ML project and the main reason is the **experiment** nature. So put an **experiment** into a deliverable timebox doens’t make any sense, however I still believe in the use of Scrum for ML projects, more specifically [ScrumBut](https://www.scrum.org/resources/what-scrumbut).
+Most project managers (PMs) are cool with agile practices and frameworks like [Scrum](https://www.scrum.org/resources/what-is-scrum), so it's tempting to just use those methods for ML projects. But here's the thing: Scrum was made for regular software projects, not ML projects. The main reason is the experimental nature of ML. So, instead of forcing experiments into a timebox, I recommend using [ScrumBut](https://www.scrum.org/resources/what-scrumbut) for ML projects.  
 
-The ML tooling right now is so overwhelming, there are so many tools and if you spend time to understand one of them two more were born around that time, so don’t spend so much effort just try use the simplest tool you found. Also, you don’t need Kubernetes for ML, from my perspective use it if you already have a Kubernetes cluster or if all the tools you choose work fine on the same version of Kubernetes (good luck with that).
+The ML tooling scene is wild, with tons of tools and new ones popping up all the time. Don't waste your time trying to understand every single one. Just use the simplest tool that gets the job done. And you don't need Kubernetes for ML - only use it if you already have a Kubernetes cluster or if all the tools you choose work well with the same version of Kubernetes (which is unlikely).
 
 ## The Machine Learning Lifecycle
 
-Again, unlike regular software projects, ML projects don’t have an incremental step composed of small changes with shipable units. Actually for some period of time they will works such an regular software develop which makes the feel of working project management, however at some point one incremental development will take longer than the previous five. This is caused by the experiment design,which does not mean that the design of the experiment is wrong, it may not be optimal, but the main problem still the management side.
+ML projects don't have an incremental step with small changes and shippable units like regular software projects do. For a while, they might seem like regular software development, but then one incremental development might take way longer than the previous five. That's because ML projects have an experimental design, which doesn't mean they're wrong, but rather that they might not be optimal. The real problem is on the management side.  
 
-So if look an common ML project lifecycle as illustrated in the figure bellow, it’s separated in green what typically an data scientist do and in blue what a machine learning engineer do, many project just follow these steps and the last step is the end of the project. That’s a huge mistake, we should test the experiments on production data (as soon as possible).. so that we could use offline production data or use some deployment strategy for experimentation.
+Here's a typical ML project lifecycle:  
 
 ![Outerbounds - Machine learning pipelines: from prototype to production](/images/machine-learning-project-in-2020s/common-ml.png "Outerbounds - Machine learning pipelines: from prototype to production")
 
-At the macro level, that is just one experiment iteration, we should consider development data and production data as two worlds and make sure the model perform close as possible in both worlds, expecting some performance degradation. If we deploy once at end of project we run the risk of not delivering the desired value and missing the mistakes made in development data.
+At the macro level, one experiment iteration includes developing and testing on both development and production data. You want to make sure the model performs similarly in both worlds, even if it degrades a bit in production. If you only deploy at the end of the project, you risk not delivering the value you wanted and missing mistakes made during development.  
 
 ## Best Practices
 
-There’s no right way of manage and develop ML projects, however we can use our experiences and those of the community to develop best practices and avoid common issues. So this is my list of best practices for an ML project:
+There's no one "right" way to manage and develop ML projects, but we can use our experiences and the community's to create best practices and avoid common issues. Here are some best practices for an ML project:  
 
-1. **Data and goal understanding** — Here we must make a basic analysis of the available data and what is the goal, so it’s possible to plan the minimal requirements. Must define an clear goal, as an example, see the table below:
+1. **Data and goal understanding** - Do a basic analysis of the available data and the goal, so you can plan the minimal requirements. Clearly define the goal (like, maximize the number of active clients to increase market dominance, but don't get distracted by total income).  
 
-    | # Experiment | # Nº of active clients / month | # Total income / month  |
-    | --- | --- | --- |
-    | Exp. A | 5,000 | $ 200,000.00 |
-    | Exp. B | 10,000 | $ 100,000.00 |
+1. **Metric development** - Create metrics that represent the goal value for which the models will be optimized. Also, develop metrics that make it easier to compare experiments.  
 
-    Which experiment we should take? What’s the goal? For instance maybe the goal is maxmize the number of active clients to increase market dominance but get distracted by total income, of course we should consider total income but what’s the goal?
+1. **Infrastructure** - Get the infrastructure set up (or almost set up) before the first experiment development. Make model development and deployment iterations as fast as possible.  
 
-2. **Metric development** — Once have data and an clear goal, must develop metrics that represent the goal value for which the models will be optimized. Also develop metrics which make easier to compare experiments.
-3. **Infrastructure** — Get infrastructure done (or almost done) before first experiment development. Make model development and deployment iteration as fast as possible.
-4. **Simple models first** — Prefer most of the time (not always) to develop simple models first as baseline which is easier to understand, then iterate to complex ones.
-5. **Test everything** — Test infrastructure: make sure the infrastrucure is right; Test data: clean data give better results than model design; Test code: unit testing and integration testing; Test deployments: A/B testing and so.
-6. **Monitoring** — Monitor you models in production and compare their metrics over time and over environments.
-7. **Research** — Once have a good model established, try whenever possible build more complex solutions by looking at the machine learning research community or make your own research development.
+1. **Simple models first** - Start with simple models as a baseline, which are easier to understand, then iterate to more complex ones.
+
+1. **Test everything** - Test infrastructure, data, code, and deployments.  
+
+1. **Monitoring** - Monitor your models in production and compare their metrics over time and over environments.  
+
+1. **Research** - Once you have a good model established, try to build more complex solutions by looking at the machine learning research community or conducting your own research and development.
 
 ## Ending
 
-I've tried to summarize as much as possible keeping only the main points, so you can always reach me over the social networks, mail or in this [github issue](https://github.com/rodrigobaron/site/issues/13) to discuss more about this topic. I’ll update this in case of missed any other important point 👋.
+I tried to keep it short as possible. If you have any questions or want to chat more about this, hit me up on social media, email, or in this [GitHub Issue](https://github.com/rodrigobaron/site/issues/13). I'll update this post if I missed anything important. 👋
 
 ## References
 
