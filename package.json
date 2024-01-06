@@ -2,7 +2,7 @@
   "name": "site",
   "version": "1.0.1",
   "main": "index.js",
-  "author": "Rodrigo Baorn <baron.rodrigo0@gmail.com>",
+  "author": "Rodrigo Baron <baron.rodrigo0@gmail.com>",
   "license": "MIT",
   "scripts": {
     "dev": "next",
