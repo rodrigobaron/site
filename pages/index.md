@@ -6,7 +6,7 @@ date: 2021-12-01
 
 # Rodrigo Baron
 
-<img style={{height: '260px', width: '260', 'object-fit': 'cover', 'border-radius': '50%'}} alt="" width="260" height="260" src="/images/profile.jpeg" />
+<Image src="/images/profile-round.png" width= '260' height= '260' />
 
 👋 Hello! My name is Rodrigo Baron. I am from Brazil and live in Toledo-PR. I have over ten years of software engineering experience and seven years as a Machine Learning Engineer, currently working as an MLOps consultant at [GAVB](https://www.gavb.com.br/)+[GB](https://www.grupoboticario.com.br/).
 
