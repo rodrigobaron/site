@@ -179,6 +179,5 @@ In this article we dive into prompts which allow the model plan the steps to sol
 
 ## References
 
-[Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903)
-
-[ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) / [blog post](https://blog.research.google/2022/11/react-synergizing-reasoning-and-acting.html)
+- [Chain-of-Thought Prompting Elicits Reasoning in Large Language Models](https://arxiv.org/abs/2201.11903)  
+- [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) / [blog post](https://blog.research.google/2022/11/react-synergizing-reasoning-and-acting.html)  
