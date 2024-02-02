@@ -13,7 +13,7 @@ Hey fellows, have an new post series called “LLM Prompter” which we will lea
 1. Prompt Engineering (this)
 2. [ReAct](llm-prompter-react)
 3. [RAG](llm-prompter-rag)
-4. Advanced Prompting (*next week*)
+4. [Advanced Prompting](llm-prompter-advanced)
 
 We'll be demonstrating concepts using [Llama 2](https://ai.meta.com/llama/), [OpenChat 3.5](https://github.com/imoneoi/openchat) and [LangChain](https://www.langchain.com/), but please note that these posts are not meant to serve as tutorials. Instead, think of them as guides to help you develop better instructions for solving specific tasks. Be sure consult the references research papers for deeper insights.
 
