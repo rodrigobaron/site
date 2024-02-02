@@ -13,7 +13,7 @@ This is the second article of the "LLM Prompter" series! In our last article, we
 1. [Prompt Engineering](llm-prompter-basics)
 2. ReAct (this)
 3. [RAG](llm-prompter-rag)
-4. Advanced Prompting (*next week*)
+4. [Advanced Prompting](llm-prompter-advanced)
 
 For this discussion, we'll continue working with [OpenChat 3.5](https://github.com/imoneoi/openchat) and [LangChain](https://www.langchain.com/), but please note that these posts are not meant to serve as tutorials. Instead, use them to help understand the core concepts. 
 
