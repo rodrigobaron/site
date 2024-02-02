@@ -175,7 +175,7 @@ Our straightforward example demonstrates the potential of an ReAct agent, we can
 
 ## Ending
 
-In this article we dive into prompts which allow the model plan the steps to solve complex tasks. At same time we have control of the steps during the iteration. I hope the article was helpful you can alse reproduce the results running this [Notebook](https://github.com/rodrigobaron/site_contet/blob/main/2_cot_react.ipynb). See you in [RAG article](llm-prompter-rag)..
+In this article we dive into prompts which allow the model plan the steps to solve complex tasks. At same time we have control of the steps during the iteration. I hope the article was helpful you can alse reproduce the results running this [Notebook](https://github.com/rodrigobaron/site_content/blob/prompt/main/2_cot_react.ipynb). See you in [RAG article](llm-prompter-rag)..
 
 ## References
 

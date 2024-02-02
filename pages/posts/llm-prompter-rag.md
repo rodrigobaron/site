@@ -168,7 +168,7 @@ Employing curated data in the ingestion process, improved document searches, and
 
 ## Ending
 
-Today we explored the exciting potential of RAG and its applications in creating AI apps using current LLMs. The source code to reproduce is in this [Notebook](https://github.com/rodrigobaron/site_contet/blob/main/3_rag.ipynb) be free to use. Next article we will talk about advanced prompting (*next week*)!
+Today we explored the exciting potential of RAG and its applications in creating AI apps using current LLMs. The source code to reproduce is in this [Notebook](https://github.com/rodrigobaron/site_content/blob/main/prompt/3_rag.ipynb) be free to use. Next article we will talk about advanced prompting (*next week*)!
 
 ## ****References****
 

@@ -51,7 +51,7 @@ These principles fall into five main categories: **Prompt Structure and Clarity*
 
 ![prompt-principles](/images/prompter/prompt-principles.png "Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4")
 
-The paper show some principles which you may already know but the researchers go deep into testing each one. Showing the examples here make the article too long so to have an better experience open the [Notebook](https://github.com/rodrigobaron/site_contet/blob/main/1_prompt_engineer.ipynb) and check the examples there.
+The paper show some principles which you may already know but the researchers go deep into testing each one. Showing the examples here make the article too long so to have an better experience open the [Notebook](https://github.com/rodrigobaron/site_content/blob/main/prompt/1_prompt_engineer.ipynb) and check the examples there.
 
 1. No need to be polite: if you say to a person “could please do X” you will get better response than “do X”, that doesn't apply for LLM. No need to add phrases like “please”, “if you don’t  mind”, “thank you”, “I would like to”, etc.,  get straight to the point.
 2. Integrate the intended audience: If you want to write an email for marketing prompt the target audience.
