@@ -13,7 +13,7 @@ Welcome back to the third article  of the "LLM Prompter" series! In this articke
 1. [Prompt Engineering](llm-prompter-basics)
 2. [ReAct](llm-prompter-react)
 3. RAG (this)
-4. Advanced Prompting (*next week*)
+4. [Advanced Prompting](llm-prompter-advanced)
 
 This approach enables AI agents to gather information from external sources, suitabke fir knowledge-intensive tasks where have ability to take worlf information beyond initial training data.
 
@@ -168,7 +168,7 @@ Employing curated data in the ingestion process, improved document searches, and
 
 ## Ending
 
-Today we explored the exciting potential of RAG and its applications in creating AI apps using current LLMs. The source code to reproduce is in this [Notebook](https://github.com/rodrigobaron/site_content/blob/main/prompt/3_rag.ipynb) be free to use. Next article we will talk about advanced prompting (*next week*)!
+Today we explored the exciting potential of RAG and its applications in creating AI apps using current LLMs. The source code to reproduce is in this [Notebook](https://github.com/rodrigobaron/site_content/blob/main/prompt/3_rag.ipynb) be free to use. Next article we will talk about [advanced prompting](llm-prompter-advanced)!
 
 ## ****References****
 
