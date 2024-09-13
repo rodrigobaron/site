@@ -8,7 +8,7 @@ author: Rodrigo Baron
 
 # AI-Powered Cold Mail Generator
 
-In this article, I'll show you how to build a cold mail generator powered by Large Language Model (LLM) - [Llama 3.1](https://ai.meta.com/blog/meta-llama-3-1/). The app emulates a consulting firm that uses its portfolio stack to find the best resources to match with job opportunity attributes, generating a cold mail prospect in the end.
+In this article, I'll show you how to build a cold mail generator powered by Large Language Model (LLM) - [Llama 3.1](https://ai.meta.com/blog/meta-llama-3-1/). The app emulates a consulting firm that uses its portfolio stack to find the best resources to match with job opportunity attributes, generating a cold mail prospect in the end ([GitHub repo](https://github.com/rodrigobaron/demos/tree/main/cold_email)).
 
 ![Screenshot](/images/cold-mail-generator/usage.png "App Screenshot")
 
