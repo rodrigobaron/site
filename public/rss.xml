@@ -4,7 +4,7 @@
         <description><![CDATA[Rodrigo Baron]]></description>
         <link>https://rodrigobaron.com</link>
         <generator>RSS for Node</generator>
-        <lastBuildDate>Fri, 02 Feb 2024 00:45:54 GMT</lastBuildDate>
+        <lastBuildDate>Fri, 13 Sep 2024 10:13:00 GMT</lastBuildDate>
         <atom:link href="https://rodrigobaron.com/rss.xml" rel="self" type="application/rss+xml"/>
         <item>
             <title><![CDATA[Hello K8s: Installation]]></title>
@@ -16,7 +16,7 @@
             <category><![CDATA[ubuntu]]></category>
             <category><![CDATA[docker]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Thu, 09 Dec 2021 03:00:00 GMT</pubDate>
+            <pubDate>Thu, 09 Dec 2021 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Hello K8s: Observability]]></title>
@@ -28,7 +28,29 @@
             <category><![CDATA[prometheus]]></category>
             <category><![CDATA[grafana]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Tue, 21 Dec 2021 03:00:00 GMT</pubDate>
+            <pubDate>Tue, 21 Dec 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Hello K8s: Resource Management]]></title>
+            <description><![CDATA[The second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.]]></description>
+            <link>/posts/hello-k8s-resource-management</link>
+            <guid isPermaLink="true">/posts/hello-k8s-resource-management</guid>
+            <category><![CDATA[tutorial]]></category>
+            <category><![CDATA[k8s]]></category>
+            <category><![CDATA[ingress]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Thu, 16 Dec 2021 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[LLM Prompter: Basics]]></title>
+            <description><![CDATA[First post “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).]]></description>
+            <link>/posts/llm-prompter-basics</link>
+            <guid isPermaLink="true">/posts/llm-prompter-basics</guid>
+            <category><![CDATA[prompt-engineer]]></category>
+            <category><![CDATA[llm]]></category>
+            <category><![CDATA[openchat]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Mon, 15 Jan 2024 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[LLM Prompter: Advanced]]></title>
@@ -40,30 +62,18 @@
             <category><![CDATA[llama]]></category>
             <category><![CDATA[langchain]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Thu, 01 Feb 2024 03:00:00 GMT</pubDate>
+            <pubDate>Thu, 01 Feb 2024 00:00:00 GMT</pubDate>
         </item>
         <item>
-            <title><![CDATA[LLM Prompter: Basics]]></title>
-            <description><![CDATA[First post “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).]]></description>
-            <link>/posts/llm-prompter-basics</link>
-            <guid isPermaLink="true">/posts/llm-prompter-basics</guid>
-            <category><![CDATA[prompt-engineer]]></category>
+            <title><![CDATA[AI-Powered Cold Mail Generator]]></title>
+            <description><![CDATA[This article provides a step-by-step guide to build a cold mail generator powered by LLM's (LLama 3.1) and learn the recipes for creating production-friendly AI projects.]]></description>
+            <link>/posts/cold-mail-generator</link>
+            <guid isPermaLink="true">/posts/cold-mail-generator</guid>
+            <category><![CDATA[tutorial]]></category>
             <category><![CDATA[llm]]></category>
-            <category><![CDATA[openchat]]></category>
+            <category><![CDATA[llama]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Mon, 15 Jan 2024 03:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[LLM Prompter: ReAct]]></title>
-            <description><![CDATA[Second post “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).]]></description>
-            <link>/posts/llm-prompter-react</link>
-            <guid isPermaLink="true">/posts/llm-prompter-react</guid>
-            <category><![CDATA[prompt-engineer]]></category>
-            <category><![CDATA[llm]]></category>
-            <category><![CDATA[openchat]]></category>
-            <category><![CDATA[langchain]]></category>
-            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Tue, 16 Jan 2024 03:00:00 GMT</pubDate>
+            <pubDate>Fri, 13 Sep 2024 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[LLM Prompter: RAG]]></title>
@@ -75,28 +85,7 @@
             <category><![CDATA[llama]]></category>
             <category><![CDATA[langchain]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Wed, 17 Jan 2024 03:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Machine Learning Project in 2020s]]></title>
-            <description><![CDATA[The first non-technical post where I point out some issues when trying to implement a machine learning project.]]></description>
-            <link>/posts/machine-learning-project-in-2020s</link>
-            <guid isPermaLink="true">/posts/machine-learning-project-in-2020s</guid>
-            <category><![CDATA[machine-learning]]></category>
-            <category><![CDATA[project-management]]></category>
-            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Sun, 20 Mar 2022 03:00:00 GMT</pubDate>
-        </item>
-        <item>
-            <title><![CDATA[Hello K8s: Resource Management]]></title>
-            <description><![CDATA[The second post of K8s lab/dev setup covering ingress, storage and Kubernetes Dashboard for resource management.]]></description>
-            <link>/posts/hello-k8s-resource-management</link>
-            <guid isPermaLink="true">/posts/hello-k8s-resource-management</guid>
-            <category><![CDATA[tutorial]]></category>
-            <category><![CDATA[k8s]]></category>
-            <category><![CDATA[ingress]]></category>
-            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Thu, 16 Dec 2021 03:00:00 GMT</pubDate>
+            <pubDate>Wed, 17 Jan 2024 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[QAFS - Quality Aware Feature Store]]></title>
@@ -108,7 +97,17 @@
             <category><![CDATA[data-quality]]></category>
             <category><![CDATA[mlops]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Wed, 26 Jan 2022 03:00:00 GMT</pubDate>
+            <pubDate>Wed, 26 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Machine Learning Project in 2020s]]></title>
+            <description><![CDATA[The first non-technical post where I point out some issues when trying to implement a machine learning project.]]></description>
+            <link>/posts/machine-learning-project-in-2020s</link>
+            <guid isPermaLink="true">/posts/machine-learning-project-in-2020s</guid>
+            <category><![CDATA[machine-learning]]></category>
+            <category><![CDATA[project-management]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Sun, 20 Mar 2022 00:00:00 GMT</pubDate>
         </item>
         <item>
             <title><![CDATA[Quick-Deploy]]></title>
@@ -120,7 +119,19 @@
             <category><![CDATA[sklearn]]></category>
             <category><![CDATA[mlops]]></category>
             <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
-            <pubDate>Sun, 02 Jan 2022 03:00:00 GMT</pubDate>
+            <pubDate>Sun, 02 Jan 2022 00:00:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[LLM Prompter: ReAct]]></title>
+            <description><![CDATA[Second post “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).]]></description>
+            <link>/posts/llm-prompter-react</link>
+            <guid isPermaLink="true">/posts/llm-prompter-react</guid>
+            <category><![CDATA[prompt-engineer]]></category>
+            <category><![CDATA[llm]]></category>
+            <category><![CDATA[openchat]]></category>
+            <category><![CDATA[langchain]]></category>
+            <dc:creator><![CDATA[Rodrigo Baron]]></dc:creator>
+            <pubDate>Tue, 16 Jan 2024 00:00:00 GMT</pubDate>
         </item>
     </channel>
 </rss>

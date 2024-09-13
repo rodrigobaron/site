@@ -1,0 +1,325 @@
+---
+title: "AI-Powered Cold Mail Generator"
+date: 2024/09/13
+description: This article provides a step-by-step guide to build a cold mail generator powered by LLM's (LLama 3.1) and learn the recipes for creating production-friendly AI projects.
+tag: tutorial, llm, llama
+author: Rodrigo Baron
+---
+
+# AI-Powered Cold Mail Generator
+
+In this article, I'll show you how to build a cold mail generator powered by Large Language Model (LLM) - [Llama 3.1](https://ai.meta.com/blog/meta-llama-3-1/). The app emulates a consulting firm that uses its portfolio stack to find the best resources to match with job opportunity attributes, generating a cold mail prospect in the end.
+
+![Screenshot](/images/cold-mail-generator/usage.png "App Screenshot")
+
+
+Despite anyone being able to use Agentic Frameworks and create AI apps that might never see production, I'll also provide recipes to build production-friendly AI projects that can be easily improved throughout the project development life cycle.
+
+Article topics:
+
+- [What is a Cold Mail?](#what-is-a-cold-mail)
+- [The App](#the-app)
+- [Loading Portfolio](#loading-portfolio)
+- [Scraping Jobs](#scraping-jobs)
+- [Cold Mail Generation](#cold-mail-generation)
+- [Observability](#observability)
+- [Final Thoughts](#final-thoughts)
+- [References](#references)
+
+## What is a Cold Mail? 
+
+A cold mail is an unsolicited message with no prior relationship or connection. It's a proactive strategy commonly used in sales and marketing to initiate contact with potential leads or prospects. The primary goal of a cold mail is to spark interest, establish credibility, and drive a desired action, such as scheduling a sales meeting or exploring a business opportunity.
+
+Unlike spam, which is sent indiscriminately and lacks personalization, cold mails are carefully targeted and include personalized content tailored to the recipient's needs. They aim to provide value and initiate meaningful business conversations with a personalized subject line and content that clearly states its purpose from the start.
+
+## The App
+
+Designed for a consulting firm with an available portfolio stack, the app has fields for inputting sales contact information, company name. After inputting this information, and provide an CSV file with the company portfolio the app will:
+
+* Load the portfolio into a vector database.
+* Webscrap the job opportunity page.
+* Extract the opportunity attributes.
+* Generate a structured cold mail targeting the specific opportunity.
+
+At end the user can copy and paste the mail, modifying it to fit their needs.
+
+## Loading Portfolio
+
+The idea is to offer company portfolios to customers, for that we need to store in a way we can use natural language to query the Our goal is to offer company portfolios to customers, which requires storing and querying the portfolios in a way that allows LLM searches. To achieve this, we'll be using a vector store database which is designed to handle the complexities of storing and retrieving vector embeddings - [ChromaDB](https://www.trychroma.com/).
+
+ChromaDB is an open-source vector database that enables fast and efficient retrieval of high-dimensional data. This is particularly useful in our scenario, where we want to find relevant portfolios based on their semantic meaning rather than exact keyword matches. ChromaDB supports various embedding models and can automatically convert text into embeddings, but we'll be doing the embedding ourselves and providing it to ChromaDB along with the original data and metadata.
+
+To start, let's provide the portfolio information. We'll use a simple CSV file with skills, role, and links. We're focusing on these three fields because they provide the most relevant information for our purpose. Here's an example of what the CSV file might look like (as me the all-in-one person):
+
+| Skills                            | Role                      | Link                     |
+|:----------------------------------|:--------------------------|:-------------------------|
+| React, Node.js, MongoDB           | Full-stack Javascript     | https://rodrigobaron.com |
+| .NET, SQL Server                  | .Net Developer            | https://rodrigobaron.com |
+| Machine Learning, Python, Pytorch | Machine Learning Engineer | https://rodrigobaron.com |
+| LLM, Prompt Engineer              | AI Engineer               | https://rodrigobaron.com |
+
+Next, we'll create a vector store database and a collection to store the embeddings using ChromaDB.
+
+```python
+chroma_client = chromadb.PersistentClient("vect_db")
+collection = chroma_client.get_or_create_collection(name="portfolio")
+```
+
+Now, let's generate the embeddings from our data. We'll be using the `sentence-transformers/all-MiniLM-L6-v2` model, which is a widely adopted model and the default model used by ChromaDB.
+
+When generating the embeddings, we'll be using the skills field from our data. This is because the skills listed are the most relevant for determining the portfolio's relevance to a particular job. We'll store the role and link as metadata, which we can use later to build the email.
+
+```python
+model = sentence_transformers.SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+data = pd.read_csv("resources/portfolio.csv")
+for _, row in data.iterrows():
+    embeddings = model.encode(row["Skills"]).tolist()
+    collection.add(
+        documents=row["Skills"],
+        embeddings=embeddings,
+        metadatas={"role": row["Role"], "link": row["Link"]},
+        ids=[str(uuid.uuid4())],
+    )
+```
+
+Finally, let's fetch the documents by encoding the query input and defining how many results to return.
+
+```python
+query_embedding = model.encode("pytorch").tolist()
+result = collection.query(
+    query_embeddings=[query_embedding], n_results=1
+).get("metadatas", [])
+print(result)
+"""
+[[{'link': 'https://rodrigobaron.com', 'role': 'Machine Learning Engineer'}]]
+"""
+```
+
+This result shows us the most relevant portfolio based on the search query, which in this case is the portfolio of a **Machine Learning Engineer** with expertise in **PyTorch**.
+
+## Scraping Jobs
+
+Before we dive into building a cold mail generator, we need to gather job information and structure it in a way that's easy to integrate with a vector store and use as core information for the cold mail. We'll need the required job skills for the vector store and a job summary for the cold mail. However, instead of spending time scraping this information, we'll delegate the task to a LLM.
+
+Let's start by doing some basic page scraping using [BeautifulSoup](https://beautiful-soup-4.readthedocs.io/en/latest/), which will parse the HTML and give us the main content and page title.
+
+```python
+page = requests.get("https://jobs.apple.com/en-us/details/200503445/aiml-machine-learning-engineer-scientist-siri-information-intelligence").text
+soup = BeautifulSoup(page, "html.parser")
+item = soup.find_all("span")
+
+page_content = ""
+for x in item:
+    page_content += f" {x.get_text()}"
+
+page_title = soup.title.get_text()
+```
+
+That was easy. Now, we'll delegate the hard work to the LLM. However, we need to consider that the LLM will provide information in a format that's suitable for "next token prediction," which can vary depending on the nature of the LLM itself. To get consistent and reliable responses from the LLM, we'll need to structure its outputs. I'll be using [Instructor](https://python.useinstructor.com/) for this.
+
+Instructor streamlines interactions with LLMs, ensuring that their responses conform to predefined structured data formats with robust data validation capabilities. By defining a schema with clear documentation for the LLM, Instructor can prompt the model to return JSON data that aligns with this schema, rather than unstructured text. Additionally, Instructor includes automatic retry functionality, which uses natural language error messages to guide the LLM in making corrections when validation fails.
+
+Let's define our job output structure using Pydantic:
+
+```python
+class JobInfo(BaseModel):
+    title: str = Field(..., description="Short text to for job title, ", required=True)
+    description: str = Field(..., description="Detailed job description", required=True)
+    role: str
+    experience: str
+    skills: List[str]
+```
+
+We've defined key attributes such as title, description, role, experience, and skills. We've also provided some basic information on how to fill in the title and description. As you may notice, this is similar to how we structure data for applications that interact with databases and/or APIs. This is a familiar domain with many years of experience and design patterns that we can apply.
+
+The next step is where may require some try/error – prompting the LLM to generate relevant information. We'll need to craft a prompt that gives the LLM context, persona, and instructions. That can vary depending on the model, data and task but let's keep it simple:
+
+```python
+JOBS_PROMPT = """You are an job web scrapper specialist which get accurate job information from website pages.
+
+Get information from the job title: {page_title}
+Using the page content:
+{page_content}
+
+### INSTRUCTION:
+Extract the job information from website content, we need the plain job content so do not extract any information regarding the website itself and others content not related to job title.
+Consider only the job description.
+"""
+
+jobs_prompt = JOBS_PROMPT.format(page_title=page_title, page_content=page_content)
+
+job_info = client.chat.completions.create(
+    model=...,
+    messages=[{"role": "user", "content": jobs_prompt}],
+    response_model=JobInfo,
+)
+print(job_info.skills)
+"""
+['Machine Learning', 'Deep Learning', 'Information Retrieval', 'Natural Language Processing', 'Data Mining', 'Python', 'Go', 'Java', 'C++', 'Spark', 'Hadoop MapReduce', 'Hive', 'Impala']
+"""
+```
+
+![Apple Job](/images/cold-mail-generator/job-page.png "Apple Job Screenshot")
+
+Good.. the model is getting all skills, However, as we've discussed, the model can hallucinate and provide incorrect skills, which can lead to offering wrong portfolios. To address this, we'll define a validator using Pydantic:
+
+```python
+    @field_validator("skills")
+    @classmethod
+    def skills_exists(cls, v: List[str], info: ValidationInfo):
+        context = info.context
+        if context:
+            context = context.get("text_chunk").lower()
+            for skill in v:
+                if skill.lower() not in context:
+                    raise ValueError(f"Skill `{skill}` not found in text")
+        return v
+```
+
+If the skill is not found in the job text, the validator will raise an error. We can test this by creating a job dictionary with an incorrect skill. For example this will raise a `ValidationError`, indicating that the skill "C++" is not found in the text.
+
+```python
+job_content = """Software Engineer (Remote)
+We seek for a software engineer with 2-3 years of experience:
+Skills:
+- Python
+- Django
+- SQL
+"""
+
+job_info_dict = dict(
+    title="Software Engineer",
+    description="We are looking for a skilled software engineer...",
+    role="Software Engineer",
+    experience="2-3 years",
+    skills=["Python", "Django", "C++"],
+)
+
+JobInfo.model_validate(job_info_dict, context={"text_chunk": job_content})
+"""
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/lib/python3.12/site-packages/pydantic/main.py", line 595, in model_validate
+    return cls.__pydantic_validator__.validate_python(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pydantic_core._pydantic_core.ValidationError: 1 validation error for JobInfo
+skills
+  Value error, Skill `C++` not found in text [type=value_error, input_value=['Python', 'Django', 'C++'], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.9/v/value_error
+"""
+```
+
+That’s a powerful way to handle the model output and also give the ability to self-correct and self-reflect, we can control this by setting the parameter `max_retries` on the api call.
+
+Further, we can write unit tests to ensure that we're handling the model response correctly:
+
+```python
+def test_job_info_invalid_skill():
+    with pytest.raises(ValueError):
+        job_info_dict = dict(
+            title="Software Engineer",
+            description="We are looking for a skilled software engineer...",
+            role="Software Engineer",
+            experience="2-3 years",
+            skills=["Python", "Django", "C++"],
+        )
+        JobInfo.model_validate(job_info_dict, context={"text_chunk": job_content})
+```
+
+## Cold Mail Generation
+
+Now that we've got our portfolio file stored and a job web page scraped, we're moving on to the cold mail generation step. We'll define the output structure, just like before. However, this time we've got two structures to work with: one for the portfolio and another for the email content. The portfolio structure contains the same information we extracted from our vector store, but with additional context for the LLM to understand how to handle it.
+
+On the other hand, the email structure includes fields for **subject**, **content**, **portfolio_links**, and **best_regards**. We've also provided some explicit guidelines for filling out such "Mail content without the ending regards, and links" section. To avoid any hallucinations in the links, we've also defined a **portfolio_links** validation.
+
+```python
+class PortfolioLink(BaseModel):
+    name: str = Field(..., description="Person name", required=True)
+    role: str = Field(..., description="Person role", required=True)
+    link: str = Field(..., description="Person portfolio link", required=True)
+
+
+class Email(BaseModel):
+    subject: str = Field(..., description="Email subject", required=True)
+    content: str = Field(
+        ...,
+        description="Mail content without the ending regards, and links",
+        required=True,
+    )
+    portfolio_links: List[PortfolioLink]
+    best_regards: str
+
+    @field_validator("portfolio_links")
+    @classmethod
+    def portfolio_links_exists(cls, v: List[PortfolioLink], info: ValidationInfo):
+        context = info.context
+        if context:
+            context_links = context.get("links")
+            for link in v:
+                if link.link not in context_links:
+                    raise ValueError(
+                        f"Link `{link.link}` not found in the reference links."
+                    )
+        return v
+```
+
+Now that we've got all the pieces in place, we just need to tie them together. We'll query our database using the scraped skills and provide the results as context to generate a cold mail. Here's the prompt we'll use, which includes some extra instructions to provide a few common project achievements as part of the persona.
+
+```python
+EMAIL_PROMPT = """
+<job_description>
+{job_description}
+</job_description>
+
+### INSTRUCTION:
+You are {sales_person}, a business development executive at {company_name}. {company_name} is an AI & Software Consulting company dedicated to facilitating
+the seamless integration of business processes through automated tools.
+Over our experience, we have empowered numerous enterprises with tailored solutions, fostering scalability, process optimization, cost reduction, and heightened overall efficiency.
+Your job is to write a cold mail to the client regarding the job mentioned above describing the capability of {company_name} in fulfilling their needs.
+Also add the most relevant ones from the following links to showcase  {company_name}'s portfolio: {link_list}
+"""
+
+email_prompt = EMAIL_PROMPT.format(
+    job_description=job_info.description,
+    sales_person=sales_person,
+    company_name=company_name,
+    link_list=link_list,
+)
+
+email = client.chat.completions.create(
+    model=...,
+    messages=[{"role": "user", "content": email_prompt}],
+    response_model=Email,
+)
+```
+
+I've even got a Streamlit project set up to make it easy to demo. Check out the [GitHub repo](https://github.com/rodrigobaron/demos/tree/main/cold_email).
+
+## Observability
+
+Observability is about making systems transparent and understandable. The key to achieving this is telemetry data, which includes logs, metrics, and traces - also known as the "three pillars of observability." This data provides the raw material needed to investigate complex system issues and understand unpredictable situations that might not be apparent through monitoring alone.
+
+In this project, I chose Logfire, an observability platform designed to make monitoring and understanding application behavior easier. Built on top of OpenTelemetry, Logfire transforms raw logs into actionable insights, visualizations, dashboards, and alerts. For example, we can easily track the requests sent to the LLM API and their responses using Logfire.
+
+![Logfire](/images/cold-mail-generator/logfire.png "Logfire Screenshot")
+
+## Final Thoughts
+
+In conclusion, we have successfully completed the Mail Generator project and learned how to integrate generative projects into software projects, including essential tools and design patterns. This integration is crucial for the successful deployment of large projects, allowing us to establish pipelines and safeguards looking at the green lights:
+
+```text
+tests/agent_test.py .........
+tests/llm_test.py .
+tests/scrapper_test.py ...
+tests/store_test.py ...
+
+============================= 16 passed in 2.15s ============================= 
+````
+With the project performing as expected, we look forward to the next steps and continuing to build on our progress.
+
+## References
+
+* [codebasics repo](https://github.com/codebasics/project-genai-cold-email-generator) - This is the project inspirated from.
+* [Instructor](https://python.useinstructor.com/)
+* [ChromaDB](https://www.trychroma.com/)
