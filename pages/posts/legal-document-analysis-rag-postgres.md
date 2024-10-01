@@ -1,7 +1,7 @@
 ---
 title: "Legal Document Analysis RAG with PostgreSQL"
 date: 2024/09/30
-description: This article ...
+description: In this article, we will explore how to build a advanced Retrieval-Augmented Generation (RAG) application using PostgreSQL to store and query legal case documents using hybrid search.
 tag: postgres, llm, rag
 author: Rodrigo Baron
 ---
