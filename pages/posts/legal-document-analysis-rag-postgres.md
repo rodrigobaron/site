@@ -1,0 +1,181 @@
+---
+title: "Legal Document Analysis RAG with PostgreSQL"
+date: 2024/09/30
+description: This article ...
+tag: postgres, llm, rag
+author: Rodrigo Baron
+---
+
+# Legal Document Analysis RAG with PostgreSQL
+
+In this article, we will explore how to build a advanced Retrieval-Augmented Generation (RAG) application using PostgreSQL to store and query legal case documents efficiently. Using hybrid search to take the power of embeddings and full-text search, we can create a system that provides relevant answers to queries, analyzing and extracting insights from legal documents cases.
+
+![Workflow](/images/legal-document-analysis-rag-postgres/workflow.png "System workflow")
+
+Article topics:
+
+- [Data and Expected Outcomes](#data-and-expected-outcomes)
+- [Why PostgreSQL](#why-postgresql)
+- [Hybrid Search](#hybrid-search)
+- [Rank Fusion and Reranking](#rank-fusion-and-reranking)
+- [Ending](#ending)
+- [References](#references)
+
+## Data and Expected Outcomes
+
+We will utilize a subset of 1,000 samples from the [Legal Text Classification Dataset](https://www.kaggle.com/datasets/amohankumar/legal-text-classification-dataset) Dataset available on Kaggle. This dataset presents the challenges typically encountered when developing a real-world RAG application.
+
+| case_id   | case_title                                                                                 | case_text                                                                                                                                                                                                                                                          |
+|:----------|:-------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Case1     | Alpine Hardwood (Aust) Pty Ltd v Hardys Pty Ltd (No 2) [2002] FCA 224 ; (2002) 190 ALR 121 | Ordinarily that discretion will be exercised so that costs follow the event and are awarded on a party and party basis. A departure from normal practice to award indemnity costs requires some special or unusual feature in the case: Alpine Hardwood (Aust) Pty Ltd v Hardys Pty Ltd (No 2) [2002] FCA 224 ; (2002) 190 ALR 121 at [11] (Weinberg J) citing Colgate Palmolive Co v Cussons Pty Ltd (1993) 46 FCR 225 at 233 (Sheppard J). |
+
+Before the technical details, it is essential to consider the input and expected outcomes of our application. In the context of a legal document RAG app, the input query need special attention to avoid empty or incorrect outputs. So we expect queries such as "What happened with XYZ," where XYZ can be a person, location, or any actor related to the legal case. The expected outcome is an answer that is specifically relevant to the queried case, ensuring that the LLM has the necessary context to generate an accurate response.
+
+So hour initial query is `"Whats the verdict from Palmer J in Macleay Nominees Pty"` and the expected document is `"Case269 - Macleay Nominees Pty Ltd v Belle Property East Pty Ltd [2001] NSWSC 743"`. Keeping this in mind help us to make good desisions when developing our application.
+
+## Why PostgreSQL
+
+When working with LLMs, storing and querying embeddings is a common task. While specialized vector databases like ChromaDB and Pinecone are often employed for this purpose, they can introduce additional complexity to integrate with the application. PostgreSQL, on the other hand, offers a mature and feature-rich database ecosystem that seamlessly integrates with most applications. With its robust database management system and support for storing vectors using the [pgvector extension](https://github.com/pgvector/pgvector), PostgreSQL provides a alternative to specialized vector databases.
+
+![Just-postgres](/images/legal-document-analysis-rag-postgres/just-postgres.png "Just use postgres for everything")
+
+Performance is a critical factor when selecting a database. Timescale, has developed an open-source extension called [pgvectorscale](https://github.com/timescale/pgvectorscale) for indexing vector embeddings in PostgreSQL. Their benchmark results demonstrate that pgvectorscale outperforms Pinecone speed and cost, making PostgreSQL a viable choice for performance-critical RAG applications.
+
+![pgvectorscale](/images/legal-document-analysis-rag-postgres/pgvectorscale.png "pgvectorscale")
+
+For simplicity the PostgreSQL setup is done using docker-compose:
+
+```docker-compose
+services:
+  db:
+    hostname: db
+    image: ankane/pgvector
+    ports:
+     - 5432:5432
+    restart: always
+    environment:
+      - POSTGRES_DB=vectordb
+      - POSTGRES_USER=testuser
+      - POSTGRES_PASSWORD=testpwd
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+```
+
+## Hybrid Search
+
+While embeddings search excels at capturing semantic similarity, it can sometimes overlook relevant results due to query keywords or limitations of the embedding model, such as out-of-vocabulary (OOV) words. To overcome this, we employ a hybrid search approach that combines the power of embeddings with traditional full-text search methods like BM25. 
+
+BM25 utilizes Term Frequency-Inverse Document Frequency (TF-IDF) scoring to measure the importance of a word in the query relative to the collection of documents. Although PostgreSQL does not have a built-in BM25 implementation, extensions like [pg_bestmatch.rs](https://github.com/tensorchord/pg_bestmatch.rs) and [pg_search](https://github.com/paradedb/paradedb/tree/dev/pg_search#overview), or services like [Supabase](https://supabase.com), can be used to incorporate BM25 functionality.
+
+In our implementation, we leverage PostgreSQL's built-in full-text search index called Generalized Inverted Index (GIN), which utilizes Term Frequency but lacks global statistics (IDF). While BM25 excels in scenarios with tens of millions of rows, GIN performs very well for our dataset size. 
+
+By combining semantic search with keyword-based full-text search, the strengths of both approaches improve the relevance and accuracy of our query results. This hybrid search method is particularly beneficial in use cases where product names, persons, or entity IDs need to be ranked alongside the contextual meaning of the query.
+
+For querying an vector table we can use cosine similarity operator `<=>`:
+
+```sql
+SELECT id, case_id, RANK () OVER (ORDER BY embedding <=> %(embedding)s) AS rank
+FROM documents
+ORDER BY embedding <=> %(embedding)s
+LIMIT 20
+```
+
+For full text search we need first convert the content to `to_tsvector`, the query `plainto_tsquery` and rank using `ts_rank_cd`:
+
+```sql
+SELECT id, case_id, RANK () OVER (ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC)
+FROM documents, plainto_tsquery('english', %(query)s) query
+WHERE to_tsvector('english', content) @@ query
+ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC
+LIMIT 20
+```
+
+## Rank Fusion and Reranking
+
+After executing the semantic search and keyword search, we obtain two collections of documents. To merge these collections into a single list, we employ the Reciprocal Rank Fusion technique. This technique normalizes the scores of the documents from both collections and orders them based on their relevance. 
+
+![Rank-fusion](/images/legal-document-analysis-rag-postgres/rank-fusion.png "Rank fusion")
+Since both search happens on Postgres we can query both embeddings and full text search and apply the Rank fusion in one single query:
+
+```sql
+WITH semantic_search AS (
+    SELECT id, case_id, RANK () OVER (ORDER BY embedding <=> %(embedding)s) AS rank
+    FROM documents
+    ORDER BY embedding <=> %(embedding)s
+    LIMIT 20
+),
+keyword_search AS (
+    SELECT id, case_id, RANK () OVER (ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC)
+    FROM documents, plainto_tsquery('english', %(query)s) query
+    WHERE to_tsvector('english', content) @@ query
+    ORDER BY ts_rank_cd(to_tsvector('english', content), query) DESC
+    LIMIT 20
+)
+SELECT
+    COALESCE(semantic_search.id, keyword_search.id) AS id,
+    COALESCE(semantic_search.case_id, keyword_search.case_id) AS case_id,
+    COALESCE(1.0 / (%(k)s + semantic_search.rank), 0.0) +
+    COALESCE(1.0 / (%(k)s + keyword_search.rank), 0.0) AS score
+FROM semantic_search
+FULL OUTER JOIN keyword_search ON semantic_search.id = keyword_search.id
+ORDER BY score DESC
+LIMIT 5
+```
+
+Additionally, we can incorporate other ranking methods, such as reranking.
+
+Reranking involves taking a subset of the documents and reordering them based on the relevance of their content to the query, rather than relying solely on scores. By applying reranking techniques, we ensure that the most relevant documents appear at the top of the final ordered list, enhancing the quality and precision of the search results.
+
+![Reranking](/images/legal-document-analysis-rag-postgres/reranking.png "Reranking")
+
+Today the most common and performant reranker is [Cohere reranker](https://cohere.com/rerank). However we will keep everything open source and use [bge-reranker-v2](https://huggingface.co/BAAI/bge-reranker-v2-m3). Unlike api and other reranker products we need do the pre-processing and post-processing ourself. First make pairs of query/document then take the scored result, clip and order:
+
+```python
+def bge_rerank(query, documents):
+    tokenizer = AutoTokenizer.from_pretrained('BAAI/bge-reranker-v2-m3')
+    model = AutoModelForSequenceClassification.from_pretrained('BAAI/bge-reranker-v2-m3')
+    model.eval()
+
+    pairs = [[query, d] for d in documents]
+    with torch.no_grad():
+        inputs = tokenizer(pairs, padding=True, truncation=True, return_tensors='pt', max_length=1024)
+        scores = model(**inputs, return_dict=True).logits.view(-1, ).float()
+        return scores.tolist()
+
+...
+
+# filter out the negative rerank
+final_result = [d for d in final_result if d['rerank_score'] > 0]
+
+# sort by renrank
+final_result = sorted(final_result, key=lambda x: x['rerank_score'], reverse=True)
+```
+
+## Ending
+
+Building a RAG application with PostgreSQL offers a powerful and efficient solution for extracting insights from legal case documents. By leveraging the strengths of embeddings and full-text search, we can create a system that provides accurate and relevant answers to queries related to specific legal cases. The use of rank fusion and reranking techniques help to find the most relevant documents.
+
+The full code is available on [this github repo](https://github.com/rodrigobaron/demos/tree/main/legal_document_analysis_postgres) where we able to reproduce the expected query/outcome defined early in this article:
+
+```bash
+$ python main.py 
+query: Whats the verdict from Palmer J in Macleay Nominees Pty
+final result: [
+    {
+        'case_id': 'Case269',
+        'title': 'Macleay Nominees Pty Ltd v Belle Property East Pty Ltd [2001] NSWSC 743',
+        'rrf_score': 0.03028233151183971,
+        'rerank_score': 1.876221776008606
+    }
+]
+```
+
+## References
+
+* [Hybrid Search Workshop](https://github.com/trancethehuman/ai-workshop-code/blob/main/Hybrid_Search_Workshop.ipynb)
+* [pgvector demo](https://github.com/johannesocean/pgvector-demo/blob/main/app/test_search.py)
+* [Contextual Retrieval](https://www.anthropic.com/news/contextual-retrieval)
+* [pg_bestmatch.rs: Elevate Your PostgreSQL Text Queries with BM25](https://blog.pgvecto.rs/pgbestmatchrs-elevate-your-postgresql-text-queries-with-bm25)
+* [QDrant Hybrid Search](https://qdrant.tech/articles/hybrid-search/)
+* [Postgres is all you need, even for vectors](https://anyblockers.com/posts/postgres-is-all-you-need-even-for-vectors)
