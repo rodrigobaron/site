@@ -1,9 +1,9 @@
 ---
-title: "Building MCP Agents"
-date: "2025/05/07"
-description: "In this article, we'll explore how to implement MCP Agents from scratch, showing how easy and powerful developing custom Agents is and extending their capability to many already available tools."
+title: Building MCP Agents
+date: 2025/05/09
+description: In this article, we'll explore how to implement MCP Agents from scratch, showing how easy and powerful developing custom Agents is and extending their capability to many already available tools.
 tag: mcp, agents, ai
-author: "Rodrigo Baron"
+author: Rodrigo Baron
 ---
 
 # Building MCP Agent From Scratch
