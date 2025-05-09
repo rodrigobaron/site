@@ -39,15 +39,15 @@ AI agents are autonomous systems capable of perceiving their environment, making
 
 Key characteristics of effective agents include goal orientation, the ability to break down problems into sub-tasks, and the capacity to learn from interactions. These systems can operate across various domains, from customer service to software development, by dynamically selecting appropriate tools and strategies based on context.
 
-So what makes agents so special compared to your regular LLMs? It's all about that persistent state and ability to take multiple steps to solve a problem. Think of it like the difference between asking someone for directions once versus having a personal assistant who plans your entire trip, adjusts when there's traffic, and makes sure you arrive on time.
+So what makes agents so special compared to your regular LLMs? It's all about persistent state and loop - ability to take multiple steps to solve a problem. Think of it like the difference between asking someone for directions once versus having a personal assistant who plans your entire trip, adjusts when there's traffic, and makes sure you arrive on time.
 
 ## Agentic Workflow
 
 Agentic workflow is basically the structured process where AI agents complete tasks through sequential reasoning and action. Unlike single-step responses, agentic workflows involve planning, execution, evaluation, and iteration. The workflow begins with task understanding, where the agent analyzes requirements and constraints to formulate an approach.
 
-The execution phase involves coordinating multiple tools and services to complete sub-tasks. Agents maintain state throughout this process, allowing them to handle interruptions, adjust strategies, and recover from errors. This dynamic capability is what distinguishes agentic systems from simpler automation tools. The workflow's effectiveness depends on robust state management.
+The execution phase involves coordinating multiple tools and services to complete sub-tasks. Agents maintain state throughout this process, allowing them to handle interruptions, adjust strategies, and recover from errors. This dynamic capability is what distinguishes agentic systems from simpler automation tools. The workflow's effectiveness depends on robust context state managemen.
 
-Now, all of this sounds great in theory, but how do agents actually communicate with the outside world? Using tools - it's the bridge that connects our agents with all the data and allow they perform actions to get stuff done!
+Now, how do agents actually communicate with the outside world? Using tools - it's the bridge that connects our agents with all the data and allow they perform actions to get stuff done!
 
 ## MCP (Model Context Protocol)
 
@@ -63,7 +63,7 @@ Key technical aspects of MCP include:
 
 MCP is particularly valuable in agentic workflows as it provides the "plumbing" that connects an AI agent to the outside world in a secure, structured manner. It complements agent orchestration tools by serving as a unified "toolbox" from which agents can invoke external actions.
 
-Alright, enough with the theory! Let's roll up our sleeves and actually build something. I'm going to show how to create your own MCP agent from scratch - no fancy frameworks needed, just some straightforward Python code.
+Alright, let's roll up our sleeves and actually build something. I'm going to show how to create your own MCP agent from scratch - no fancy frameworks needed, just some straightforward Python code.
 
 ## Building MCP Agent
 
