@@ -11,11 +11,11 @@ const GiscusComments = () => {
         <Giscus
             id="comments"
             repo="rodrigobaron/site"
-            repoId="R_kgDONxvZHA"
+            repoId="R_kgDOGgO1pA"
             category="Announcements"
             categoryId="DIC_kwDONxvZHM4Cmh3a"
             mapping="pathname"
-            term="Welcome to @giscus/react component!"
+            term="Welcome to Rodrigo Baron's site!"
             reactionsEnabled="1"
             emitMetadata="0"
             inputPosition="top"
