@@ -1,0 +1,15 @@
+---
+title: Rodrigo Baron's blog - AI Journal
+description: Rodrigo Baron's AI Journal - Exploring current and next generation AI applications
+---
+
+export const getStaticProps = async (props) => {
+const params = await props.params
+  return {
+    tag: params.tag
+  }
+}
+
+import { PostsPage } from '../../components/PostsPage.tsx'
+
+<PostsPage params={await getStaticProps(props)} />
