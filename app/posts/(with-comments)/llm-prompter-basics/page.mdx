@@ -1,0 +1,99 @@
+---
+title: "LLM Prompter: Basics"
+date: 2024/01/15
+description: First post “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).
+thumbnail: /images/posts/prompter/prompt-principles.png
+tags: [Prompt-Engineer]
+author: Rodrigo Baron
+---
+
+# LLM Prompter: Basics
+
+Hey fellows, have an new post series called “LLM Prompter” which we will learn to use the power of the modern dragons (LLMs/Generative AI). In this series we will learn to utilize them not training/finetuning (coming soon)  and get better responses, use in complex cases and learn to improve. The series will be break down in 4 articles:
+
+1. Prompt Engineering (this)
+2. [ReAct](llm-prompter-react)
+3. [RAG](llm-prompter-rag)
+4. [Advanced Prompting](llm-prompter-advanced)
+
+We'll be demonstrating concepts using [Llama 2](https://ai.meta.com/llama/), [OpenChat 3.5](https://github.com/imoneoi/openchat) and [LangChain](https://www.langchain.com/), but please note that these posts are not meant to serve as tutorials. Instead, think of them as guides to help you develop better instructions for solving specific tasks. Be sure consult the references research papers for deeper insights.
+
+## Large Language Models
+
+Before diving into prompt engineering, let's take a moment to understand what LLMs are and how they work. These powerful models such as [ChatGPT](https://arxiv.org/abs/2303.08774), [Llama](https://ai.meta.com/llama/), and [Mistral](https://mistral.ai/news/mixtral-of-experts/), are initially pretrained to predict the next token based on given input text. They subsequently go through supervised fine-tuning (SFT) to follow instructions, understand chat conversation, and align themselves with human preferences using methods like Reinforcement Learning with Human Feedback ([RLHF](https://arxiv.org/abs/2305.18438)) and Direct Preference Optimization ([DPO](https://arxiv.org/abs/2305.18290)). At heart, LLMs are text generators, provide them with text input and they produce additional task relevant text.
+
+![LLM Training](/images/posts/prompter/llm-training.png "Understanding Next Token Prediction: Concept To Code: 1st part!")
+
+The input text are converted into tokens during pre-processing, with certain special tokens representing the beginning or end of the text to signal when generation should stop.
+
+![Tokenizer](/images/posts/prompter/tokenizer.png "Understanding Next Token Prediction: Concept To Code: 1st part!")
+
+While individual models vary in terms of capacity and capability, they generally share common characteristics, including limited context lengths and varying degrees of reasoning ability. Most LLMs contain billions (or even trillions - GPT-4 👀) of parameters and are trained on vast quantities of text using many GPUs per hour. Performance and limitations mainly come from the quality of the data used and the model's size; higher-quality data and larger parametric models yield superior results, as demonstrated in the Llama 2 paper.
+
+![scaling-law](/images/posts/prompter/scaling-law.png "Llama 2: Open Foundation and Fine-Tuned Chat Models")
+
+## Prompt Engineering
+
+Now that we have a basic understanding of LLMs, let's discuss prompt engineering. Put simply, prompt engineering refers to the process of carefully constructing queries to get ideal responses from LLMs. Given that formulation, your request has a direct impact on the resulting response, thoughtfully designed prompts are essential for obtaining optimal responses. Although there isn't a universal formula for creating effective prompts, researchers have identified several guiding principles and techniques to build successful prompts.
+
+Throughout this article, we'll reference the 26 principles outlined in the paper [Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4](https://arxiv.org/abs/2312.16171) while adding our own recommendations along the way.
+
+## 26 Prompt Principles
+
+These principles fall into five main categories: **Prompt Structure and Clarity**, **Specificity and Information**, **User Interaction and Engagement**, **Content and Language Style**, and **Complex Tasks and Coding Prompts**.
+
+![prompt-principles](/images/posts/prompter/prompt-principles.png "Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4")
+
+The paper show some principles which you may already know but the researchers go deep into testing each one. Showing the examples here make the article too long so to have an better experience open the [Notebook](https://github.com/rodrigobaron/site_content/blob/main/prompt/1_prompt_engineer.ipynb) and check the examples there.
+
+1. No need to be polite: if you say to a person “could please do X” you will get better response than “do X”, that doesn't apply for LLM. No need to add phrases like “please”, “if you don’t  mind”, “thank you”, “I would like to”, etc.,  get straight to the point.
+2. Integrate the intended audience: If you want to write an email for marketing prompt the target audience.
+3. Break down complex tasks into a sequence of simpler prompts in an interactive conversation.
+4. Employ affirmative directives such as ‘do,’ while steering clear of negative language like ‘don’t’. In most cases LLM’s ignore NOT instruction.
+5. When you need clarity or a deeper understanding of a topic, idea, or any piece of information, utilize:
+o Explain [insert specific topic] in simple terms.
+o Explain to me like I’m 11 years old.
+o Explain to me as if I’m a beginner in [field].
+o Write the [essay/text/paragraph] using simple English like you’re explaining something to a 5-year-old.
+Use lot of this 🙂
+6. Add “I’m going to tip $xxx for a better solution!”
+7. Use few-shot prompting
+8. When formatting your prompt, start with ‘###Instruction###’, followed by either ‘###Example###’ or ‘###Question###’ if relevant.
+9. Incorporate the following phrases: “Your task is” and “You MUST”
+10. Incorporate the following phrases: “You will be penalized”
+11. Use ”Answer a question given in a natural, human-like manner”.
+12. Use leading words like writing “think step by step”. That is the most know prompt when need reasoning or better answer.
+13. For content creation use “Ensure that your answer is unbiased and does not rely on stereotypes”.
+14. Make the model ask questions to you, it makes fill the gaps. People are using this to create personalized content.
+15. To inquire about a specific topic or idea or any information and you want to test your understanding, you can use the following phrase: “Teach me the [Any theorem/topic/rule name] and include a test at the end, but don’t give me the answers and then tell me if I got the answer right when I respond”.
+16. Assign a role to the large language models.
+17. Use Delimiters.
+18. Repeat a specific word or phrase multiple times within a prompt.
+19. Combine Chain-of-thought (CoT) with few-Shot prompts.
+20. Use output primers, which involve concluding your prompt with the beginning of the desired output. Utilize output primers by ending your prompt with the start of the anticipated response.
+21. To write an essay /text /paragraph /article or any type of text that should be detailed: “Write a detailed [essay/text/paragraph] for me on [topic] in detail by adding all the information necessary”.
+22. To correct/change specific text without changing its style: “Try to revise every paragraph sent by users. You should only improve the user’s grammar and vocabulary and make sure it sounds natural. You should not change the writing style, such as making a formal paragraph casual”.
+23. When you have a complex coding prompt that may be in different files: “From now and on whenever you generate code that spans more than one file, generate a [programming language ] script that can be run to automatically create the specified files or make changes to existing files to insert the generated code. [your question]”.
+24. When you want to initiate or continue a text using specific words, phrases, or sentences, utilize the following prompt:
+’I’m providing you with the beginning [song lyrics/story/paragraph/essay...]: [Insert lyrics/words/sentence]’. Finish it based on the words provided. Keep the flow consistent.
+25. Clearly state the requirements that the model must follow in order to produce content, in the form of the keywords, regulations, hint, or instructions
+26. To write any text, such as an essay or paragraph, that is intended to be similar to a provided sample, include the following instructions: Please use the same language based on the provided paragraph[/title/text /essay/answer].
+
+As mentioned earlier, LLMs don't interpret words the same way humans do because they operate on the token level. Therefore, it's crucial to consider how LLMs might view synonymous phrases differently due to variations in their training data. 
+
+When designing prompts, avoid strictly following traditional grammatical rules. For instance, if you want users to perform four actions, instruct them to "do A, B, C, and D" instead of composing a grammatically correct alternative. Additionally, always imageine the desired output format for the task before crafting prompts, allowing the model produce the appropriate structure and content.
+
+## Ending
+
+That concludes Part One of this series! The next is about [Chain of Thoughts and ReAct](llm-prompter-react). Happy prompt hacking 🙂
+
+
+## References
+
+- [Meta - Llama 2](https://ai.meta.com/llama/)
+- [GPT4 Technical Report](https://arxiv.org/abs/2303.08774)
+- [Reinforcement Learning with Human Feedback: Learning Dynamic Choices via Pessimism](https://arxiv.org/abs/2305.18438)
+- [Direct Preference Optimization: Your Language Model is Secretly a Reward Model](https://arxiv.org/abs/2305.18290)
+- [Llama 2: Open Foundation and Fine-Tuned Chat Models](https://arxiv.org/abs/2307.09288)
+- [Understanding Next Token Prediction: Concept To Code: 1st part!](https://medium.com/@akash.kesrwani99/understanding-next-token-prediction-concept-to-code-1st-part-7054dabda347)
+[Principled Instructions Are All You Need for Questioning LLaMA-1/2, GPT-3.5/4](https://arxiv.org/abs/2312.16171)

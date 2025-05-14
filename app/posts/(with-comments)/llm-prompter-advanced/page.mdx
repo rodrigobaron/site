@@ -1,0 +1,91 @@
+---
+title: "LLM Prompter: Advanced"
+date: 2024/02/01
+description: Last post of “LLM Prompter” series which teach howto use the power of the modern dragons (LLMs/Generative AI).
+thumbnail: /images/posts/prompter/tree-of-thoughts.png
+tags: [Prompt-Engineer, LangChain]
+author: Rodrigo Baron
+---
+
+# LLM Prompter: Advanced
+
+This is the final article in our LLM Prime series, the last article we discussed Retrieval Augmented Generation (RAG), enabling us to incorporate customized information into LLM contexts, thereby enhancing AI agents. However, designing and building AI Agents presents certain challenges, primarily concerning knowledge extraction and reasoning paths.
+
+1. [Prompt Engineering](llm-prompter-basics)
+2. [ReAct](llm-prompter-react)
+3. [RAG](llm-prompter-rag)
+4. Advanced Prompting (this)
+
+Knowledge Extraction: When LLMs require filling intermediate steps using contextual or tool-provided information, they encounter issues—specifically, if the given data is insufficient, the LLM may generate irrelevant or "hallucinated" answers rather than selecting the appropriate response.  
+
+Reasoning Paths: These refer to the sequential decision-making processes within the LLM. Errors at any stage can lead to cascading failures throughout the subsequent stages. Although recovery might be feasible, increasing costs accompany longer chains due to higher token counts and context limitations. 
+
+In this article, we explore advanced strategies to address these concerns.  
+
+## Self-Consistency
+
+Assuming the LLM knows the correct solution, the Self-Consistency technique allows sampling the model several times and choosing the most frequently occurring answer among the results. By doing so, you obtain a consistently accurate outcome.
+
+![Self-Consistency](/images/posts/prompter/self-consistency.png "Self-Consistency with Chain of Thought (CoT-SC)")
+
+In essence, this builds upon CoT prompting while providing improved consistency in the final answer.
+
+## Self-Reflection
+
+Research indicates that humans can learn from their errors, and LLMs exhibit similar capabilities. Utilizing reflection enables models to identify and rectify mistakes, improving performance across various tasks, including dialogue chat scenarios.
+
+![Self-Reflection](/images/posts/prompter/self-reflection.png "Reflexion: Language Agents with Verbal Reinforcement Learning")
+
+Combining reflection with external evaluation tools or generating synthetic tests empowers LLMs to tackle challenging tasks effectively.
+
+## Tree-of-Thoughts
+
+As an alternative approach based on CoT and Self-Consistency methods, Tree-of-Thought focuses on step resolution. Instead of considering whole reasoning sequences, this strategy involves sampling individual intermediate steps, facilitating controlled self-assessment during the reasoning process.
+
+![Self-Reflection](/images/posts/prompter/tree-of-thoughts.png "Tree of Thoughts: Deliberate Problem Solving with Large Language Models")
+
+Here's a four-step outline detailing its implementation:  
+
+1. **Thought decomposition**: Split the task in thought steps.  
+2. **Thought generator**: Generate samples by sample or propose.  
+3. **State evaluator**: Evaluate the step by value or vote.  
+4. **Search algorithm**: Search tree by Breadth-first search (BFS) or Depth-first search (DFS).  
+
+## Self-Ask Prompting
+
+Another CoT extension, Self-Ask introduces follow-up prompts targeting LLM verification of potential gaps or erroneous responses in intermediate steps.
+
+![Self-Ask](/images/posts/prompter/self-ask.png "Measuring and Narrowing the Compositionality Gap in Language Models")
+
+Commonly employed alongside search tools, Self-Ask queries intermediate outcomes iteratively.
+
+## Least-to-Most Prompting
+
+Drawing inspiration from childhood learning techniques, least-to-most prompting decomposes complex tasks into manageable subtasks, addressing them sequentially. Implementation entails two primary phases:
+
+1. **Decomposition**: Present examples demonstrating effective division of complex questions followed by the actual prompt question.
+2. **Problem segmentation**: Amalgamate previously obtained answers before posing the following question.
+
+![Least-to-Most](/images/posts/prompter/least-to-most.png "Measuring and Narrowing the Compositionality Gap in Language Models")
+
+While sharing superficial similarities with CoT, least-to-most differs substantially. Rather than resolving all questions consecutively within a single prompt, least-to-most combines earlier solutions prior to proceeding further, ultimately yielding distinct outputs.
+
+## Ending
+
+We've finished our series covering some advanced and effective prompt techniques, also have an example notebook showing how to utilize [CoT + Self-Consistency + Self-Reflect](https://github.com/rodrigobaron/site_content/blob/main/prompt/4_advanced_prompting.ipynb). Simple prompting, yet give powerful results, actaully there are community rumors that ChatGPT (the product not model/API) might be using a similar approach: 1) Apply CoT to the question. 2) Generate Samples for N possible answers. 3) Reflect the N answers and provide the final, most comprehensive response. Well who knows **¯\\_(ツ)_/¯** 
+
+## References
+
+[Self-Consistency Improves Chain of Thought Reasoning in Language Models](https://arxiv.org/abs/2203.11171)
+
+[Self-Consistency with Chain of Thought (CoT-SC)](https://medium.com/@johannes.koeppern/self-consistency-with-chain-of-thought-cot-sc-2f7a1ea9f941)
+
+[Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366)
+
+[Tree of Thoughts: Deliberate Problem Solving with Large Language Models](https://arxiv.org/abs/2305.10601)
+
+[Large Language Model Guided Tree-of-Thought](https://arxiv.org/abs/2305.08291)
+
+[Measuring and Narrowing the Compositionality Gap in Language Models](https://ofir.io/self-ask.pdf)
+
+[Least-to-Most Prompting Enables Complex Reasoning in Large Language Models](https://arxiv.org/abs/2205.10625)
