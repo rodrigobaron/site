@@ -1,0 +1,68 @@
+---
+title: Two-Stage Delivery Framework
+date: 2025/11/11
+description: It's a strategic framework that acknowledges a fundamental truth about modern engineering - sometimes you need to move fast, and sometimes you need to build things right. Rather than choosing one at the expense of the other, two-stage delivery separates the development lifecycle into two deliberate phases.
+thumbnail: /images/posts/two-stage-delivery/2sd.png
+tags: [Project-Management]
+author: Rodrigo Baron
+---
+# Two-Stage Delivery Framework
+
+It's a strategic framework that acknowledges a fundamental truth about modern engineering: sometimes you need to move fast, and sometimes you need to build things right. Rather than choosing one at the expense of the other, two-stage delivery separates the development lifecycle into two deliberate phases — a rapid delivery phase focused on getting features to market, followed by a systematic technical debt repayment phase that ensures long-term system health.  
+
+It recognizes that technical debt, like financial debt, compounds over time. The interest accumulates in the form of slower feature velocity as code becomes harder to modify, increased bug rates from fragile and poorly-tested code, higher onboarding costs for new team members, and system instability that leads to production incidents. The second stage prevents this compound interest from spiraling out of control by systematically paying down debt before it becomes unmanageable.
+
+## The Framework
+
+![Two Stage Delivery](/images/posts/two-stage-delivery/2sd.png)
+
+The first stage is all about speed and market responsiveness. During this phase, teams ship functional features quickly to meet launch deadlines, respond to competitive pressure, or validate market hypotheses. They make pragmatic trade-offs in code architecture, test coverage, and documentation to accelerate time-to-market. The teams accept calculated technical debt as a conscious strategic decision to deliver minimum viable implementations that solve user problems without over-engineering, understanding that perfect code shipped too late is often less valuable than good-enough code shipped on time.
+
+The second stage shifts the focus entirely to system sustainability. Teams engage in systematic refactoring to improve code structure, readability, and maintainability. They expand test coverage to catch regressions and enable confident future changes. Addressing architectural weaknesses identified during rapid development, improve documentation and knowledge sharing, optimize performance and resolve scalability bottlenecks. 
+
+Similarly, MVP development emphasizes building the smallest feature set that delivers value, but it often lacks explicit planning for what comes after. Many MVPs become permanent solutions that accrue unbounded technical debt. Two-stage delivery treats the MVP as stage one and explicitly plans for stage two improvements in the stage one. Also makes debt repayment an integral, non-negotiable part of the delivery cycle.
+
+Agile methodologies emphasize iterative development and regular refactoring, they don't explicitly separate rapid delivery from debt repayment as distinct strategic phases. Two-stage delivery can work within Agile frameworks but adds specific structure for managing the speed-quality trade-off. The key difference is an explicitly plan for technical debt as a strategic tool, with a built-in mechanism for repayment, rather than treating it as something to avoid entirely.
+
+## Extending Scrum
+
+Two-stage delivery aligns naturally with Scrum. Teams can choose the integration patterns:  
+* Dedicate entire sprints to a fast delivery and technical debt repayment.
+* Allocating 70% to feature delivery and 30% to refactoring and debt repayment in every sprint.
+* A complete two-stage cycle, spending the first sprint on rapid implementation and then dedicating the next sprint to refinement, testing, and technical improvements.
+
+![Two Stage Delivery](/images/posts/two-stage-delivery/2sd_capacity.png)
+
+The ratio you choose matters less than ensuring both stages actually happen. During sprint planning, teams should explicitly label stories as stage one "delivery" or stage two "refinement", ensuring both types are represented in the sprint backlog. Daily standups should track progress on both new features and debt repayment, identifying when stage one work is creating more debt than anticipated. Sprint reviews become opportunities to demonstrate both user-facing features and technical improvements, helping stakeholders understand the value of stage two work. And retrospectives should evaluate whether the balance was appropriate, identify areas where debt is accumulating fastest, and adjust the delivery-to-refinement ratio for upcoming sprints.
+
+Critically, Scrum teams should maintain separate definitions of done. The stage one definition might be pragmatic: the feature has basic test coverage for critical paths, includes minimal documentation, and logs known issues for stage two. The stage two definition would be comprehensive: full test coverage, refactored code following team standards, complete documentation and optimized performance. This explicit separation acknowledges that what's "done enough" for rapid validation differs from what's "done right" for long-term production sustainability.
+
+## A/B Testing
+
+Two-stage delivery and A/B testing form a powerful combination for data-driven product development. During stage one, teams can deploy multiple variants quickly with minimal polish. Imagine your team needs to implement a new recommendation algorithm. Rather than debating which approach is best and building one perfect system, you could rapidly build three different implementations—collaborative filtering, content-based, and a hybrid approach—with quick, unpolished code. Deploy them behind feature flags to different user segments, accepting that all variants have technical debt.
+
+Once A/B testing identifies the successful variant, stage two becomes far more efficient. You invest in refactoring only the winning implementation, archiving the losing variants to reduce maintenance burden, add comprehensive testing and monitoring, and optimize performance based on actual production data. You're using insights from the A/B test to guide technical decisions, understanding real-world usage patterns before optimizing, and building scalability features for the metrics that actually grew. This avoids the common trap of over-engineering solutions for features that won't be adopted or optimizing dimensions that don't matter to users.
+
+## How to Implement
+
+Two-stage delivery requires more than just good intentions.
+
+**1. Make technical debt visible and quantifiable:** Maintain a backlog of known technical debt items, tagging them by severity, and estimated repayment cost. Review and prioritize regularly. Measure the impact by tracking metrics that reflect technical debt. Quantify how debt slows development velocity and present the data to stakeholders in business terms they care about, like lost revenue or slower feature delivery. You might track lines of code without test coverage, average pull request review time (which increases with code complexity), the percentage of sprint capacity spent on bugs versus features.
+
+**2. Establish clear transition criteria to move from stage one to stage two:** You might create a simple decision framework: if feature are accepted (A/B testing, business sign-off, evaluation ...) the technical debt tasks should be the next in the task list.
+
+**3. Allocate dedicated time for stage two:** You might follow the 70-30 rule, spending 70% of capacity on feature delivery and 30% on technical debt repayment, adjusting the ratio based on debt levels. Or use the alternating sprint model, running two to three sprints of feature delivery followed by one sprint dedicated to refactoring and quality.
+
+**4. Communicate trade-offs transparently:** Educate stakeholders by explaining technical debt in business terms—interest payments. Show how stage two work prevents future slowdowns with concrete examples of debt causing production issues. Set expectations early.
+
+**5. Enforce minimum guardrails even in stage one:** Stage one doesn't mean zero standards. Maintain essential practices like version control with meaningful commit messages, code review (even if faster and less thorough), basic documentation including READMEs and API contracts, logging for debugging production issues, and security best practices.
+
+![Two Stage Delivery](/images/posts/two-stage-delivery/2sd_scores.png)
+
+Finally, celebrate stage two work. Technical debt repayment often goes unrecognized because it lacks visible user impact. Make it visible by showing improved metrics in sprint reviews.
+
+## Finding Your Rhythm
+
+Two-stage delivery is a mindset that balances pragmatism with engineering. The specific ratio of delivery to refinement, the criteria for transitioning between stages, and the practices you adopt should evolve based on your team's context, your product's maturity, and your organization's values.
+
+Start small. Choose one feature or project as an experiment. Ship it fast, track the technical debt, then allocate time for paydown. Measure the results—both business outcomes and engineering health metrics. Refine your approach based on what you learn.
