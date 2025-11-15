@@ -1,9 +1,9 @@
 ---
 title: "LLaMA.cpp: Serving Language Models"
-date: 2025/10/30
-description: [TODO]
-thumbnail: /images/posts/mcp-agent/meme.jpg
-tags: [MCP, Agent]
+date: 2025/11/14
+description: In this article we will explore how to use llama.cpp to deploy large language models (LLM) and vision language models (VLM) on a consumer hardware. Showing how the community was been using local models to create and consume AI applications.
+thumbnail: /images/posts/llamacpp-intro/llamacpp.png
+tags: [llamacpp, qwen3]
 author: Rodrigo Baron
 ---
 
@@ -11,7 +11,10 @@ import Image from 'next/image'
 
 # LLaMA.cpp: Serving Language Models
 
-In this article we will explore how to use llama.cpp to deploy large language models (LLM) and vision language models (VLM) on a consumer hardware. Showing how I was been using local models to create and consume AI applications.
+![LLaMa.cpp](/images/posts/llamacpp-intro/llamacpp.png)
+
+
+In this article we will explore how to use llama.cpp to deploy large language models (LLM) and vision language models (VLM) on a consumer hardware. Showing how the community was been using local models to create and consume AI applications.
 
 ## What is llama.cpp?
 
@@ -55,15 +58,15 @@ docker run -p 8080:8080 -v /path/to/models:/models \
   --host 0.0.0.0 --port 8080 --n-gpu-layers 999
 ```
 
-However I build from source with CUDA support in my ubuntu server machine:
+However I build from source with CUDA support in my Ubuntu Server machine:
 
 ```bash
 apt-get update
 apt-get install pciutils build-essential cmake curl libcurl4-openssl-dev -y
 git clone https://github.com/ggml-org/llama.cpp
 cmake llama.cpp -B llama.cpp/build \
-    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON -DGGML_CUDA_FA_ALL_QUANTS=ON
-cmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split
+    -DBUILD_SHARED_LIBS=OFF -DGGML_CUDA=ON -DLLAMA_CURL=ON -DGGML_CUDA_FA_ALL_QUANTS=ON -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=ON -DLLAMA_BUILD_SERVER=ON
+cmake --build llama.cpp/build --config Release -j --clean-first --target llama-cli llama-gguf-split llama-server
 cp llama.cpp/build/bin/llama-* llama.cpp
 ```
 
@@ -88,7 +91,7 @@ Launch the server with optimized parameters:
 
 ```bash
 ./llama-server \
-  -m Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf \
+  -m models/Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf \
   --host 0.0.0.0 \
   --port 8080 \
   --jinja \
@@ -102,7 +105,7 @@ Launch the server with optimized parameters:
   --repeat-penalty 1.05 \
   --cache-type-k q8_0 \
   --cache-type-v q8_0 \
-  --flash-attn
+  --flash-attn 'on'
 ```
 
 Let's break down the parameters to understand what's happening:
@@ -110,16 +113,20 @@ Let's break down the parameters to understand what's happening:
 - `--host 0.0.0.0`: Allow network access (use 127.0.0.1 for local-only)
 - `--port 8080`: API endpoint port
 - `--jinja`: Apply jinja chat template, enabling function calling support
-e `--ctx-size 32684`: Context window size
-e `-ngl 999`: Offload all layers to GPU for maximum speed
+- `-ngl 99`: Offload all layers to GPU  
+- `--threads 2`: Total threads  
+- `--ctx-size 32684`: Context window size  
+- `--cache-type-k q8_0`: Convert cache K to int8  
+- `--cache-type-v q8_0`: Convert cache v to int8   
 
 Counter-intuitively, fewer threads often help GPU-bound inference:
 
 ```bash
 --threads 2  # Optimal for single GPU
---threads 4  # For CPU-heavy preprocessing
+--threads -1  # Use all CPU cores.
 ```
 
+The cache quantization (`--cache-type-k q8_0`) allow fitting large contexts into GPU memory without significant quality loss.
 
 ```python
 from openai import OpenAI
@@ -130,7 +137,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model='codellama-7b',
+    model='Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf',
     messages=[{
         "role": "user",
         "content": "Write Python code for quicksort"
@@ -139,13 +146,12 @@ response = client.chat.completions.create(
 
 print(response.choices[0].message.content)
 ```
-The cache quantization (`--cache-type-k q8_0`) is crucial for fitting large contexts into GPU memory without significant quality loss.
 
-Qwen3-Coder supports function calling using special tokens:
+Also, Qwen3-Coder supports function calling using special tokens:
 
 ```python
 response = client.chat.completions.create(
-    model='qwen3-coder',
+    model='Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf',
     messages=[{
         "role": "user",
         "content": "What's the current temperature in San Francisco?"
@@ -164,11 +170,88 @@ response = client.chat.completions.create(
         }
     }]
 )
+
+print(response.choices[0].message.tool_calls[0])
 ```
 
 The model will generate structured tool calls that your application can execute and feed back for final response generation.
 
+## Speculative Decoding
+
+One of the most exciting llama.cpp features is speculative decoding, a technique that can boost inference speed by 1.5-2.5x using a "draft" model.
+
+First a small "draft" model quickly generates multiple token candidates, then the main model verifies these tokens in parallel. Accepted tokens are kept; rejected tokens trigger fallback, the process repeats, maintaining identical output as standard generation.
+
+For examplem, using a 500M parameter draft model with a 30B main model. Download pre-quantized GGUF files for the draft model for Qwen2.5-Coder:
+```bash
+huggingface-cli download \
+  unsloth/Qwen2.5-Coder-32B-Instruct-GGUF \
+  Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf \
+  --local-dir ./models
+```
+
+Then the draft model:
+
+```bash
+huggingface-cli download \
+  unsloth/Qwen2.5-Coder-0.5B-Instruct-GGUF \
+  Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf \
+  --local-dir ./models
+```
+
+Running all together:
+
+```bash
+./llama-server \
+  -m models/Qwen2.5-Coder-32B-Instruct-Q4_K_M.gguf \
+  -md models/Qwen2.5-Coder-0.5B-Instruct-Q4_K_M.gguf \
+  --draft-max 16 \
+  --draft-min 1 \
+  --host 0.0.0.0 \
+  --port 8080 \
+  --jinja \
+  -ngl 99 \
+  -ngld 99 \
+  --threads 2 \
+  --ctx-size 21790 \
+  --temp 0.7 \
+  --top-p 0.8 \
+  --min-p 0.0 \
+  --top-k 20 \
+  --repeat-penalty 1.05 \
+  --cache-type-k q8_0 \
+  --cache-type-v q8_0 \
+  --flash-attn 'on'
+```
+
+Additional key parameters:
+- `-md`: Draft model path
+- `-ngld`: GPU layers for draft model
+- `--draft-max 16`: Maximum tokens to draft (4-16 optimal for code)
+- `--draft-min 1`: Minimum draft tokens
+- `--p-split 0.1`: Probability threshold for token splitting
+
+The key to effective speculative decoding is high acceptance rates (70%+), for that:
+
+- **Use same-family models**: Qwen draft for Qwen main, Llama draft for Llama main
+- **Match vocabulary**: Different tokenizers break speculation
+- **Tune draft size**: Too many tokens reduces acceptance; too few misses opportunities
+- **Monitor metrics**: Track acceptance rates via API stats
+
+The API returns helpful diagnostics:
+
+```json
+"timings": {
+  "completion_tokens": 478,
+  "draft_n": 439,
+  "draft_n_accepted": 330
+}
+```
+
+In our example have an `330/439=0.75` of acceptance.
+
 ## Vision-Language Models: Qwen3-VL 
+
 
 While Qwen3-Coder excels at text and code, vision-language models (VLMs) extend AI capabilities to images and multimodal content. llama.cpp supports VLMs through multimodal projectors that bridge vision encoders with language models.
 
@@ -176,28 +259,45 @@ VLMs require two components:
 1. **Base language model** (GGUF format)
 2. **Multimodal projector** (mmproj file) that processes images
 
+```bash
+huggingface-cli download unsloth/Qwen3-VL-30B-A3B-Instruct-GGUF \
+  --local-dir models/qwen3-vl-30b-a3b-instruct-gguf \
+  --include "*UD-Q4_K_XL.gguf" "mmproj-F16.gguf"
+```
+
 Serving a VLM:
 
 ```bash
 ./llama-server \
-  -m llava-v1.5-7b.Q4_K_M.gguf \
-  --mmproj mmproj-model-f16.gguf \
-  --host 0.0.0.0 \
-  --port 8080 \
-  -c 4096 \
-  -ngl 999
+  --model models/qwen3-vl-30b-a3b-instruct-gguf/Qwen3-VL-30B-A3B-Instruct-UD-Q4_K_XL.gguf \
+  --mmproj models/qwen3-vl-30b-a3b-instruct-gguf/mmproj-F16.gguf \
+  --n-gpu-layers 99 \
+  --jinja \
+  --top-p 0.8 \
+  --top-k 20 \
+  --temp 0.7 \
+  --min-p 0.0 \
+  --flash-attn 'on' \
+  --presence-penalty 1.5 \
+  --ctx-size 8192
 ```
 
 The API accepts base64-encoded images:
 
 ```python
 import base64
+from openai import OpenAI
+
+client = OpenAI(
+    base_url='http://localhost:8080/v1',
+    api_key='None'  # Not required for local server
+)
 
 with open('image.jpg', 'rb') as f:
     image_data = base64.b64encode(f.read()).decode()
 
 response = client.chat.completions.create(
-    model='llava',
+    model='Qwen3-VL-30B-A3B-Instruct-UD-Q4_K_XL.gguf',
     messages=[{
         "role": "user",
         "content": [
@@ -211,112 +311,21 @@ response = client.chat.completions.create(
         ]
     }]
 )
-```
 
+print(response.choices[0].message.content)
+```
 
 VLMs consume more memory than text-only models due to image tokens. Images typically consume 300-1000 tokens depending on resolution, so adjust context windows accordingly.
 
-## Speculative Decoding
-
-One of the most exciting recent additions to llama.cpp is speculative decoding, a technique that can boost inference speed by 1.5-2.5x without changing model outputs.
-
-Traditional autoregressive generation is inherently sequential: generate one token, update state, generate next token. This leaves GPUs underutilized. Speculative decoding works differently:
-
-1. A small "draft" model quickly generates multiple token candidates
-2. The main model verifies these tokens in parallel
-3. Accepted tokens are kept; rejected tokens trigger fallback
-4. The process repeats, maintaining identical output to standard generation
-
-Think of it as having an assistant suggest completions that you verify. When the assistant is accurate, you save time. When wrong, you fall back to doing it yourself—but you never get worse results.
-
-Using a 500M parameter draft model with a 30B main model:
-
-```bash
-./llama-server \
-  -m Qwen3-Coder-30B-A3B-Instruct-Q4_K_M.gguf \
-  -md Qwen2.5-0.5B-Instruct-Q4_K_M.gguf \
-  -ngl 99 \
-  -ngld 99 \
-  --draft-max 16 \
-  --draft-min 1 \
-  --p-split 0.1
-```
-
-Key parameters:
-- `-md`: Draft model path
-- `-ngld`: GPU layers for draft model
-- `--draft-max 16`: Maximum tokens to draft (4-16 optimal for code)
-- `--draft-min 1`: Minimum draft tokens
-- `--p-split 0.1`: Probability threshold for token splitting
-
-Benchmarks on RTX 3090 hardware show impressive improvements:
-
-| Scenario | Standard Speed | Speculative Speed | Gain |
-|----------|---------------|-------------------|------|
-| Coding tasks | 34.79 tok/s | 51.31 tok/s | 1.47x |
-| General text | 30.00 tok/s | 40.00 tok/s | 1.33x |
-| Repetitive output | 32.00 tok/s | 65.00 tok/s | 2.03x |
-
-For Qwen3-Coder-30B specifically, expect 40-50 tokens per second with a 0.5B draft model—a substantial upgrade from the baseline 25-30 tokens/second.
-
-The key to effective speculative decoding is high acceptance rates (70%+). Tips for success:
-
-- **Use same-family models**: Qwen draft for Qwen main, Llama draft for Llama main
-- **Match vocabulary**: Different tokenizers break speculation
-- **Tune draft size**: Too many tokens reduces acceptance; too few misses opportunities
-- **Monitor metrics**: Track acceptance rates via API stats
-
-The API returns helpful diagnostics:
-
-```json
-{
-  "accepted_draft_tokens_count": 145,
-  "rejected_draft_tokens_count": 23,
-  "acceptance_rate": 0.863
-}
-```
-
-Aim for acceptance rates above 70% for coding tasks, 60% for general text.
-
-## Optimization Best Practices
-
-### Memory Management
-
-If you're hitting OOM errors:
-1. Reduce context size (`-c 8192` instead of `-c 32768`)
-2. Enable KV cache quantization (`--cache-type-k q8_0`)
-3. Lower batch size (`--batch-size 512`)
-4. Use more aggressive quantization (Q4 instead of Q5/Q6)
-
-
-More threads create context-switching overhead when the GPU is the bottleneck.
-
-### Context Window Scaling
-
-Larger contexts require more memory and compute:
-
-| Context Size | VRAM Overhead | Generation Speed Impact |
-|-------------|---------------|------------------------|
-| 4K | Baseline | Baseline |
-| 8K | +1-2GB | -5-10% |
-| 16K | +3-4GB | -15-20% |
-| 32K | +6-8GB | -30-40% |
-
-Use the smallest context that fits your use case.
-
 ## Conclusion
 
-llama.cpp has matured into a production-ready platform for running AI models locally. With optimizations like speculative decoding, quantization, and continuous batching, consumer hardware can now handle sophisticated AI workloads that previously required data center infrastructure.
+llama.cpp has a production-ready platform for running AI models. With optimizations like speculative decoding, quantization, and continuous batching, and consumer hardware support to able handle AI workloads. I's a great option if you're building privacy-focused applications, reducing provider costs or experimenting with cutting-edge models.
 
-Whether you're building privacy-focused applications, reducing cloud costs, experimenting with cutting-edge models, or simply want full control over your AI stack, llama.cpp provides a solid foundation. The combination of performance, flexibility, and an OpenAI-compatible API makes it an essential tool for modern AI development.
-
-Start with a small model, measure performance, and optimize based on your specific use case. The thriving community continues to push boundaries—what was impossible on consumer hardware last year is routine today.
-
-## Getting Started Resources
+## References
 
 - **Official Repository**: [github.com/ggml-org/llama.cpp](https://github.com/ggml-org/llama.cpp)
 - **Model Hub**: [Hugging Face GGUF models](https://huggingface.co/models?library=gguf)
 - **Documentation**: [llama.cpp examples](https://github.com/ggml-org/llama.cpp/tree/master/examples)
-- **Community**: Reddit r/LocalLLaMA for tips, benchmarks, and troubleshooting
+- **Unsloth**: [Unsloth](https://docs.unsloth.ai/)
 
 Happy inferencing!
