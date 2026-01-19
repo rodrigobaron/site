@@ -1,7 +1,7 @@
 ---
-title: Build an AI Home Lab
+title: Building an AI Home Lab
 date: 2026/01/19
-description: "In this post we will build an MLOPs system to fine-tune a Small Language Model to be better at function calling, We will use llama-3-8b-Instruct model and do Supervised Fine-Tuning (SFT) on Salesforce/xlam-function-calling-60k dataset. At end we will have home AI lab that works the way a production system should: version-controlled, automated, reproducible, and scalable."
+description: "In this post we will build an MLOPs system to fine-tune a Small Language Model to be better at function calling, we will use llama-3-8b-Instruct model and do Supervised Fine-Tuning (SFT) on Salesforce/xlam-function-calling-60k dataset. At end we will have home AI lab that works the way a production system should: version-controlled, automated, reproducible, and scalable."
 thumbnail: /images/posts/home_lab/home_lab.png
 tags: [RAG, Agent]
 author: Rodrigo Baron
@@ -10,7 +10,7 @@ author: Rodrigo Baron
 import Image from 'next/image'
 import { Callout } from 'nextra/components'
 
-# Build an AI Home Lab 
+# Building an AI Home Lab 
 
 ![Agent MEME](/images/posts/home_lab/home_lab.png "Home Lab")
 
@@ -18,7 +18,7 @@ I have many years of Machine Learning experience, building ML pipelines on SageM
 
 Then I found dstack. The setup was absurdly simple, just a few YAML files and I had GPU-native scheduling, task orchestration, and serving endpoints all in one. Just a clean, declarative way to define my ML infrastructure that scale when needed.
 
-In this post we will build an MLOPs system to fine-tune a Small Language Model to be better at function calling, We will use llama-3-8b-Instruct model and do Supervised Fine-Tuning (SFT) on Salesforce/xlam-function-calling-60k dataset. At end we will have home AI lab that works the way a production system should: version-controlled, automated, reproducible, and scalable.
+In this post we will build an MLOPs system to fine-tune a Small Language Model to be better at function calling, we will use [llama-3-8b-Instruct](https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct) model and do Supervised Fine-Tuning (SFT) on [Salesforce/xlam-function-calling-60k](https://huggingface.co/datasets/Salesforce/xlam-function-calling-60k) dataset. At end we will have home AI lab that works the way a production system should: version-controlled, automated, reproducible, and scalable.
 
 <Callout type="info">
 I built this on a single RTX 3090, but the architecture works anywhere just swap in cloud GPUs (A100s, L4s) by updating the fleet config. Also the same workflows scale to cloud or your existing cluster without rewrite.
