@@ -1,7 +1,5 @@
 // @ts-nocheck
 import Link from 'next/link'
-import clsx from 'clsx'
-import { ComponentProps, ReactElement, ReactNode } from 'react'
 
 import { normalizePages } from 'nextra/normalize-pages'
 import { getPageMap } from 'nextra/page-map'
@@ -23,58 +21,6 @@ async function getTags() {
   return tags
 }
 
-type Size = 'lg' | 'md'
-
-const Heading = ({
-    className,
-    size = 'lg',
-    children,
-    ...props
-  }: {
-    size?: Size;
-  } & ComponentProps<'h2'>): ReactElement => {
-    return (
-      <h2
-        className={clsx(
-          'heading-wrap',
-          {
-            lg: 'heading-lg',
-            md: 'heading-mb',
-          }[size],
-          className,
-        )}
-        {...props}
-      >
-        {children}
-      </h2>
-    );
-  };
-
-  const Description = ({
-    className,
-    size = 'lg',
-    children,
-  }: {
-    size?: Size
-    className?: string
-    children: ReactNode
-  }): ReactElement => {
-    return (
-      <p
-        className={clsx(
-          'description-wrap',
-          {
-            lg: 'description-lg',
-            md: 'description-md',
-          }[size],
-          className
-        )}
-      >
-        {children}
-      </p>
-    )
-  }
-
 export const metadata = {
     title: 'Posts'
 }
@@ -84,12 +30,11 @@ export async function PostsPage(props) {
     const tags = await getTags()
     const allposts = await getPosts()
 
-    const posts = params.tag 
-    ? allposts.filter(post => 
+    const posts = params.tag
+    ? allposts.filter(post =>
         post.frontMatter.tags?.includes(decodeURIComponent(params.tag))
       )
     : allposts;
-
 
     const allTags = Object.create(null)
 
@@ -97,20 +42,18 @@ export async function PostsPage(props) {
         allTags[tag] ??= 0
         allTags[tag] += 1
     }
-    
-    // If all import methods fail, you can try replacing Bleed with a div as a temporary solution
+
     return (
         <Bleed>
             <h1 className='tag-title'>{params.tag && `Posts Tagged with "${decodeURIComponent(params.tag)}"`}</h1>
             <div className='tag-wrap'>
             {Object.entries(allTags).map(([tag, count]: [string, number]) => {
-                // Check if this tag matches the current params.tag
                 const isActive = params.tag && tag === decodeURIComponent(params.tag);
-                
+
                 return (
-                    <Link 
-                        key={tag} 
-                        href={`/tags/${tag}`} 
+                    <Link
+                        key={tag}
+                        href={`/tags/${tag}`}
                         className={`tag tag-with-href ${isActive ? 'tag-active' : 'tag-not-active'}`}
                     >
                         {tag} ({count})
@@ -120,38 +63,25 @@ export async function PostsPage(props) {
             </div>
             <div className='container'>
             {posts.map(post => (
-                <Link
-                key={post.route}
-                href={post.route ?? '/404'}
-                className='container-item'
-              >
-                <img
-                  src={post.frontMatter.thumbnail}
-                  alt={post.title}
-                  className='container-item-image'
-                />
-                <div className='heading-block'>
-                  <Heading size='md' className='heading'>
-                    {post.title}
-                  </Heading>
-                  <Description
-                    size='md'
-                    className='description'
-                  >
-                    {post.frontMatter.description}
-                  </Description>
-                  <div className='container-footer'>
-                    <span className='container-footer-wrap'>
-                      <span className='select-none'> • </span>
+                <Link key={post.route} href={post.route ?? '/404'} className='post-card'>
+                  <div className='post-card-meta'>
+                    <span className='post-card-date'>
                       {new Date(post.frontMatter.date).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric',
                       })}
                     </span>
+                    <div className='post-card-tags'>
+                      {post.frontMatter.tags?.slice(0, 3).map(tag => (
+                        <span key={tag} className='post-card-tag'>{tag}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </Link>
+                  <h2 className='post-card-title'>{post.title}</h2>
+                  <p className='post-card-desc'>{post.frontMatter.description}</p>
+                  <span className='post-card-arrow'>→ read more</span>
+                </Link>
             ))}
             </div>
         </Bleed>
