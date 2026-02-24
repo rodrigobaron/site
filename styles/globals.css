@@ -381,14 +381,18 @@ nav.nextra-toc p {
 
 .post-card-desc {
   font-family: var(--ibm-font);
-  font-size: 0.85rem;
   color: var(--ibm-text2);
   line-height: 1.65;
-  margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+html body article.nextra-body-typesetting-article p.post-card-desc {
+  font-size: 0.78rem !important;
+  margin: 0 !important;
+  line-height: 1.65 !important;
 }
 
 .post-card-arrow {
@@ -604,8 +608,10 @@ article.nextra-body-typesetting-article img {
   margin: 1.5rem auto !important;
 }
 
-/* No border on logo/hero images */
-article.nextra-body-typesetting-article .hero-block img {
+/* No border on logo/hero images or card thumbnails */
+article.nextra-body-typesetting-article .hero-block img,
+article.nextra-body-typesetting-article .featured-thumb-img,
+article.nextra-body-typesetting-article .grid-thumb-img {
   border: none !important;
   border-radius: 0 !important;
   margin: 0 !important;
@@ -631,6 +637,364 @@ article.nextra-body-typesetting-article hr::after {
   color: var(--ibm-text2);
   font-family: 'IBM Plex Mono', monospace;
   font-size: 0.9rem;
+}
+
+/* ============================================
+   HOME PAGE — SECTION HEADER
+   ============================================ */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ibm-border);
+}
+
+.section-label {
+  font-family: var(--ibm-font);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ibm-accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::before {
+  content: '';
+  width: 20px;
+  height: 1px;
+  background: var(--ibm-accent);
+  opacity: 0.5;
+}
+
+.section-count {
+  font-family: var(--ibm-font);
+  font-size: 0.62rem;
+  color: var(--ibm-text2);
+  letter-spacing: 0.04em;
+}
+
+.home-section-gap {
+  margin-top: 2.5rem;
+}
+
+.home-tag-wrap {
+  justify-content: flex-start;
+  margin-bottom: 0;
+}
+
+/* ============================================
+   HOME PAGE — FEATURED CARD
+   ============================================ */
+.featured-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--ibm-bg2);
+  border: 1px solid var(--ibm-border);
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none !important;
+  transition: border-color 0.25s;
+}
+
+.featured-card:hover {
+  border-color: var(--ibm-accent);
+  text-decoration: none !important;
+}
+
+.featured-visual {
+  min-height: 260px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--ibm-border);
+  background: var(--ibm-bg2);
+}
+
+html.dark .featured-visual {
+  background: #080810;
+}
+
+.featured-glow {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--ibm-accent);
+  opacity: 0.05;
+  filter: blur(60px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Featured card thumbnail image */
+.featured-thumb-img {
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 0.75;
+}
+
+/* Grid card thumbnail image */
+.grid-thumb-img {
+  object-fit: cover !important;
+  object-position: center !important;
+  opacity: 0.7;
+}
+
+.featured-badge {
+  position: relative;
+  z-index: 1;
+  font-family: var(--ibm-font);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ibm-accent);
+  border: 1px solid var(--ibm-border);
+  padding: 8px 14px;
+  border-radius: 3px;
+  background: var(--ibm-card);
+  backdrop-filter: blur(4px);
+}
+
+.featured-body {
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.featured-tag {
+  font-family: var(--ibm-font);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ibm-accent);
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.featured-title {
+  font-family: var(--ibm-font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+  color: var(--ibm-text);
+  margin-bottom: 10px;
+  transition: color 0.15s;
+}
+
+.featured-card:hover .featured-title {
+  color: var(--ibm-accent);
+}
+
+.featured-excerpt {
+  font-family: var(--ibm-font);
+  line-height: 1.65;
+  color: var(--ibm-text2);
+}
+
+html body article.nextra-body-typesetting-article p.featured-excerpt {
+  font-size: 0.82rem !important;
+  margin: 0 !important;
+  line-height: 1.65 !important;
+}
+
+.featured-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--ibm-border);
+  font-family: var(--ibm-font);
+  font-size: 0.7rem;
+  color: var(--ibm-text2);
+}
+
+@media (max-width: 768px) {
+  .featured-card {
+    grid-template-columns: 1fr;
+  }
+  .featured-visual {
+    min-height: 140px;
+    border-right: none;
+    border-bottom: 1px solid var(--ibm-border);
+  }
+}
+
+/* ============================================
+   HOME PAGE — POSTS GRID
+   ============================================ */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .posts-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 500px) {
+  .posts-grid { grid-template-columns: 1fr; }
+}
+
+.grid-card {
+  background: var(--ibm-bg2);
+  border: 1px solid var(--ibm-border);
+  border-radius: 4px;
+  padding: 22px;
+  text-decoration: none !important;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.grid-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--ibm-accent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.grid-card:hover {
+  border-color: var(--ibm-accent);
+  background: var(--ibm-card);
+  text-decoration: none !important;
+}
+
+.grid-card:hover::before {
+  opacity: 1;
+}
+
+.grid-card-thumb {
+  width: 100%;
+  height: 120px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  position: relative;
+  background: var(--ibm-bg);
+  border: 1px solid var(--ibm-border);
+  flex-shrink: 0;
+}
+
+html.dark .grid-card-thumb {
+  background: #080810;
+}
+
+.grid-card-glow {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  filter: blur(28px);
+  background: var(--ibm-accent);
+  opacity: 0.12;
+  top: -40px;
+  left: -30px;
+}
+
+.grid-card-label {
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  z-index: 1;
+  font-family: var(--ibm-font);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ibm-accent);
+  opacity: 0.9;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+
+.grid-card-tag {
+  font-family: var(--ibm-font);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ibm-accent);
+  margin-bottom: 9px;
+  opacity: 0.75;
+}
+
+.grid-card-title {
+  font-family: var(--ibm-font);
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--ibm-text);
+  margin-bottom: 9px;
+  flex: 1;
+  transition: color 0.15s;
+}
+
+.grid-card:hover .grid-card-title {
+  color: var(--ibm-accent);
+}
+
+.grid-card-excerpt {
+  font-family: var(--ibm-font);
+  line-height: 1.55;
+  color: var(--ibm-text2);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+html body article.nextra-body-typesetting-article p.grid-card-excerpt {
+  font-size: 0.75rem !important;
+  margin-bottom: 16px !important;
+  line-height: 1.55 !important;
+}
+
+.grid-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--ibm-border);
+  margin-top: auto;
+}
+
+.grid-card-date {
+  font-family: var(--ibm-font);
+  font-size: 0.6rem;
+  color: var(--ibm-text2);
+}
+
+.grid-card-arrow {
+  font-family: var(--ibm-font);
+  font-size: 0.72rem;
+  color: var(--ibm-accent);
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.grid-card:hover .grid-card-arrow {
+  opacity: 1;
+  transform: translateX(2px);
 }
 
 /* ============================================
