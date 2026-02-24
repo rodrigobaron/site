@@ -578,12 +578,37 @@ article.nextra-body-typesetting-article pre code {
   line-height: 1.6 !important;
 }
 
+/* Callout — override Nextra's hardcoded blue classes */
+div.nextra-callout {
+  background: var(--ibm-card) !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-left: 3px solid var(--ibm-accent) !important;
+  border-radius: 0 4px 4px 0 !important;
+  color: var(--ibm-text) !important;
+  padding: 20px 4px 20px 0 !important;
+  margin: 28px 0 !important;
+}
+
+div.nextra-callout p,
+div.nextra-callout li {
+  color: var(--ibm-text) !important;
+}
+
 /* Images */
 article.nextra-body-typesetting-article img {
   border: 1px solid var(--ibm-border) !important;
   border-radius: 4px !important;
   display: block;
   margin: 1.5rem auto !important;
+}
+
+/* No border on logo/hero images */
+article.nextra-body-typesetting-article .hero-block img {
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
 }
 
 /* HR separator — gold line with § */
