@@ -190,16 +190,16 @@ nav.nextra-toc p {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 6rem;
-  margin-bottom: 4rem;
+  margin-top: 1.5rem;
+  margin-bottom: 2rem;
   gap: 1.25rem;
   text-align: center;
 }
 
 @media (min-width: 768px) {
   .hero-block {
-    margin-top: 8rem;
-    margin-bottom: 6rem;
+    margin-top: 2rem;
+    margin-bottom: 2.5rem;
   }
 }
 
@@ -228,11 +228,13 @@ nav.nextra-toc p {
 
 .hero-block-text {
   font-family: var(--ibm-font);
-  font-size: 0.95rem;
-  color: var(--ibm-text2);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 600;
+  color: var(--ibm-text);
   text-align: center;
-  max-width: 560px;
-  line-height: 1.7;
+  max-width: 720px;
+  line-height: 1.5;
+  letter-spacing: -0.02em;
 }
 
 /* ============================================

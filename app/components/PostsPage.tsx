@@ -129,6 +129,9 @@ export async function PostsPage(props) {
         <span className='section-label'>Topics</span>
       </div>
       <div className='tag-wrap home-tag-wrap'>
+        <Link href='/' className='tag tag-with-href tag-not-active'>
+          All ({rest.length})
+        </Link>
         {Object.entries(allTags).map(([tag, count]: [string, number]) => (
           <Link
             key={tag}
@@ -140,12 +143,7 @@ export async function PostsPage(props) {
         ))}
       </div>
 
-      {/* ── ALL POSTS grid ── */}
-      <div className='section-header home-section-gap'>
-        <span className='section-label'>All Posts</span>
-        <span className='section-count'>{rest.length} posts</span>
-      </div>
-      <div className='posts-grid'>
+      <div className='posts-grid home-section-gap'>
         {rest.map(post => (
           <Link key={post.route} href={post.route ?? '/404'} className='grid-card'>
             <div className='grid-card-thumb'>
