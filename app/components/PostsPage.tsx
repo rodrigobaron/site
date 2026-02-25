@@ -57,9 +57,6 @@ export async function PostsPage() {
           ) : (
             <div className='featured-glow' />
           )}
-          <span className='featured-badge'>
-            / {featured.frontMatter.tags?.slice(0, 2).join(' · ')}
-          </span>
         </div>
         <div className='featured-body'>
           <div>
