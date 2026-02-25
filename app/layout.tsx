@@ -12,7 +12,7 @@ const navbar = (
             <div className='logo'>
             <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} className='h-fit' />
             <span className='logo-text'>
-                Rodrigo Baron's AI Journal
+                Rodrigo Baron's VibeNotes
             </span>
             </div>
         )}
@@ -25,17 +25,12 @@ const navbar = (
 )
 const footer = (
     <Footer>
-        <time>{new Date().getFullYear()}</time> © Rodrigo Baron.
-        <p>
-            &nbsp;Built with{' '}
-            <a href='https://nextra.site/' target='_blank' rel='noopener noreferrer' className='underline'>
-              Nextra
-            </a>{' '}
-            and{' '}
-            <a href='https://vercel.com/' target='_blank' rel='noopener noreferrer' className='underline'>
-              Vercel
-            </a>.
-        </p>
+        <div className='footer-inner'>
+            <span className='footer-logo-text'>Rodrigo Baron&apos;s VibeNotes</span>
+            <span className='footer-copy'>
+                © <time>{new Date().getFullYear()}</time> Rodrigo Baron
+            </span>
+        </div>
     </Footer>)
 
 export default async function RootLayout({children}) {

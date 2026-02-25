@@ -11,6 +11,8 @@
   /* Override Nextra's font CSS variables so its own html/body rules use IBM Plex Mono */
   --default-font-family: 'IBM Plex Mono', monospace;
   --default-mono-font-family: 'IBM Plex Mono', monospace;
+  /* Override nextra-bg so navbar bg-nextra-bg uses our theme color (light: warm cream) */
+  --nextra-bg: 248, 246, 240;
   --ibm-bg: #f8f6f0;
   --ibm-bg2: #f0ede4;
   --ibm-text: #1a1a2e;
@@ -30,6 +32,8 @@ html.dark {
   --nextra-primary-hue: 40 !important;
   --nextra-primary-saturation: 55% !important;
   --nextra-primary-lightness: 60% !important;
+  /* Override nextra-bg so navbar bg-nextra-bg uses our theme color (dark: midnight navy) */
+  --nextra-bg: 12, 12, 20;
   --ibm-bg: #0c0c14;
   --ibm-bg2: #111120;
   --ibm-text: #f0eeea;
@@ -99,6 +103,11 @@ main img {
    NAVBAR
    ============================================ */
 
+/* Navbar background */
+header.nextra-navbar {
+  border-bottom: 1px solid var(--ibm-border) !important;
+}
+
 /* Top nav page links (Home, Posts, etc.) */
 header.nextra-navbar nav div > a {
   color: var(--ibm-text2) !important;
@@ -132,13 +141,47 @@ nav.nextra-nav a[aria-current="page"] {
   color: var(--ibm-accent) !important;
 }
 
-/* Footer */
+/* Footer — override Nextra wrapper and footer element backgrounds */
 footer.x\:text-gray-600,
 footer {
   font-size: 0.82rem !important;
   color: var(--ibm-text2) !important;
+  background: var(--ibm-bg) !important;
+  border-top: none !important;
   padding-top: 1.5rem !important;
   padding-bottom: 1.5rem !important;
+}
+
+/* Nextra footer wrapper div */
+.x\:bg-gray-100,
+.x\:dark\:bg-neutral-900 {
+  background-color: var(--ibm-bg) !important;
+  border-top: 1px solid var(--ibm-border) !important;
+}
+
+.footer-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.footer-logo-text {
+  font-family: var(--ibm-font);
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--ibm-accent);
+  letter-spacing: -0.02em;
+}
+
+.footer-logo-text::before { content: '⟨ '; }
+.footer-logo-text::after  { content: ' /⟩'; }
+
+.footer-copy {
+  font-family: var(--ibm-font);
+  font-size: 0.68rem;
+  color: var(--ibm-text2);
+  letter-spacing: 0.04em;
 }
 
 /* Table of contents (right sidebar) */
