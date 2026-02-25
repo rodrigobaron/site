@@ -1,15 +1,5 @@
----
-title: Rodrigo Baron's VibeNotes
-description: Rodrigo Baron's VibeNotes - Machine Learning Developer Notes
----
+import { redirect } from 'next/navigation'
 
-export const getStaticProps = async (props) => {
-const params = await props.params
-  return {
-    tag: params.tag
-  }
+export default async function TagPage() {
+  redirect('/')
 }
-
-import { PostsPage } from '../../components/PostsPage.tsx'
-
-<PostsPage params={await getStaticProps(props)} />

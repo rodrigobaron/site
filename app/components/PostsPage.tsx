@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { normalizePages } from 'nextra/normalize-pages'
 import { getPageMap } from 'nextra/page-map'
 import { Bleed } from 'nextra/components'
+import { PostsGrid } from './PostsGrid'
 
 async function getPosts() {
   const { directories } = normalizePages({
@@ -16,12 +17,6 @@ async function getPosts() {
     .sort((a, b) => new Date(b.frontMatter.date) - new Date(a.frontMatter.date))
 }
 
-async function getTags() {
-  const posts = await getPosts()
-  const tags = posts.flatMap(post => post.frontMatter.tags)
-  return tags
-}
-
 function formatDate(dateStr, opts = { month: 'short', day: 'numeric', year: 'numeric' }) {
   return new Date(dateStr).toLocaleDateString('en-US', opts)
 }
@@ -30,61 +25,16 @@ export const metadata = {
   title: 'Posts'
 }
 
-export async function PostsPage(props) {
-  const params = await (props?.params ?? {})
-  const tags = await getTags()
+export async function PostsPage() {
   const allposts = await getPosts()
+  const tags = allposts.flatMap(post => post.frontMatter.tags)
 
-  const allTags = Object.create(null)
+  const allTags: Record<string, number> = {}
   for (const tag of tags) {
     allTags[tag] ??= 0
     allTags[tag] += 1
   }
 
-  // ── TAG PAGE ────────────────────────────────────────────
-  if (params.tag) {
-    const posts = allposts.filter(post =>
-      post.frontMatter.tags?.includes(decodeURIComponent(params.tag))
-    )
-    return (
-      <Bleed>
-        <h1 className='tag-title'>{`Posts tagged "${decodeURIComponent(params.tag)}"`}</h1>
-        <div className='tag-wrap'>
-          {Object.entries(allTags).map(([tag, count]: [string, number]) => {
-            const isActive = tag === decodeURIComponent(params.tag)
-            return (
-              <Link
-                key={tag}
-                href={`/tags/${tag}`}
-                className={`tag tag-with-href ${isActive ? 'tag-active' : 'tag-not-active'}`}
-              >
-                {tag} ({count})
-              </Link>
-            )
-          })}
-        </div>
-        <div className='container'>
-          {posts.map(post => (
-            <Link key={post.route} href={post.route ?? '/404'} className='post-card'>
-              <div className='post-card-meta'>
-                <span className='post-card-date'>{formatDate(post.frontMatter.date, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                <div className='post-card-tags'>
-                  {post.frontMatter.tags?.slice(0, 3).map(tag => (
-                    <span key={tag} className='post-card-tag'>{tag}</span>
-                  ))}
-                </div>
-              </div>
-              <h2 className='post-card-title'>{post.title}</h2>
-              <p className='post-card-desc'>{post.frontMatter.description}</p>
-              <span className='post-card-arrow'>→ read more</span>
-            </Link>
-          ))}
-        </div>
-      </Bleed>
-    )
-  }
-
-  // ── HOME PAGE ───────────────────────────────────────────
   const featured = allposts[0]
   const rest = allposts.slice(1)
 
@@ -124,51 +74,8 @@ export async function PostsPage(props) {
         </div>
       </Link>
 
-      {/* ── TOPICS ── */}
-      <div className='section-header home-section-gap'>
-        <span className='section-label'>Topics</span>
-      </div>
-      <div className='tag-wrap home-tag-wrap'>
-        <Link href='/' className='tag tag-with-href tag-not-active'>
-          All ({rest.length})
-        </Link>
-        {Object.entries(allTags).map(([tag, count]: [string, number]) => (
-          <Link
-            key={tag}
-            href={`/tags/${tag}`}
-            className='tag tag-with-href tag-not-active'
-          >
-            {tag} ({count})
-          </Link>
-        ))}
-      </div>
-
-      <div className='posts-grid home-section-gap'>
-        {rest.map(post => (
-          <Link key={post.route} href={post.route ?? '/404'} className='grid-card'>
-            <div className='grid-card-thumb'>
-              {post.frontMatter.thumbnail ? (
-                <Image
-                  src={post.frontMatter.thumbnail}
-                  alt={post.title}
-                  fill
-                  className='grid-thumb-img'
-                />
-              ) : (
-                <div className='grid-card-glow' />
-              )}
-              <span className='grid-card-label'>{post.frontMatter.tags?.[0]}</span>
-            </div>
-            <div className='grid-card-tag'>{post.frontMatter.tags?.[0]}</div>
-            <div className='grid-card-title'>{post.title}</div>
-            <p className='grid-card-excerpt'>{post.frontMatter.description}</p>
-            <div className='grid-card-footer'>
-              <span className='grid-card-date'>{formatDate(post.frontMatter.date)}</span>
-              <span className='grid-card-arrow'>→</span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {/* ── TOPICS + GRID (client-side filtering) ── */}
+      <PostsGrid posts={rest} allTags={allTags} />
 
     </Bleed>
   )
