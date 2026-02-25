@@ -12,7 +12,7 @@ const navbar = (
             <div className='logo'>
             <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} className='h-fit' />
             <span className='logo-text'>
-                Rodrigo Baron's AI Journal
+                Rodrigo Baron's VibeNotes
             </span>
             </div>
         )}
@@ -25,17 +25,12 @@ const navbar = (
 )
 const footer = (
     <Footer>
-        <time>{new Date().getFullYear()}</time> © Rodrigo Baron.
-        <p>
-            &nbsp;Built with{' '}
-            <a href='https://nextra.site/' target='_blank' rel='noopener noreferrer' className='underline'>
-              Nextra
-            </a>{' '}
-            and{' '}
-            <a href='https://vercel.com/' target='_blank' rel='noopener noreferrer' className='underline'>
-              Vercel
-            </a>.
-        </p>
+        <div className='footer-inner'>
+            <span className='footer-logo-text'>Rodrigo Baron&apos;s VibeNotes</span>
+            <span className='footer-copy'>
+                © <time>{new Date().getFullYear()}</time> Rodrigo Baron
+            </span>
+        </div>
     </Footer>)
 
 export default async function RootLayout({children}) {
@@ -52,8 +47,10 @@ export default async function RootLayout({children}) {
         <Head
             // ... Your additional head options
         >
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet" />
             <link rel="shortcut icon" href="/images/general/icon.svg"/>
-            {/* Your additional tags should be passed as `children` of `<Head>` element */}
         </Head>
         <body>
         <Layout
