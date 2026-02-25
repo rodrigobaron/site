@@ -63,7 +63,11 @@ export async function PostsPage() {
         </div>
         <div className='featured-body'>
           <div>
-            <div className='featured-tag'>{featured.frontMatter.tags?.[0]}</div>
+            <div className='featured-tags'>
+              {featured.frontMatter.tags?.map(tag => (
+                <span key={tag} className='featured-tag'>{tag}</span>
+              ))}
+            </div>
             <div className='featured-title'>{featured.title}</div>
             <p className='featured-excerpt'>{featured.frontMatter.description}</p>
           </div>

@@ -55,7 +55,11 @@ export function PostsGrid({ posts, allTags }) {
                 <div className='grid-card-glow' />
               )}
             </div>
-            <div className='grid-card-tag'>{post.frontMatter?.tags?.[0]}</div>
+            <div className='grid-card-tags'>
+              {post.frontMatter?.tags?.map(tag => (
+                <span key={tag} className='grid-card-tag'>{tag}</span>
+              ))}
+            </div>
             <div className='grid-card-title'>{post.title}</div>
             <p className='grid-card-excerpt'>{post.frontMatter?.description}</p>
             <div className='grid-card-footer'>

@@ -450,6 +450,46 @@ html body article.nextra-body-typesetting-article p.post-card-desc {
 }
 
 /* ============================================
+   POST META HEADER
+   ============================================ */
+.post-meta-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.post-meta-tags {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.post-meta-tag {
+  font-family: var(--ibm-font);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 2px;
+  border: 1px solid var(--ibm-border);
+  background: var(--ibm-tag-bg);
+  color: var(--ibm-tag-color);
+}
+
+.post-meta-date {
+  font-family: var(--ibm-font);
+  font-size: 0.7rem;
+  color: var(--ibm-text2);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================
    ARTICLE CONTENT (post pages)
    ============================================ */
 
@@ -817,6 +857,13 @@ html.dark .featured-visual {
   gap: 20px;
 }
 
+.featured-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 10px;
+}
+
 .featured-tag {
   font-family: var(--ibm-font);
   font-size: 0.58rem;
@@ -824,8 +871,11 @@ html.dark .featured-visual {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ibm-accent);
-  margin-bottom: 10px;
-  opacity: 0.8;
+  border: 1px solid var(--ibm-border);
+  background: var(--ibm-tag-bg);
+  padding: 2px 8px;
+  border-radius: 2px;
+  opacity: 0.85;
 }
 
 .featured-title {
@@ -971,6 +1021,13 @@ html.dark .grid-card-thumb {
   text-shadow: 0 1px 4px rgba(0,0,0,0.6);
 }
 
+.grid-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-bottom: 9px;
+}
+
 .grid-card-tag {
   font-family: var(--ibm-font);
   font-size: 0.56rem;
@@ -978,8 +1035,11 @@ html.dark .grid-card-thumb {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--ibm-accent);
-  margin-bottom: 9px;
-  opacity: 0.75;
+  border: 1px solid var(--ibm-border);
+  background: var(--ibm-tag-bg);
+  padding: 2px 7px;
+  border-radius: 2px;
+  opacity: 0.85;
 }
 
 .grid-card-title {
