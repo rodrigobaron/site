@@ -1,7 +1,7 @@
 ---
 title: LLM Post-Training with Verl 
 date: 2026/03/10
-description: asd 
+description: A practical guide to LLM post-training with verl using a small-scale recipe. Covers RL concepts, the HybridFlow programming model, actors and reward modules, a GSM8K math training recipe with GRPO.
 thumbnail: /images/posts/verl-post-training/verl-thumb.png
 tags: [RLHF, Verl]
 author: Rodrigo Baron
@@ -17,7 +17,7 @@ import Image from 'next/image'
 
 Reinforcement learning from human feedback (RLHF) powers today's most capable language models. Implementing RLHF at scale is an technically hard task: manage the coordination between rollout generation, reward computation, and policy updates. Verl, an framework developed by Volcano Engine, addresses this. The team built it specifically for making reinforcement learning on large language models practical and production-ready. The result is a system where you can swap vLLM for SGLang inference backend without rewriting the training loop, or scale from a single GPU to a multi-node cluster.
 
-This guide walks through into RL post training. Then examine the three core components: actors, reward modules, and trainers; next, we build a simple math recipe using GSM8K dataset; and finally, analyze and understand training metrics such gradient norms, KL divergence, and reward curves. With these building blocks in place, you can start building your own recipes with verl.
+This guide walks you through a small-scale GRPO recipe optimized for a single 24GB VRAM GPU, which you can later extend to larger models and multi-node clusters. We start by exploring the three core components of RL post-training: actors, reward modules, and trainers. From there, we build a simple math recipe using the GSM8K dataset and take a closer look at how to read and interpret key training metrics like gradient norms, KL divergence, and reward curves. By the end, you should have a solid foundation to start building your own recipes with verl.
 
 ## What Is verl
 
@@ -277,5 +277,5 @@ Adapting this example to different models and tasks is fairly straightforwardly 
 
 ## References
 
-* Verl documentation — https://verl.readthedocs.io.
+* Verl Documentation — https://verl.readthedocs.io.
 * Verl GitHub — https://github.com/verl-project/verl.
