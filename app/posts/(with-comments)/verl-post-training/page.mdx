@@ -1,0 +1,281 @@
+---
+title: LLM Post-Training with Verl 
+date: 2026/03/10
+description: asd 
+thumbnail: /images/posts/verl-post-training/verl-thumb.png
+tags: [RLHF, Verl]
+author: Rodrigo Baron
+---
+
+import Image from 'next/image'
+
+# LLM Post‑Training with Verl
+
+![Agent MEME](/images/posts/verl-post-training/verl-thumb.png "Verl")
+
+---
+
+Reinforcement learning from human feedback (RLHF) powers today's most capable language models. Implementing RLHF at scale is an technically hard task: manage the coordination between rollout generation, reward computation, and policy updates. Verl, an framework developed by Volcano Engine, addresses this. The team built it specifically for making reinforcement learning on large language models practical and production-ready. The result is a system where you can swap vLLM for SGLang inference backend without rewriting the training loop, or scale from a single GPU to a multi-node cluster.
+
+This guide walks through into RL post training. Then examine the three core components: actors, reward modules, and trainers; next, we build a simple math recipe using GSM8K dataset; and finally, analyze and understand training metrics such gradient norms, KL divergence, and reward curves. With these building blocks in place, you can start building your own recipes with verl.
+
+## What Is verl
+
+verl is an open-source RL framework designed specifically for post-training LLMs. It implements the HybridFlow approach and handles the full workflow: start with an existing model, generate rollouts on your task or dataset, score those outputs using a reward function or reward model, and then update the policy using algorithms like PPO, GRPO, or DAPO. The framework scales this process efficiently from a single GPU up to multi-node clusters. verl integrates with PyTorch FSDP, Megatron-LM, vLLM, SGLang, and TensorRT-LLM, so you can plug it into any infrastructure.
+
+The HuggingFace integration is straightforward, loading models and tokenizers adirectly. For memory-constrained setups, have LoRA-based fine-tuning option.
+
+## The HybridFlow Programming Model
+
+Traditionally, distributed RL systems have fallen into one of two strategies. The single-controller approach uses a central trainer to orchestrate the entire pipeline, coordinating data collection, reward computation, and policy updates from a single logical point of control. It's intuitive and easier to think about, but it'll bottleneck when you need to scale generation throughput across many workers. The multi-controller approach takes the opposite track: each rollout worker gets significant autonomy. Actors generate trajectories independently, which scales beautifully for inference-heavy workloads. However coordinating these workers and managing the flow of data back to a trainer introduces complexity.
+
+HybridFlow unifies these approaches into a single data-flow graph. Rather than forcing you to choose between central coordination and distributed autonomy, the framework determines how to map components onto available hardware. This description separates two concerns: where computation happens (which GPU or node runs the policy model, the reward model, the trainer) and how data moves through the system (rollouts flowing from actors to reward modules, rewards accumulating at the trainer, gradients propagating back to update the policy).
+
+Also that makes easier to swap backends from PyTorch FSDP to Megatron-LM for training, or from vLLM to SGLang for inference is just an configuration parameters that specify where and how each component runs. The same applies when scaling up from a single GPU to a multi-node cluster, the framework handles the complex work of placing models, routing data, and managing synchronization.
+
+## Actors, Trainer, and Reward Pipeline
+
+verl's RL pipeline is built around actors that generate responses, a reward module that scores them, and a trainer that orchestrates policy updates. Separating these concerns enables independent scaling of each component and implementation swaps without rewrites.
+
+The actors, sometimes called rollout workers, generate responses from the policy model given a set of prompts. Throughput is critical here: generating thousands of tokens per second across many prompts requires serious optimization. That's why verl allows actors to run on specialized inference engines like vLLM or SGLang. The memory layouts, kernel optimizations, and parallelism strategies that make for fast inference are quite different from those that make for efficient backpropagation. An actor can generate rollouts using vLLM's PagedAttention and continuous batching, while the trainer uses PyTorch FSDP or Megatron-LM for gradient computation—these choices are largely independent configuration decisions.
+
+Once actors have generated responses, the reward module takes over. Its job is to accept prompts paired with their corresponding responses and emit scalar rewards that signal how good each response was. For structured tasks like mathematical reasoning, you might use a rule-based reward function that checks for exact match against a known answer. However the reward module can just as easily be a learned reward model trained on human preferences, a code execution harness that runs test cases, or a multi-objective scorer balancing correctness against safety and style. The pluggable design supports starting with simple rule-based rewards during development and moving to more sophisticated model-based scorers as needed.
+
+<Image src='/images/posts/verl-post-training/verl_rl_framework.drawio.svg' alt='Verl Pipeline' width={1000} height={1000} className='h-fit' />
+
+The trainer is the single controller in verl's architecture. It collects rollouts and their rewards from the actors, computes advantages, then calculates gradients and runs policy updates based on whatever algorithm you've configured. The supported algorithms, including PPO, GRPO, DAPO, and their variants, take different approaches to estimating advantages, handling KL divergence constraints, and managing exploration. 
+
+## Installation and Environment Setup
+
+Installing verl isn't as simple as running pip install. The framework's backend-agnostic design means it needs to work with multiple inference and training backends (vLLM, SGLang, and Megatron-Core), each with its own dependency tree and version constraints.
+
+You will need Python 3.9 or higher and PyTorch with GPU support (either CUDA for NVIDIA GPUs or ROCm for AMD GPUs). The framework also supports various NPUs depending on your chosen backend. Make sure your CUDA version matches what PyTorch expects, as version mismatches here are a common source of cryptic errors.
+
+Start by cloning the repository from https://github.com/volcengine/verl. It contains the installation utilities that handle vLLM, SGLang, and Megatron-Core dependencies. Running it takes around 20 minutes depending on your system.
+
+```bash
+# . Clone the repository
+git clone https://github.com/volcengine/verl
+cd verl
+
+# . Run the official script for base dependencies
+chmod +x ./scripts/install_vllm_sglang_mcore.sh
+bash ./scripts/install_vllm_sglang_mcore.sh
+pip install --no-deps -e .
+```
+
+The next sections walk through a training run on the GSM8K math dataset using GRPO.
+
+## Preparing GSM8K
+
+The GSM8K dataset consists of math word problems paired with detailed solutions, but we need align prompts and ground-truth answers for reward computation, and also include metadata about the task. The preprocessing script handles this transformation.
+
+```python
+import argparse
+import os
+import re
+
+import datasets
+
+from verl.utils.hdfs_io import copy, makedirs
+
+
+def extract_solution(solution_str):
+    solution = re.search("#### (\\-?[0-9\\.\\,]+)", solution_str)
+    assert solution is not None
+    final_solution = solution.group(0)
+    final_solution = final_solution.split("#### ")[1].replace(",", "")
+    return final_solution
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--local_dir", default=None, help="The save directory for the preprocessed dataset.")
+    parser.add_argument("--hdfs_dir", default=None)
+    parser.add_argument("--local_dataset_path", default=None, help="The local path to the raw dataset, if it exists.")
+    parser.add_argument(
+        "--local_save_dir", default="~/data/gsm8k", help="The save directory for the preprocessed dataset."
+    )
+
+    args = parser.parse_args()
+    local_dataset_path = args.local_dataset_path
+
+    data_source = "openai/gsm8k"
+
+    if local_dataset_path is not None:
+        dataset = datasets.load_dataset(local_dataset_path, "main")
+    else:
+        dataset = datasets.load_dataset(data_source, "main")
+
+    train_dataset = dataset["train"]
+    test_dataset = dataset["test"]
+
+    instruction_following = 'Let\'s think step by step and output the final answer after "####".'
+
+    # add a row to each data item that represents a unique id
+    def make_map_fn(split):
+        def process_fn(example, idx):
+            question_raw = example.pop("question")
+
+            question = question_raw + " " + instruction_following
+
+            answer_raw = example.pop("answer")
+            solution = extract_solution(answer_raw)
+            data = {
+                "data_source": data_source,
+                "prompt": [
+                    {
+                        "role": "user",
+                        "content": question,
+                    }
+                ],
+                "ability": "math",
+                "reward_model": {"style": "rule", "ground_truth": solution},
+                "extra_info": {
+                    "split": split,
+                    "index": idx,
+                    "answer": answer_raw,
+                    "question": question_raw,
+                },
+            }
+            return data
+
+        return process_fn
+
+    train_dataset = train_dataset.map(function=make_map_fn("train"), with_indices=True)
+    test_dataset = test_dataset.map(function=make_map_fn("test"), with_indices=True)
+
+    hdfs_dir = args.hdfs_dir
+    local_save_dir = args.local_dir
+    if local_save_dir is not None:
+        print("Warning: Argument 'local_dir' is deprecated. Please use 'local_save_dir' instead.")
+    else:
+        local_save_dir = args.local_save_dir
+
+    train_dataset.to_parquet(os.path.join(local_save_dir, "train.parquet"))
+    test_dataset.to_parquet(os.path.join(local_save_dir, "test.parquet"))
+
+    if hdfs_dir is not None:
+        makedirs(hdfs_dir)
+
+        copy(src=local_save_dir, dst=hdfs_dir)
+```
+
+The extract_solution function is core part of preprocessing, which uses a regular expression to find and extract the final numeric answer from each solution string. The GSM8K dataset format includes solutions that end with #### followed by the answer, so the regex pattern captures this value while handling negative numbers, decimal points, and commas. This extracted value becomes the ground truth that the reward module will later use to score model responses. The function also strips commas from the extracted answer, converting strings like "1,234" into "1234" for cleaner comparison.
+
+The preprocessing script also adds an instruction-following prompt to each question. The original question from the dataset gets appended with `"Let's think step by step and output the final answer after '####'"`. This instruction serves two purposes: it guides the model to produce chain-of-thought reasoning, which generally improves mathematical problem-solving performance, and it ensures the model's output format matches what the reward function expects to parse.
+
+The preprocessing script downloads GSM8K from Hugging Face (if not cached locally), applies the transformations described above, and writes the processed data to the specified directory.
+
+```bash
+python3 recipes/gsm8k/data_preprocessing.py --local_save_dir ~/data/gsm8k
+```
+
+Once the data is preprocessed, launching training uses Ray for job submission, which is how verl manages distributed execution.
+
+## Ray Job Sumbmission
+
+Ray is the orchestration layer that coordinates the various components (actors, trainers, and any auxiliary services) across whatever hardware topology you've configured. We can set RAY_ADDRESS environment variable points to the Ray cluster, and the runtime-env-json specifies environment variables that Ray injects into the worker processes. Using this we can set MLflow tracking to log experiment metrics to a MLflow endpoint or database. The same training logic runs identically whether you're on a single GPU locally or distributed across a multi-node cluster; what changes is how you submit the job to Ray.
+
+```bash
+#!/usr/bin/env bash
+
+set -o errexit -o nounset -o pipefail
+
+RAY_ADDRESS="${RAY_ADDRESS:-http://localhost:8265}"
+RUNTIME_ENV='{"env_vars": {"MLFLOW_TRACKING_URI": "sqlite://///data/gsmk8/mlruns.db"}}'
+
+ray job submit \
+    --address="${RAY_ADDRESS}" \
+    --runtime-env-json="${RUNTIME_ENV}" \
+    -- python3 -m verl.trainer.main_ppo \
+    algorithm.adv_estimator=grpo \
+    data.train_files="/root/data/gsm8k/train.parquet" \
+    data.val_files="/root/data/gsm8k/test.parquet" \
+    data.train_batch_size=16 \
+    data.max_prompt_length=512 \
+    data.max_response_length=1024 \
+    data.filter_overlong_prompts=True \
+    data.truncation='error' \
+    actor_rollout_ref.model.path=Qwen/Qwen2.5-0.5B-Instruct \
+    actor_rollout_ref.actor.optim.lr=1e-6 \
+    actor_rollout_ref.model.use_remove_padding=True \
+    actor_rollout_ref.actor.ppo_mini_batch_size=16 \
+    actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
+    actor_rollout_ref.actor.use_kl_loss=True \
+    actor_rollout_ref.actor.kl_loss_coef=0.001 \
+    actor_rollout_ref.actor.kl_loss_type=low_var_kl \
+    actor_rollout_ref.actor.entropy_coeff=0 \
+    actor_rollout_ref.model.enable_gradient_checkpointing=True \
+    actor_rollout_ref.actor.fsdp_config.param_offload=False \
+    actor_rollout_ref.actor.fsdp_config.optimizer_offload=False \
+    actor_rollout_ref.rollout.trace.backend=mlflow \
+    actor_rollout_ref.rollout.trace.token2text=True \
+    actor_rollout_ref.rollout.trace.max_samples_per_step_per_worker=2 \
+    actor_rollout_ref.rollout.log_prob_micro_batch_size_per_gpu=8 \
+    actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
+    actor_rollout_ref.rollout.name=vllm \
+    actor_rollout_ref.rollout.gpu_memory_utilization=0.7 \
+    actor_rollout_ref.rollout.n=5 \
+    actor_rollout_ref.ref.log_prob_micro_batch_size_per_gpu=8 \
+    actor_rollout_ref.ref.fsdp_config.param_offload=True \
+    algorithm.use_kl_in_reward=False \
+    trainer.critic_warmup=0 \
+    trainer.logger='["console", "mlflow"]' \
+    trainer.project_name='verl_grpo_gsm8k' \
+    trainer.experiment_name='qwen25_05b' \
+    trainer.n_gpus_per_node=1 \
+    trainer.nnodes=1 \
+    trainer.default_local_dir=/data/gsmk8/checkpoints \
+    trainer.save_freq=20 \
+    trainer.test_freq=5 \
+    trainer.total_epochs=5
+```
+
+Training is invoked via `verl.trainer.main_ppo`, the entry point for PPO-style training. Despite the module name referencing PPO, the actual algorithm is determined by setting `algorithm.adv_estimator=grpo`. GRPO is a refinement over vanilla PPO that generates multiple samples per prompt (controlled by the `n=5` parameter) and estimates advantages by comparing rewards within each group. The trade-off is: generating multiple samples per prompt increases rollout time, but improve learning stability.
+
+Training examples flow through the pipeline according to data configuration settings. `data.train_files` and `data.val_files point` to the preprocessed files we generated earlier. A batch size of 16 (`data.train_batch_size=16`) is relatively small, appropriate for single-GPU setup in this example. Larger models or multi-GPU setups would typically use larger batch sizes. The `data.max_prompt_length=512` and `data.max_response_length=1024` parameters establish the context window boundaries. Prompts longer than 512 tokens will be filtered out (as specified by `data.filter_overlong_prompts=True`), and responses will be generated up to 1024 tokens before being truncated.
+
+The model configuration starts with `actor_rollout_ref.model.path=Qwen/Qwen2.5-0.5B-Instruct`, which specifies the Qwen2.5 0.5 billion parameter instruct-tuned model as our base policy. The "Instruct" variant has already undergone supervised fine-tuning for instruction following, which provides a reasonable starting point for RL training, and RL primarily shapes its behavior toward the specific reward function we've defined. At 0.5B parameters, the model is small enough to train on a single GPU while still demonstrating the full RL pipeline.
+
+Policy optimization dynamics depend on several hyperparameters. The learning rate `actor_rollout_ref.actor.optim.lr=1e-6` is notably smaller than typical supervised fine-tuning rates. RL fine-tuning requires conservative updates to prevent the policy from destabilizing, especially in the early stages of training when the reward signal might be noisy. The `actor_rollout_ref.actor.ppo_mini_batch_size=16` and `actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4` parameters control gradient accumulation. The mini-batch size defines how many examples are used for each policy update, while the micro-batch size defines how many examples are processed together on the GPU. With these settings, each mini-batch update involves accumulating gradients across 16/4 = 4 micro-batches, which trades some computational efficiency for lower memory usage.
+
+KL divergence settings are crucial for stable RL training. So the `actor_rollout_ref.actor.use_kl_loss=True` enables an explicit KL penalty term in the loss function, and `actor_rollout_ref.actor.kl_loss_coef=0.001` sets the coefficient that balances the KL penalty against the reward objective. And last but not least the `actor_rollout_ref.actor.kl_loss_type=low_var_kl` specifies a low-variance estimator for the KL divergence. 
+
+## Monitoring Training
+
+The metrics that verl logs during training is essential for debugging problems early and understanding whether your configuration is working. The GSM8K training run produces several key visualizations, each offering a different perspective on the training dynamics.
+
+Starting with gradient norms, the most immediate indicator of training health. Healthy training typically shows gradient norms that are neither exploding nor vanishing. Values that remain relatively stable or gradually decrease over time suggest the optimization is proceeding smoothly. If you see gradient norms spiking dramatically, that's a warning sign that the policy update might be taking too large a step, potentially destabilizing everything the model has learned so far. Conversely, if gradient norms collapse toward zero and stay there, the model has stopped learning. The policy has either converged to an optimum or gotten stuck in a region where the gradient signal is too weak to escape. The logarithmic scale on plots is important to note, since a "small" change on the graph might represent an order of magnitude difference in actual gradient values.
+
+![Agent MEME](/images/posts/verl-post-training/actor_grad_norm.png "Grad Norm")
+
+As mentioned we applied an explicit KL penalty to prevent the policy from straying too far from its original behavior. A steadily increasing KL divergence is expected, but if it grows too quickly or continues growing without bound, you risk "reward hacking", where the model discovers exploits that maximize the reward signal while producing outputs that are actually worse. The model might learn to output answers in a format that tricks the reward function, or it might specialize in the particular patterns present in the training set at the expense of generalization. Watching KL divergence helps you catch this early. If rewards are improving but KL is growing rapidly, it's worth examining actual model outputs to see what behaviors are being rewarded.
+
+![Agent MEME](/images/posts/verl-post-training/actor_kl_loss.png "KL Loss")
+
+To know whether the model is actually getting better at the task, we look at reward. For the GSM8K run, this tracks how often the model's extracted numerical answers match the expected answers. But reading this plot isn't always straightforward. A smoothly increasing curve is ideal, but RL training is often noisy. You might see plateaus where the model seems stuck, followed by sudden improvements as it discovers better strategies. The scale matters too. If mean rewards start very low (say, 0.1 for a binary correct/incorrect reward) and reach 0.3 after training, that's a meaningful improvement even though absolute performance is still modest.
+
+![Agent MEME](/images/posts/verl-post-training/critic_rewards_mean.png "Reward")
+
+One metric that's easy to overlook is response length, which shows whether the model is learning to generate appropriately sized outputs. In RL training, especially with reward functions that only evaluate the final answer, there's a risk that the model learns to generate extremely long chain-of-thought reasoning that doesn't actually improve accuracy but does increase the probability of stumbling onto a correct answer by chance. The prompt explicitly asks for step-by-step reasoning, so watching response length helps verify that the model isn't gaming the system by producing degenerate outputs. A healthy training run typically shows response lengths that stabilize around a reasonable value rather than trending continuously upward or downward.
+
+![Agent MEME](/images/posts/verl-post-training/response_length_mean.png "Response Length")
+
+The validation reward shows whether improvements will transfer to unseen examples. This metric evaluates the policy on held-out test examples that weren't seen during training, using the same reward function. The gap between training rewards and validation rewards is where overfitting becomes visible. If training rewards continue improving while validation rewards plateau or decline, the model is memorizing the training set rather than learning generalizable problem-solving strategies.
+
+![Agent MEME](/images/posts/verl-post-training/val-aux_openai_gsm8k_reward_mean_at_1.png "Val Reward")
+
+Gradient norms reveal whether optimization is proceeding. KL divergence shows if the policy is changing in a controlled way. Rewards indicate whether performance is improving. Response length flags whether the model's output behavior is sensible. Validation performance confirms whether improvements will generalize. When something goes wrong in RL training, it usually shows up in multiple metrics simultaneously. You might see KL spiking alongside gradient explosion, or validation rewards diverging from training rewards while response lengths grow. Verl's logging infrastructure gives you the visibility needed to catch these issues early.
+
+## Ending
+
+The framework reduce the complexity of applying reinforcement learning to LLM's. However hyperparameters and reward design determine what behaviors emerge, and monitoring requires understanding what the metrics are telling you.
+
+Adapting this example to different models and tasks is fairly straightforwardly for the same setup. Aloso you might use a learned preference model as a reward function, or working with a model large enough to need tensor parallelism across multiple GPUs. The task could involve code execution or multi-turn dialogue. In each case, you're preparing data with structured prompts and reward configuration, specifying hyperparameters through configuration, and monitoring training dynamics. The backend-agnostic design allow you swap inference engines or adjust parallelism strategies without starting from scratch.
+
+
+## References
+
+* Verl documentation — https://verl.readthedocs.io.
+* Verl GitHub — https://github.com/verl-project/verl.
