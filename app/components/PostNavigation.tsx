@@ -18,15 +18,15 @@ export function PostNavigation({ posts }) {
     <div className='x:mx-auto x:flex x:max-w-(--nextra-content-width)'>
       <div className='post-nav-wrap'>
         <div className='post-nav'>
-          {prev ? (
-            <Link href={prev.route} className='post-nav-link post-nav-prev'>
+          {next ? (
+            <Link href={next.route} className='post-nav-link post-nav-prev'>
               <span className='post-nav-arrow'>←</span>
-              <span className='post-nav-title'>{prev.title}</span>
+              <span className='post-nav-title'>{next.title}</span>
             </Link>
           ) : <span className='post-nav-placeholder' />}
-          {next ? (
-            <Link href={next.route} className='post-nav-link post-nav-next'>
-              <span className='post-nav-title'>{next.title}</span>
+          {prev ? (
+            <Link href={prev.route} className='post-nav-link post-nav-next'>
+              <span className='post-nav-title'>{prev.title}</span>
               <span className='post-nav-arrow'>→</span>
             </Link>
           ) : <span className='post-nav-placeholder' />}
