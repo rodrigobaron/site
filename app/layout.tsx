@@ -10,7 +10,7 @@ const navbar = (
     <Navbar
         logo={(
             <div className='logo'>
-            <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} className='h-fit' />
+            <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} style={{ height: 40, width: 40 }} />
             <span className='logo-text'>
                 Baron's VibeNotes
             </span>

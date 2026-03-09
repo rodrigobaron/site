@@ -489,6 +489,61 @@ html body article.nextra-body-typesetting-article p.post-card-desc {
   letter-spacing: 0.05em;
 }
 
+.post-nav-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border-top: 1px solid var(--ibm-border);
+  padding-top: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.post-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--ibm-font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ibm-text2);
+  text-decoration: none;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  transition: color 0.15s;
+}
+
+.post-nav-link:hover {
+  color: var(--ibm-accent);
+}
+
+.post-nav-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-nav-next {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.post-nav-placeholder {
+  flex: 1 1 0;
+}
+
+.post-nav-arrow {
+  flex-shrink: 0;
+  color: var(--ibm-accent);
+}
+
 /* ============================================
    ARTICLE CONTENT (post pages)
    ============================================ */
