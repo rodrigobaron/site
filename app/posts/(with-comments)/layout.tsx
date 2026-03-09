@@ -12,7 +12,7 @@ export default async function CommentsLayout({ children }) {
 
   const posts = directories
     .filter(p => p.name !== 'index')
-    .sort((a, b) => new Date(b.frontMatter?.date) - new Date(a.frontMatter?.date))
+    .sort((a, b) => new Date(b.frontMatter?.date).getTime() - new Date(a.frontMatter?.date).getTime())
     .map(p => ({
       name: p.name,
       route: p.route,

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Giscus from "@giscus/react";
-import { useTheme } from 'next-themes';
+import { useTheme } from 'nextra-theme-docs';
 
 const GiscusComments = () => {
     const { resolvedTheme } = useTheme();
