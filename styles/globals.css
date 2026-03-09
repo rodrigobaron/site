@@ -271,7 +271,7 @@ nav.nextra-toc p {
 
 .hero-block-text {
   font-family: var(--ibm-font);
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
   font-weight: 600;
   color: var(--ibm-text);
   text-align: center;
@@ -487,6 +487,61 @@ html body article.nextra-body-typesetting-article p.post-card-desc {
   font-size: 0.7rem;
   color: var(--ibm-text2);
   letter-spacing: 0.05em;
+}
+
+.post-nav-wrap {
+  width: 100%;
+  min-width: 0;
+}
+
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  border-top: 1px solid var(--ibm-border);
+  padding-top: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.post-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--ibm-font);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ibm-text2);
+  text-decoration: none;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.75rem 1rem;
+  transition: color 0.15s;
+}
+
+.post-nav-link:hover {
+  color: var(--ibm-accent);
+}
+
+.post-nav-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.post-nav-next {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.post-nav-placeholder {
+  flex: 1 1 0;
+}
+
+.post-nav-arrow {
+  flex-shrink: 0;
+  color: var(--ibm-accent);
 }
 
 /* ============================================
@@ -823,14 +878,12 @@ html.dark .featured-visual {
 .featured-thumb-img {
   object-fit: cover !important;
   object-position: center !important;
-  opacity: 0.75;
 }
 
 /* Grid card thumbnail image */
 .grid-thumb-img {
   object-fit: cover !important;
   object-position: center !important;
-  opacity: 0.7;
 }
 
 .featured-badge {

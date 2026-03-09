@@ -2,8 +2,12 @@
 
 import React from 'react';
 import Giscus from "@giscus/react";
+import { useTheme } from 'nextra-theme-docs';
 
 const GiscusComments = () => {
+    const { resolvedTheme } = useTheme();
+    const giscusTheme = resolvedTheme === 'dark' ? 'dark' : 'light';
+
     return (
         <div className='x:mx-auto x:flex x:max-w-(--nextra-content-width)'>
             <div className='giscus-wrap'>
@@ -19,7 +23,7 @@ const GiscusComments = () => {
             reactionsEnabled="1"
             emitMetadata="0"
             inputPosition="top"
-            theme="preferred_color_scheme"
+            theme={giscusTheme}
             lang="en"
             loading="lazy"
         />

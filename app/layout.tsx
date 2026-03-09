@@ -10,9 +10,9 @@ const navbar = (
     <Navbar
         logo={(
             <div className='logo'>
-            <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} className='h-fit' />
+            <Image src='/images/general/logo.svg' alt='logo' width={40} height={40} style={{ height: 40, width: 40 }} />
             <span className='logo-text'>
-                Rodrigo Baron's VibeNotes
+                Baron's VibeNotes
             </span>
             </div>
         )}
@@ -26,7 +26,7 @@ const navbar = (
 const footer = (
     <Footer>
         <div className='footer-inner'>
-            <span className='footer-logo-text'>Rodrigo Baron&apos;s VibeNotes</span>
+            <span className='footer-logo-text'>Baron&apos;s VibeNotes</span>
             <span className='footer-copy'>
                 © <time>{new Date().getFullYear()}</time> Rodrigo Baron
             </span>
