@@ -193,7 +193,7 @@ The -1.1 worst case (zero tool calls, no parseable answer) targets the spiral-re
 
 ## Ending
 
-After training, the model's tool usage is noticeably better: short targeted code calls for arithmetic verification and symbolic reasoning. The SFT dataset doesn't need to be large — enough demonstrations to teach the model the right structure is sufficient to make the RL phase converge in a reasonable number of steps.
+After training, the model's tool usage is noticeably better: short targeted code calls for arithmetic verification and symbolic reasoning. The SFT dataset doesn't need to be large, just enough demonstrations to teach the model the right structure is sufficient to make the RL phase converge in a reasonable number of steps.
 
 The [official reference](https://github.com/THUDM/slime/tree/main/examples/retool) implementation on 8 GPU node and the [single 24GB VRAM](https://gist.github.com/rodrigobaron/f7b88658b11e732e71200b8e01c4b64d) implementation.
 
