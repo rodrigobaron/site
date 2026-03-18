@@ -23,9 +23,9 @@ The experiment runs on **[Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B)**,
 
 Three datasets are involved across the two stages:
 
-- **SFT — [ReTool-SFT](https://huggingface.co/datasets/JoeYing/ReTool-SFT)**: Demonstrations of tool-augmented reasoning. Each sample contains a multi-turn trace where calculation-heavy steps are rewritten as code blocks, verified for correct format and answer.
-- **RL — [dapo-math-17k](https://huggingface.co/datasets/zhuzilin/dapo-math-17k)**: The main RL training set, 17k math problems with verifiable answers used to generate rollouts and compute rewards.
-- **Eval — [aime-2024](https://huggingface.co/datasets/zhuzilin/aime-2024)**: AIME 2024 problems used to track whether the policy is actually improving on hard competition math.
+- SFT, [ReTool-SFT](https://huggingface.co/datasets/JoeYing/ReTool-SFT): Demonstrations of tool-augmented reasoning. Each sample contains a multi-turn trace where calculation-heavy steps are rewritten as code blocks, verified for correct format and answer.
+- RL, [dapo-math-17k](https://huggingface.co/datasets/zhuzilin/dapo-math-17k): The main RL training set, 17k math problems with verifiable answers used to generate rollouts and compute rewards.
+- Eval, [aime-2024](https://huggingface.co/datasets/zhuzilin/aime-2024): AIME 2024 problems used to track whether the policy is actually improving on hard competition math.
 
 To download everything:
 
@@ -50,7 +50,7 @@ SFT cold-start fixes this by getting the model into a region of the space where 
 
 The demonstrations for SFT are built by taking existing text-only chains-of-thought, finding the calculation-heavy steps, and rewriting them as code. Each sample then gets verified twice: format verification checks for valid tool call tags and correct answer wrapper, while answer verification compares execution results against ground truth. Anything that fails either check gets dropped.
 
-The two stages solve different problems. SFT introduces correct trajectory format. RL teaches the strategy — which includes determining which problems benefit from code and which do not, how many calls are sufficient, how to self-correct, and when to commit to an answer.
+The two stages solve different problems. SFT introduces correct trajectory format. RL teaches the strategy, which includes determining which problems benefit from code and which do not, how many calls are sufficient, how to self-correct, and when to commit to an answer.
 
 ## SFT Configuration
 
@@ -151,7 +151,7 @@ async def generate(args, sample: Sample, sampling_params) -> Sample:
     return sample
 ```
 
-The `loss_mask = 0` on interpreter output means those tokens are still visible to the model — they go into context and the model conditions on them for subsequent turns — but the gradient does not flow through them. So the policy learns to use execution results without learning to predict the executor's output.
+The `loss_mask = 0` on interpreter output means those tokens are still visible to the model; they go into context and the model conditions on them for subsequent turns, but the gradient does not flow through them. So the policy learns to use execution results without learning to predict the executor's output.
 
 The base reward is binary:
 
