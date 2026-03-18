@@ -1,0 +1,203 @@
+---
+title: "Slime RL Training: Teaching Models to Use Tools Strategically"
+date: 2026/03/18
+description: A walkthrough of implementing ReTool-style code-interpreter training using Slime, covering SFT cold-start, multi-turn rollout with per-token loss masking, and a GRPO reward function.
+thumbnail: /images/posts/retool-with-slime/retool-diagram.png
+tags: [RLHF, Slime]
+author: Rodrigo Baron
+---
+
+import Image from 'next/image'
+
+# Slime RL Training: Teaching Models to Use Tools Strategically
+
+![Agent MEME](/images/posts/retool-with-slime/retool-diagram.png "ReTool")
+
+---
+
+LLMs solve algebra using plain text, and verify computations through logic, but errors still slip through. [ReTool](https://arxiv.org/abs/2504.11536) changes that by training a model to use a code interpreter as part of its reasoning. This post walks through a full implementation in [Slime](https://github.com/THUDM/slime). It covers the custom generate function and the reward shaping.
+
+## Model and Datasets
+
+The experiment runs on **[Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B)**, a small but capable instruction-tuned model. Its size makes the full two-stage pipeline fast to iterate on without needing multiple GPUs.
+
+Three datasets are involved across the two stages:
+
+- SFT, [ReTool-SFT](https://huggingface.co/datasets/JoeYing/ReTool-SFT): Demonstrations of tool-augmented reasoning. Each sample contains a multi-turn trace where calculation-heavy steps are rewritten as code blocks, verified for correct format and answer.
+- RL, [dapo-math-17k](https://huggingface.co/datasets/zhuzilin/dapo-math-17k): The main RL training set, 17k math problems with verifiable answers used to generate rollouts and compute rewards.
+- Eval, [aime-2024](https://huggingface.co/datasets/zhuzilin/aime-2024): AIME 2024 problems used to track whether the policy is actually improving on hard competition math.
+
+To download everything:
+
+```bash
+cd slime
+pip install -e . --no-deps
+
+# SFT
+hf download --repo-type dataset JoeYing/ReTool-SFT --local-dir /root/JoeYing/ReTool-SFT
+hf download Qwen/Qwen3-0.6B --local-dir /root/Qwen/Qwen3-0.6B
+
+# RL
+hf download --repo-type dataset zhuzilin/dapo-math-17k --local-dir /root/dapo-math-17k
+hf download --repo-type dataset zhuzilin/aime-2024 --local-dir /root/aime-2024
+```
+
+## Why Two Stages
+
+If we throw RL at a base model with a code-execution environment, the model doesn't know how to handle it, so it cannot emit valid tool call blocks consistently. Almost every rollout returns -1.0, and the reward signal is too sparse to learn from, resulting in a model that learned to write slightly more approximated correct answers.
+
+SFT cold-start fixes this by getting the model into a region of the space where exploration has more good trajectories. After SFT, the model can produce the right structure roughly half the time. This is enough that RL has a meaningful gradient to work with.
+
+The demonstrations for SFT are built by taking existing text-only chains-of-thought, finding the calculation-heavy steps, and rewriting them as code. Each sample then gets verified twice: format verification checks for valid tool call tags and correct answer wrapper, while answer verification compares execution results against ground truth. Anything that fails either check gets dropped.
+
+The two stages solve different problems. SFT introduces correct trajectory format. RL teaches the strategy, which includes determining which problems benefit from code and which do not, how many calls are sufficient, how to self-correct, and when to commit to an answer.
+
+## SFT Configuration
+
+The first step is processing the SFT dataset and converting the model checkpoint to Megatron's torch dist format:
+
+```bash
+# Convert checkpoint
+source scripts/models/qwen3-0.6B.sh
+PYTHONPATH=/root/Megatron-LM python tools/convert_hf_to_torch_dist.py \
+    ${MODEL_ARGS[@]} \
+    --hf-checkpoint /root/Qwen/Qwen3-06B \
+    --rotary-base 5000000 \
+    --save /root/Qwen/Qwen3-06B_torch_dist
+
+# Process data and run SFT
+python sft_data_processing.py
+bash retool_qwen3_0.6b_sft.sh
+```
+
+Slime's SFT mode bypasses SGLang entirely. `--debug-train-only` kills the rollout engine and Megatron trains directly on the static dataset:
+
+```bash
+--rollout-function-path slime.rollout.sft_rollout.generate_rollout
+--loss-type sft_loss
+--calculate-per-token-loss
+--disable-compute-advantages-and-returns
+--debug-train-only
+--num-epoch 3
+```
+
+`--calculate-per-token-loss` normalizes loss per token rather than per sequence. With variable-length tool-use traces, per-sequence normalization lets long low-quality sequences dominate the gradient.
+
+Loss masking is handled by `MultiTurnLossMaskGenerator` to zero out tool output turns:
+
+```json
+{
+  "prompt": [
+    {"role": "user", "content": "Find all primes less than 10 and sum them."},
+    {"role": "assistant", "content": "I'll check each number.\n<code>\nprimes = [x for x in range(2, 10) if all(x % i != 0 for i in range(2, x))]\nprint(sum(primes))\n</code>"},
+    {"role": "tool", "content": "17"},
+    {"role": "assistant", "content": "The sum is 17. <answer>17</answer>"}
+  ]
+}
+```
+
+The model trains to produce the code that produces "17" and the answer that uses it. It never trains to predict "17" itself.
+
+## RL Phase: Multi-Turn Rollout with Live Execution
+
+After SFT, launch the RL phase:
+
+```bash
+bash retool_qwen3_0.6b_rl.sh
+```
+
+This wires in two custom modules:
+
+```bash
+CUSTOM_ARGS=(
+  --custom-generate-function-path generate_with_retool.generate
+  --custom-rm-path generate_with_retool.reward_func
+)
+```
+
+We set GRPO via `--advantage-estimator grpo`, which normalizes advantages within each group of `n_samples_per_prompt` rollouts, so no separate critic is needed. This makes it cheaper than PPO while remaining stable enough for most use cases.
+
+The generate function runs the multi-turn loop. It calls SGLang, inspects output for code blocks, executes them, and feeds the results back into the context window. This cycle repeats until the model outputs `<answer>` or reaches MAX_TURNS.
+
+```python
+async def generate(args, sample: Sample, sampling_params) -> Sample:
+    messages = sample.prompt
+    full_tokens = []
+    full_loss_mask = []
+
+    for turn in range(MAX_TURNS):
+        response = await sglang_router.generate(messages, sampling_params)
+
+        response_tokens = tokenize(response.text)
+        full_tokens.extend(response_tokens)
+        full_loss_mask.extend([1] * len(response_tokens))  # policy output: train on this
+
+        if "<code>" in response.text and "</code>" in response.text:
+            code = extract_code(response.text)
+            result = execute_in_sandbox(code)
+
+            tool_tokens = tokenize(f"<interpreter>\n{result}\n</interpreter>")
+            full_tokens.extend(tool_tokens)
+            full_loss_mask.extend([0] * len(tool_tokens))  # env output: don't train on this
+
+            messages.append({"role": "assistant", "content": response.text})
+            messages.append({"role": "tool", "content": result})
+
+        if "<answer>" in response.text:
+            break
+
+    sample.tokens = full_tokens
+    sample.loss_mask = full_loss_mask
+    return sample
+```
+
+The `loss_mask = 0` on interpreter output means those tokens are still visible to the model; they go into context and the model conditions on them for subsequent turns, but the gradient does not flow through them. So the policy learns to use execution results without learning to predict the executor's output.
+
+The base reward is binary:
+
+```python
+result = math_dapo_compute_score(solution_str, ground_truth, strict_box_verify=True)
+# +1.0 if correct, -1.0 otherwise (including unparseable answers)
+```
+
+On top of that, a tool-call adjustment applies only to incorrect trajectories:
+
+```python
+async def reward_func(args, sample, **kwargs):
+    solution_str = sample.prompt + sample.response
+    ground_truth = sample.label if sample.label is not None else ""
+    num_turns = getattr(sample, "tool_call_count", 0)
+
+    result = math_dapo_compute_score(solution_str, ground_truth, strict_box_verify=True)
+
+    if result["score"] < 0:
+        tool_call_reward = (num_turns - 2) / 2 * 0.1
+        result["score"] = min(-0.6, result["score"] + tool_call_reward)
+
+    return result
+```
+
+This breaks even at 2 tool calls (tool call + tool response) and caps the total bonus at +0.5 (so the final score is floored at -0.6 regardless of how many calls were made):
+
+| tool calls | adjustment | final score |
+|---|---|---|
+| 0 | -0.10 | -1.10 |
+| 1 | -0.05 | -1.05 |
+| 2 | 0.00 | -1.00 |
+| 4 | +0.10 | -0.90 |
+| 12 | +0.50 | -0.60 (capped) |
+
+The cap is necessary. Without it, the model discovers that calling the interpreter 50 times on a wrong answer scores better than answering correctly with no tools. The -0.6 floor means tool calls are worth something on incorrect trajectories, but not more than a correct answer is worth.
+
+The -1.1 worst case (zero tool calls, no parseable answer) targets the spiral-reasoning failure mode: the model generates several hundred tokens of hedged chain-of-thought, self-corrects three times, and never emits `<answer>`. The extra penalty on those trajectories creates pressure toward grounded computation and clean termination.
+
+## Ending
+
+After training, the model's tool usage is noticeably better: short targeted code calls for arithmetic verification and symbolic reasoning. The SFT dataset doesn't need to be large, just enough demonstrations to teach the model the right structure is sufficient to make the RL phase converge in a reasonable number of steps.
+
+The [official reference](https://github.com/THUDM/slime/tree/main/examples/retool) implementation on 8 GPU node and the [single 24GB VRAM](https://gist.github.com/rodrigobaron/f7b88658b11e732e71200b8e01c4b64d) implementation.
+
+## References
+
+* [Slime Documentation](https://thudm.github.io/slime/_examples_synced/retool/README.html)
+* [ReTool: Reinforcement Learning for Strategic Tool Use in LLMs](https://retool-rl.github.io)
