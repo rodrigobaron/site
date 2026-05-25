@@ -3,10 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-
-function formatDate(dateStr, opts = { month: 'short', day: 'numeric', year: 'numeric' }) {
-  return new Date(dateStr).toLocaleDateString('en-US', opts)
-}
+import { formatDate } from '../lib/format'
 
 export function PostsGrid({ posts, allTags }) {
   const [activeTopic, setActiveTopic] = useState('all')

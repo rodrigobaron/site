@@ -9,10 +9,6 @@ author: Rodrigo Baron
 
 import Image from 'next/image'
 
-# Slime RL Training: Teaching Models to Use Tools Strategically
-
-![Agent MEME](/images/posts/retool-with-slime/retool-diagram.png "ReTool")
-
 ---
 
 LLMs solve algebra using plain text, and verify computations through logic, but errors still slip through. [ReTool](https://arxiv.org/abs/2504.11536) changes that by training a model to use a code interpreter as part of its reasoning. This post walks through a full implementation in [Slime](https://github.com/THUDM/slime). It covers the custom generate function and the reward shaping.

@@ -9,10 +9,6 @@ author: Rodrigo Baron
 
 import Image from 'next/image'
 
-# LLM Post‑Training with Verl
-
-![Agent MEME](/images/posts/verl-post-training/verl-thumb.png "Verl")
-
 ---
 
 Reinforcement learning from human feedback (RLHF) powers today's most capable language models. Implementing RLHF at scale is an technically hard task: manage the coordination between rollout generation, reward computation, and policy updates. Verl, an framework developed by Volcano Engine, addresses this. The team built it specifically for making reinforcement learning on large language models practical and production-ready. The result is a system where you can swap vLLM for SGLang inference backend without rewriting the training loop, or scale from a single GPU to a multi-node cluster.

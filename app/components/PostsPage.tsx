@@ -6,6 +6,7 @@ import { normalizePages } from 'nextra/normalize-pages'
 import { getPageMap } from 'nextra/page-map'
 import { Bleed } from 'nextra/components'
 import { PostsGrid } from './PostsGrid'
+import { formatDate } from '../lib/format'
 
 async function getPosts() {
   const { directories } = normalizePages({
@@ -15,10 +16,6 @@ async function getPosts() {
   return directories
     .filter(post => post.name !== 'index')
     .sort((a, b) => new Date(b.frontMatter.date) - new Date(a.frontMatter.date))
-}
-
-function formatDate(dateStr, opts = { month: 'short', day: 'numeric', year: 'numeric' }) {
-  return new Date(dateStr).toLocaleDateString('en-US', opts)
 }
 
 export const metadata = {

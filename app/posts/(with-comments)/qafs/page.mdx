@@ -7,10 +7,6 @@ tags: [Feature-Store, MLOPs]
 author: Rodrigo Baron
 ---
 
-# QAFS - Quality Aware Feature Store
-
-![QAFS - Quality Aware Feature Store](/images/posts/qafs/thumbnail.png)
-
 Just released [QAFS](https://github.com/rodrigobaron/qafs) another machine learning engineering tool to help build and maintain ML products. Building machine learning models are becoming easier every year.. doing `.fit` on a toy dataset and see the metrics is great however when we move to production side the fun is ~~almost~~ over. How do I know the [metrics are not killing our company?](https://www.reddit.com/r/MachineLearning/comments/qlilnf/n_zillows_nnbased_zestimate_leads_to_massive/) and what about [potentially doing bad recommendations for four months?](https://engineering.atspotify.com/2021/11/15/the-rise-and-lessons-learned-of-ml-models-to-personalize-content-on-home-part-i/) Actually I do not know, but we can try minimize the risks using Feature Store + Data Quality Checks + Monitoring stack.  
 
 The main idea is the ML teams keep the data pipelines simple and be able to scale, for this reason `QAFS` was build to use an existing infraestructure e.g., run on a local machine and scale to [Dask](https://dask.org/) or [Spark](https://spark.apache.org/) (not supported yet) cluster.

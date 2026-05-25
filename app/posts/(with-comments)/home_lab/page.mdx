@@ -10,10 +10,6 @@ author: Rodrigo Baron
 import Image from 'next/image'
 import { Callout } from 'nextra/components'
 
-# Building an AI Home Lab 
-
-![Agent MEME](/images/posts/home_lab/home_lab.png "Home Lab")
-
 I have many years of Machine Learning experience, building ML pipelines on SageMaker, Vertex AI, and Databricks. Time ago I decided to apply the same MLOps principles to fun experiments at home: just needed to set up a Kubernetes cluster with some Helm charts would be enough. It worked. Barely. I was spending more time fighting infrastructure than actually using the local services.
 
 Then I found dstack. The setup was absurdly simple, just a few YAML files and I had GPU-native scheduling, task orchestration, and serving endpoints all in one. Just a clean, declarative way to define my ML infrastructure that scale when needed.
