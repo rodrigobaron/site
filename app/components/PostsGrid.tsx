@@ -17,6 +17,7 @@ export function PostsGrid({ posts, allTags }) {
       {/* ── TOPICS ── */}
       <div className='section-header home-section-gap'>
         <span className='section-label'>Topics</span>
+        <span className='section-meta'>{filtered.length} {filtered.length === 1 ? 'ENTRY' : 'ENTRIES'}</span>
       </div>
       <div className='tag-wrap home-tag-wrap'>
         <button
@@ -38,33 +39,38 @@ export function PostsGrid({ posts, allTags }) {
 
       {/* ── ALL POSTS grid ── */}
       <div className='posts-grid home-section-gap'>
-        {filtered.map(post => (
-          <Link key={post.route} href={post.route ?? '/404'} className='grid-card'>
-            <div className='grid-card-thumb'>
-              {post.frontMatter?.thumbnail ? (
-                <Image
-                  src={post.frontMatter.thumbnail}
-                  alt={post.title}
-                  fill
-                  className='grid-thumb-img'
-                />
-              ) : (
-                <div className='grid-card-glow' />
-              )}
-            </div>
-            <div className='grid-card-tags'>
-              {post.frontMatter?.tags?.map(tag => (
-                <span key={tag} className='grid-card-tag'>{tag}</span>
-              ))}
-            </div>
-            <div className='grid-card-title'>{post.title}</div>
-            <p className='grid-card-excerpt'>{post.frontMatter?.description}</p>
-            <div className='grid-card-footer'>
-              <span className='grid-card-date'>{formatDate(post.frontMatter?.date)}</span>
-              <span className='grid-card-arrow'>→</span>
-            </div>
-          </Link>
-        ))}
+        {filtered.map(post => {
+          const cornerLabel = post.frontMatter?.tags?.[0] ?? 'note'
+          return (
+            <Link key={post.route} href={post.route ?? '/404'} className='grid-card'>
+              <div className='grid-card-thumb'>
+                <span className='grid-card-corner'>{String(cornerLabel)}</span>
+                <span className='grid-card-corner-r' />
+                {post.frontMatter?.thumbnail ? (
+                  <Image
+                    src={post.frontMatter.thumbnail}
+                    alt={post.title}
+                    fill
+                    className='grid-thumb-img'
+                  />
+                ) : (
+                  <div className='grid-card-glow' />
+                )}
+              </div>
+              <div className='grid-card-tags'>
+                {post.frontMatter?.tags?.map(tag => (
+                  <span key={tag} className='grid-card-tag'>{tag}</span>
+                ))}
+              </div>
+              <div className='grid-card-title'>{post.title}</div>
+              <p className='grid-card-excerpt'>{post.frontMatter?.description}</p>
+              <div className='grid-card-footer'>
+                <span className='grid-card-date'>{formatDate(post.frontMatter?.date)}</span>
+                <span className='grid-card-arrow'>►</span>
+              </div>
+            </Link>
+          )
+        })}
       </div>
     </>
   )

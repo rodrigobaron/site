@@ -1,16 +1,12 @@
 import { PostHero } from '../components/PostHero'
-import { normalizePages } from 'nextra/normalize-pages'
-import { getPageMap } from 'nextra/page-map'
+import { getPosts } from '../lib/posts'
+import { readingMinutes } from '../lib/readingTime'
 
 export default async function PostsLayout({ children }) {
-  const { directories } = normalizePages({
-    list: await getPageMap('/posts'),
-    route: '/posts'
-  })
+  const directories = await getPosts()
 
-  const posts = directories
-    .filter(p => p.name !== 'index')
-    .map(p => ({
+  const posts = await Promise.all(
+    directories.map(async p => ({
       name: p.name,
       route: p.route,
       title: p.title,
@@ -19,7 +15,9 @@ export default async function PostsLayout({ children }) {
       description: p.frontMatter?.description ?? '',
       thumbnail: p.frontMatter?.thumbnail ?? null,
       author: p.frontMatter?.author ?? '',
+      readingMinutes: await readingMinutes(p.name),
     }))
+  )
 
   return (
     <>

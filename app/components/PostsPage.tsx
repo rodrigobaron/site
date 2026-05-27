@@ -2,28 +2,17 @@
 import Link from 'next/link'
 import Image from 'next/image'
 
-import { normalizePages } from 'nextra/normalize-pages'
-import { getPageMap } from 'nextra/page-map'
 import { Bleed } from 'nextra/components'
 import { PostsGrid } from './PostsGrid'
+import { getPostsByDateDesc } from '../lib/posts'
 import { formatDate } from '../lib/format'
-
-async function getPosts() {
-  const { directories } = normalizePages({
-    list: await getPageMap('/posts'),
-    route: '/posts'
-  })
-  return directories
-    .filter(post => post.name !== 'index')
-    .sort((a, b) => new Date(b.frontMatter.date) - new Date(a.frontMatter.date))
-}
 
 export const metadata = {
   title: 'Posts'
 }
 
 export async function PostsPage() {
-  const allposts = await getPosts()
+  const allposts = await getPostsByDateDesc()
   const tags = allposts.flatMap(post => post.frontMatter.tags)
 
   const allTags: Record<string, number> = {}
@@ -34,29 +23,38 @@ export async function PostsPage() {
 
   const featured = allposts[0]
   const rest = allposts.slice(1)
+  const featuredTag = featured.frontMatter.tags?.[0] ?? 'note'
+  const featuredDate = featured.frontMatter.date
+    ? new Date(featured.frontMatter.date).toISOString().slice(0, 10)
+    : ''
 
   return (
     <Bleed>
+      <div className='posts-page'>
 
-      {/* ── LATEST (featured post) ── */}
-      <div className='section-header'>
-        <span className='section-label'>Latest</span>
-      </div>
-      <Link href={featured.route ?? '/404'} className='featured-card'>
-        <div className='featured-visual'>
-          {featured.frontMatter.thumbnail ? (
-            <Image
-              src={featured.frontMatter.thumbnail}
-              alt={featured.title}
-              fill
-              className='featured-thumb-img'
-            />
-          ) : (
-            <div className='featured-glow' />
-          )}
+        {/* ── LATEST (featured post) ── */}
+        <div className='section-header'>
+          <span className='section-label'>Latest</span>
+          <span className='section-meta'>FEATURED{featuredDate ? ` · ${featuredDate}` : ''}</span>
         </div>
-        <div className='featured-body'>
-          <div>
+        <Link href={featured.route ?? '/404'} className='featured-card'>
+          <div className='featured-visual'>
+            <span className='featured-corner'>
+              <span className='dot' />
+              {String(featuredTag).toUpperCase()}
+            </span>
+            {featured.frontMatter.thumbnail ? (
+              <Image
+                src={featured.frontMatter.thumbnail}
+                alt={featured.title}
+                fill
+                className='featured-thumb-img'
+              />
+            ) : (
+              <div className='featured-glow' />
+            )}
+          </div>
+          <div className='featured-body'>
             <div className='featured-tags'>
               {featured.frontMatter.tags?.map(tag => (
                 <span key={tag} className='featured-tag'>{tag}</span>
@@ -64,17 +62,17 @@ export async function PostsPage() {
             </div>
             <div className='featured-title'>{featured.title}</div>
             <p className='featured-excerpt'>{featured.frontMatter.description}</p>
+            <div className='featured-meta'>
+              <span>{formatDate(featured.frontMatter.date)}</span>
+              <span className='featured-cta'>OPEN NOTE</span>
+            </div>
           </div>
-          <div className='featured-meta'>
-            <span>{formatDate(featured.frontMatter.date)}</span>
-            <span>→ read</span>
-          </div>
-        </div>
-      </Link>
+        </Link>
 
-      {/* ── TOPICS + GRID (client-side filtering) ── */}
-      <PostsGrid posts={rest} allTags={allTags} />
+        {/* ── TOPICS + GRID (client-side filtering) ── */}
+        <PostsGrid posts={rest} allTags={allTags} />
 
+      </div>
     </Bleed>
   )
 }
