@@ -113,16 +113,35 @@ body::after {
 }
 
 /* ============================================
-   SCROLLBAR
+   SCROLLBAR — transparent until hover/scroll
    ============================================ */
 html {
   scrollbar-width: thin;
-  scrollbar-color: var(--banner-border) var(--bg);
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 200ms ease;
 }
-::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--banner-border); }
-::-webkit-scrollbar-thumb:hover { background: var(--banner-accent); }
+html:hover,
+html:focus-within,
+html:active {
+  scrollbar-color: var(--banner-border) transparent;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; background: transparent; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  transition: background 200ms ease;
+  border-radius: 0;
+}
+html:hover ::-webkit-scrollbar-thumb,
+html:focus-within ::-webkit-scrollbar-thumb,
+html:active ::-webkit-scrollbar-thumb {
+  background: var(--banner-border);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--banner-accent) !important;
+}
+::-webkit-scrollbar-corner { background: transparent; }
 
 /* ============================================
    UTILITIES
