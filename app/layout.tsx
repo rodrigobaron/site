@@ -5,6 +5,7 @@ import {getPageMap} from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import '../styles/globals.css'
 import { StatusBar } from './components/StatusBar'
+import { ScrollToTop } from './components/ScrollToTop'
 
 const navbar = (
     <Navbar
@@ -55,6 +56,7 @@ export default async function RootLayout({children}) {
         >
             {children}
         </Layout>
+        <ScrollToTop />
         </body>
         </html>
     )
