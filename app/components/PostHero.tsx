@@ -21,11 +21,6 @@ export function PostHero({ posts }) {
       <h1 className='post-hero-title'>{post.title}</h1>
       {post.thumbnail && (
         <div className='post-hero-cover'>
-          <span className='post-hero-cover-corner'>
-            <span className='dot' />
-            {deriveCornerLabel(post)}
-          </span>
-          <span className='post-hero-cover-corner-r'>FIG.01</span>
           <Image
             src={post.thumbnail}
             alt={post.title}
@@ -35,9 +30,6 @@ export function PostHero({ posts }) {
             priority
           />
         </div>
-      )}
-      {post.description && (
-        <p className='post-hero-description'>{post.description}</p>
       )}
       <div className='post-hero-meta'>
         <div className='post-hero-meta-inner'>

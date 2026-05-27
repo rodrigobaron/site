@@ -762,12 +762,6 @@ main {
   object-fit: cover !important;
   object-position: center !important;
   z-index: 0 !important;
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.2) brightness(0.92) contrast(1.5);
-  transition: filter 280ms;
-}
-
-.featured-card:hover .featured-thumb-img {
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.6) brightness(1.05) contrast(1.7);
 }
 
 .featured-glow {
@@ -1008,12 +1002,6 @@ html body article.nextra-body-typesetting-article p.featured-excerpt {
   object-fit: cover !important;
   object-position: center !important;
   z-index: 0 !important;
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.2) brightness(0.92) contrast(1.5);
-  transition: filter 280ms;
-}
-
-.grid-card:hover .grid-thumb-img {
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.6) brightness(1.05) contrast(1.7);
 }
 
 .grid-card-glow {
@@ -1141,9 +1129,43 @@ html body article.nextra-body-typesetting-article p.grid-card-excerpt {
    POST HERO
    ============================================ */
 .post-hero {
-  padding: 16px 0 36px;
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-bottom: 40px;
+  padding: 40px max(24px, calc(50vw - 590px)) 0;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+.post-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 25%, rgba(0, 255, 255, 0.14) 0%, transparent 60%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.post-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 204, 204, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 204, 204, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.post-hero > * {
+  position: relative;
+  z-index: 1;
 }
 
 .post-hero-title {
@@ -1170,8 +1192,8 @@ html body article.nextra-body-typesetting-article p.grid-card-excerpt {
   max-width: 980px;
   margin: 0 auto 28px;
   aspect-ratio: 16 / 10;
-  border: 1px solid var(--banner-border);
-  background: var(--bg);
+  background: transparent;
+  border: none;
   overflow: hidden;
 }
 
@@ -1191,7 +1213,6 @@ html body article.nextra-body-typesetting-article p.grid-card-excerpt {
   object-fit: contain !important;
   object-position: center !important;
   z-index: 1 !important;
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.2) brightness(0.92) contrast(1.5);
 }
 
 .post-hero-cover-corner {
@@ -1252,6 +1273,7 @@ html body article.nextra-body-typesetting-article p.grid-card-excerpt {
   border-top: 1px solid var(--banner-border);
   border-bottom: 1px solid var(--banner-border);
   box-sizing: border-box;
+  background: var(--bg);
 }
 
 .post-hero-meta-inner {
@@ -1776,23 +1798,25 @@ article.nextra-body-typesetting-article hr::after {
 }
 
 /* ============================================
-   ARTICLE IMAGES — cyan filter
+   ARTICLE IMAGES — neutral by default
    ============================================ */
 article.nextra-body-typesetting-article img {
+  display: block;
+  margin: 1.5rem auto !important;
+  border-radius: 0 !important;
+}
+
+/* Opt-in cyan-monochrome treatment via <ThemedImage>. */
+.themed-image {
   filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.2) brightness(0.92) contrast(1.5);
   border: 1px solid var(--banner-border) !important;
   border-radius: 0 !important;
-  display: block;
-  margin: 1.5rem auto !important;
 }
 
-/* SVG exemption — drawn in palette, no filter, no border.
-   Next/Image rewrites the src to /_next/image?url=...svg&w=...&q=..., so we match by `contains`. */
+/* SVGs are already palette-locked — no filter/border for any consumer.
+   Next/Image rewrites src to /_next/image?url=...svg&w=...&q=..., so match by `contains`. */
 img[src*=".svg"],
-.featured-thumb-img[src*=".svg"],
-.grid-thumb-img[src*=".svg"],
-.post-hero-cover-img[src*=".svg"],
-article.nextra-body-typesetting-article img[src*=".svg"] {
+.themed-image[src*=".svg"] {
   filter: none !important;
   border: none !important;
 }
@@ -1816,8 +1840,6 @@ article.nextra-body-typesetting-article img[src*=".svg"] {
 
 .post-hero-cover-img[src*=".svg"] {
   object-fit: contain !important;
-  box-sizing: border-box !important;
-  padding: 32px !important;
   z-index: 1 !important;
 }
 
