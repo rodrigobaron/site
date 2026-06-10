@@ -52,10 +52,6 @@ export function StatusBar() {
   return (
     <>
       <div className='sb-cell'>
-        <span className='sb-block good' />
-        <span className='sb-good'>OK</span>
-      </div>
-      <div className='sb-cell'>
         <span className='sb-key'>file</span>
         <span className='sb-val'>{formatPath(pathname)}</span>
       </div>

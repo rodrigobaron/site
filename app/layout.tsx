@@ -43,6 +43,8 @@ export default async function RootLayout({children}) {
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
             <link rel="shortcut icon" href="/images/general/icon.svg"/>
+            {/* always load at the top — no browser scroll restoration on refresh */}
+            <script dangerouslySetInnerHTML={{ __html: `if ('scrollRestoration' in history) history.scrollRestoration = 'manual'` }} />
         </Head>
         <body>
         <Layout
@@ -53,6 +55,7 @@ export default async function RootLayout({children}) {
             feedback={{content: ''}}
             search={<Search placeholder='Search content...' />}
             nextThemes={{ defaultTheme: 'dark', forcedTheme: 'dark' }}
+            darkMode={false}
         >
             {children}
         </Layout>

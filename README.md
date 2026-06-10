@@ -32,6 +32,17 @@ pnpm i
 pnpm dev
 ```
 
+## Authoring Posts
+
+### Cover image (`thumbnail` frontmatter)
+
+The post hero renders the cover at **16:9** at all viewport sizes. To avoid letterbox bars on either side:
+
+- 1x: **1100 × 619**
+- 2x (retina, recommended): **2200 × 1238**
+
+Any 16:9 source (e.g. 1920 × 1080) works edge-to-edge. Non-16:9 images will be `contain`-fit against a white background.
+
 ## License
 
 This project is licensed under the MIT License.

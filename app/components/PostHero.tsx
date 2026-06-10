@@ -26,7 +26,7 @@ export function PostHero({ posts }) {
             alt={post.title}
             fill
             className='post-hero-cover-img'
-            sizes='(max-width: 768px) 100vw, 980px'
+            sizes='(max-width: 768px) 100vw, 560px'
             priority
           />
         </div>
