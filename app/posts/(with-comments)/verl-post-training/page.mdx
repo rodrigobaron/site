@@ -37,7 +37,7 @@ The actors, sometimes called rollout workers, generate responses from the policy
 
 Once actors have generated responses, the reward module takes over. Its job is to accept prompts paired with their corresponding responses and emit scalar rewards that signal how good each response was. For structured tasks like mathematical reasoning, you might use a rule-based reward function that checks for exact match against a known answer. However the reward module can just as easily be a learned reward model trained on human preferences, a code execution harness that runs test cases, or a multi-objective scorer balancing correctness against safety and style. The pluggable design supports starting with simple rule-based rewards during development and moving to more sophisticated model-based scorers as needed.
 
-<Image src='/images/posts/verl-post-training/verl_rl_framework.drawio.svg' alt='Verl Pipeline' width={1000} height={1000} className='h-fit' />
+<Image src='/images/posts/verl-post-training/verl_rl_framework.drawio.svg' alt='Verl Pipeline' width={1362} height={867} className='h-fit' />
 
 The trainer is the single controller in verl's architecture. It collects rollouts and their rewards from the actors, computes advantages, then calculates gradients and runs policy updates based on whatever algorithm you've configured. The supported algorithms, including PPO, GRPO, DAPO, and their variants, take different approaches to estimating advantages, handling KL divergence constraints, and managing exploration. 
 

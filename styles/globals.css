@@ -52,6 +52,10 @@
   --bg-elev:         #04181B;
   --bg-elev-2:       #062326;
   --scanline:        rgba(0, 255, 255, 0.025);
+
+  /* widen Nextra's content container so the article column + breakout
+     images have room next to the TOC on large screens */
+  --nextra-content-width: 1600px;
 }
 
 /* ============================================
@@ -264,11 +268,85 @@ nav.nextra-nav a[aria-current="page"] {
   background: var(--bg-elev) !important;
 }
 
-/* Table of contents */
+/* Docs sidebar is unused on this site — it only leaves a phantom gap */
+aside.nextra-sidebar {
+  display: none !important;
+}
+
+/* Nextra's TOC-balancing spacer (w-64 h-0 placeholder) — with the TOC moved
+   to the left it just opens a hole between the TOC and the article */
+div.x\:max-xl\:hidden.x\:h-0.x\:w-64.x\:shrink-0 {
+  display: none !important;
+}
+
+/* Table of contents — moved to the left side of the article */
 nav.nextra-toc {
   font-family: var(--font-mono) !important;
   font-size: 11px !important;
   color: var(--banner-text) !important;
+  order: -1 !important;
+}
+
+/* an empty TOC (page without headings, e.g. home) still occupies 256px and
+   shifts the article center — hide it entirely */
+nav.nextra-toc:not(:has(li)) {
+  display: none !important;
+}
+
+/* nudge the whole TOC 50px toward the article (visual shift only —
+   no layout reflow, so the centered reading column stays put) */
+nav.nextra-toc > div {
+  transform: translateX(50px);
+}
+
+/* the sticky TOC must clear the fixed 28px status bar at the bottom,
+   otherwise the scroll-to-top control gets clipped on short screens */
+nav.nextra-toc > div {
+  max-height: calc(100vh - var(--nextra-navbar-height) - 44px) !important;
+}
+
+/* footer separator: hidden until the scroll-to-top button is active */
+nav.nextra-toc div:has(> button) {
+  border-top: 1px solid transparent !important;
+  transition: border-color 200ms;
+}
+
+nav.nextra-toc div:has(> button:not([disabled])) {
+  border-top-color: var(--session-border) !important;
+}
+
+/* scroll-to-top — themed as a terminal control */
+nav.nextra-toc button {
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: var(--ui-label) !important;
+  border: 1px solid var(--session-border) !important;
+  background: var(--bg-elev) !important;
+  border-radius: 0 !important;
+  padding: 6px 10px !important;
+  transition: opacity 200ms, color 150ms, border-color 150ms !important;
+}
+
+nav.nextra-toc button[disabled] {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+nav.nextra-toc button:not([disabled]) {
+  opacity: 1 !important;
+}
+
+nav.nextra-toc button:hover {
+  color: var(--banner-accent) !important;
+  border-color: var(--banner-border) !important;
+}
+
+nav.nextra-toc button svg {
+  border-radius: 0 !important;
+  border-color: currentColor !important;
 }
 
 nav.nextra-toc a {
@@ -1483,25 +1561,16 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
   overflow: hidden;
 }
 
-.post-hero::before {
-  content: '';
+/* animated backdrop (same layers as the home hero), faded behind the cover
+   image so the artwork stands clear */
+.post-hero .post-hero-bg {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 75% 25%, rgba(0, 255, 255, 0.14) 0%, transparent 60%);
   z-index: 0;
   pointer-events: none;
-}
-
-.post-hero::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 204, 204, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 204, 204, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
-  z-index: 0;
-  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(ellipse 45% 55% at 50% 58%, transparent 35%, black 90%);
+  mask-image: radial-gradient(ellipse 45% 55% at 50% 58%, transparent 35%, black 90%);
 }
 
 .post-hero > * {
@@ -1531,7 +1600,7 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
 .post-hero-cover {
   position: relative;
   width: 100%;
-  max-width: 672px;
+  max-width: 980px;
   margin: 0 auto 26px;
   aspect-ratio: 16 / 10;
   background: transparent;
@@ -1624,7 +1693,7 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 18px 36px;
-  max-width: 672px;
+  max-width: 980px;
   margin: 0 auto;
 }
 
@@ -1678,6 +1747,18 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
   max-width: 780px;
   margin: 0 auto;
   padding: 0 24px;
+  position: relative;
+}
+
+/* separator spans the entire page, not just the nav column */
+.post-nav-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  height: 1px;
+  background: var(--session-border);
 }
 
 .post-nav {
@@ -1686,7 +1767,6 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
   align-items: stretch;
   gap: 16px;
   padding: 24px 0;
-  border-top: 1px solid var(--banner-border);
   margin-bottom: 28px;
 }
 
@@ -2142,12 +2222,45 @@ article.nextra-body-typesetting-article hr::after {
 }
 
 /* ============================================
+   ARTICLE READING COLUMN
+   Text capped at a readable measure; images break out
+   wider than the text (Anthropic-blog style).
+   ============================================ */
+/* Counterweight the left TOC (w-64 = 256px) with matching right padding so
+   the whole column system — text, images, hero — centers on the page axis. */
+@media (min-width: 1280px) {
+  html body article.nextra-body-typesetting-article:has(.post-hero) {
+    padding-right: 304px !important;
+  }
+}
+
+html body article.nextra-body-typesetting-article main > *:not(.post-hero):not(.nextra-bleed) {
+  max-width: 740px;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* blocks that contain an image — or bare images — get a wider column */
+html body article.nextra-body-typesetting-article main > :is(p, div, figure):has(img):not(.post-hero):not(.nextra-bleed),
+html body article.nextra-body-typesetting-article main > img:not(.post-hero):not(.nextra-bleed),
+html body article.nextra-body-typesetting-article main > picture:not(.post-hero):not(.nextra-bleed) {
+  max-width: 1120px;
+}
+
+/* ============================================
    ARTICLE IMAGES — neutral by default
    ============================================ */
 article.nextra-body-typesetting-article img {
   display: block;
   margin: 1.5rem auto !important;
   border-radius: 0 !important;
+}
+
+/* keep intrinsic aspect ratio when the column cap shrinks an image
+   (fill-mode images are excluded — they size off their container) */
+article.nextra-body-typesetting-article main img:not([data-nimg="fill"]) {
+  height: auto;
+  max-width: 100%;
 }
 
 /* Opt-in cyan-monochrome treatment via <ThemedImage>. */
@@ -2203,7 +2316,7 @@ article.nextra-body-typesetting-article .grid-thumb-img {
   max-width: 780px;
   margin: 0 auto;
   padding: 0 24px 24px;
-  border-top: 1px solid var(--session-border);
+  border-top: none;
 }
 
 .giscus {

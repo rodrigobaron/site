@@ -18,6 +18,12 @@ export function PostHero({ posts }) {
 
   return (
     <header className='post-hero'>
+      {/* same animated backdrop as the home hero: drifting grid + breathing glow */}
+      <div className='post-hero-bg' aria-hidden='true'>
+        <div className='hero-bg-glow' />
+        <div className='hero-bg-glow hero-bg-glow-2' />
+        <div className='hero-bg-grid' />
+      </div>
       <h1 className='post-hero-title'>{post.title}</h1>
       {post.thumbnail && (
         <div className='post-hero-cover'>

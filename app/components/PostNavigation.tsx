@@ -31,10 +31,7 @@ export function PostNavigation({ posts }) {
             <span className='post-nav-title'>{next.title}</span>
           </Link>
         ) : (
-          <span className='post-nav-link post-nav-next' aria-disabled='true'>
-            <span className='post-nav-arrow'>Next ▸</span>
-            <span className='post-nav-title'>(end of stream)</span>
-          </span>
+          <span className='post-nav-placeholder' />
         )}
       </div>
     </div>
