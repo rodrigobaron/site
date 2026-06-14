@@ -1827,7 +1827,6 @@ html body article.nextra-body-typesetting-article {
   font-size: 13.5px !important;
   font-weight: 400 !important;
   line-height: 1.78 !important;
-  counter-reset: h2-counter;
 }
 
 /* h2 — bracket counter + trailing rule */
@@ -1847,13 +1846,27 @@ article.nextra-body-typesetting-article h2 {
   background: none !important;
 }
 
-article.nextra-body-typesetting-article h2::before {
-  content: '[' counter(h2-counter, decimal-leading-zero) ']';
+/* h2 permalink rendered as a clickable [ # ] at the START of the heading.
+   Reuses Nextra's .subheading-anchor (moved to the front via order), which
+   replaces both the old [01] counter and the hover-only # on the right. */
+article.nextra-body-typesetting-article h2 .subheading-anchor {
+  order: -1;
+  flex-shrink: 0;
+  opacity: 1;
+  text-decoration: none;
   color: var(--banner-dim);
   font-weight: 500;
   letter-spacing: 0.04em;
-  flex-shrink: 0;
-  counter-increment: h2-counter;
+  transition: color 150ms ease;
+}
+
+article.nextra-body-typesetting-article h2 .subheading-anchor::after {
+  content: '[ # ]';
+}
+
+article.nextra-body-typesetting-article h2 .subheading-anchor:hover,
+article.nextra-body-typesetting-article h2 .subheading-anchor:focus-visible {
+  color: var(--banner-accent);
 }
 
 article.nextra-body-typesetting-article h2::after {

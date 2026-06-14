@@ -13,16 +13,19 @@ export const metadata = {
 
 export async function PostsPage() {
   const allposts = await getPostsByDateDesc()
-  const tags = allposts.flatMap(post => post.frontMatter.tags)
 
+  const featured = allposts[0]
+  const rest = allposts.slice(1)
+
+  // Topic counts come from the grid posts only. The featured post lives in the
+  // LATEST section (not the grid), so its tags must be excluded — otherwise a
+  // tag unique to it (e.g. "Slime") shows as a topic but filters to an empty grid.
+  const tags = rest.flatMap(post => post.frontMatter.tags)
   const allTags: Record<string, number> = {}
   for (const tag of tags) {
     allTags[tag] ??= 0
     allTags[tag] += 1
   }
-
-  const featured = allposts[0]
-  const rest = allposts.slice(1)
   const featuredDate = featured.frontMatter.date
     ? new Date(featured.frontMatter.date).toISOString().slice(0, 10)
     : ''

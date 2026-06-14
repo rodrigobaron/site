@@ -50,9 +50,8 @@ export async function HeroBlock() {
           </h1>
 
           <p className='hero-sub'>
-            A working log on the moving parts of production ML — inference servers,
-            quantization, fine-tuning, evaluation, and the trade-offs you only learn
-            by shipping.
+            Working notes on building and running ML systems in production: serving,
+            quantization, fine-tuning and evaluation.
           </p>
 
           <div className='hero-cta'>
