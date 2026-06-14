@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1433 892" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ar-red" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#ff5d5d"/></marker>
+    <marker id="ar-blue" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#7fb3ff"/></marker>
+    <marker id="ar-lav" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#cda0ec"/></marker>
+    <marker id="ar-sal" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#ffaaaa"/></marker>
+  </defs>
+
+  <!-- ================= ARROWS (drawn first, under nodes) ================= -->
+  <g fill="none" stroke-width="2.6">
+    <!-- dark-red -->
+    <g stroke="#ff5d5d" marker-end="url(#ar-red)">
+      <path d="M94,33 L122,95"/>
+      <path d="M85,122 L122,122"/>
+      <path d="M47,150 L47,322"/>
+      <path d="M47,322 L92,372"/>
+      <path d="M47,330 Q47,482 97,482"/>
+      <path d="M237,163 L237,224"/>
+      <path d="M312,242 L427,150"/>
+      <path d="M690,122 L648,122"/>
+      <path d="M536,163 L536,224"/>
+      <path d="M591,245 L877,138"/>
+      <path d="M996,163 L996,224"/>
+      <path d="M255,278 L422,368"/>
+      <path d="M180,163 L422,352"/>
+      <path d="M996,281 L996,437"/>
+      <path d="M1110,480 L1257,480"/>
+      <path d="M935,525 L982,566"/>
+      <path d="M745,720 L877,700"/>
+      <path d="M1315,508 L1315,655"/>
+      <path d="M793,790 L877,840"/>
+      <path d="M147,510 L147,570"/>
+    </g>
+    <!-- light-blue -->
+    <g stroke="#7fb3ff" marker-end="url(#ar-blue)">
+      <path d="M200,377 L422,393"/>
+      <path d="M560,335 L730,282"/>
+    </g>
+    <!-- lavender / purple -->
+    <g stroke="#cda0ec" marker-end="url(#ar-lav)">
+      <path d="M805,360 Q1100,300 1197,305"/>
+      <path d="M805,585 Q1130,560 1197,345"/>
+      <path d="M805,595 Q1050,640 1202,690"/>
+      <path d="M865,375 Q900,420 882,470"/>
+    </g>
+    <!-- salmon -->
+    <g stroke="#ffaaaa" marker-end="url(#ar-sal)">
+      <path d="M645,372 L688,374"/>
+      <path d="M645,402 L695,470"/>
+      <path d="M195,482 L422,402"/>
+      <path d="M195,500 L422,592"/>
+      <path d="M195,602 L422,615"/>
+      <path d="M645,595 L688,595"/>
+      <path d="M560,638 L730,672"/>
+      <path d="M560,638 L728,772"/>
+    </g>
+  </g>
+
+  <!-- ================= EDGE LABELS ================= -->
+  <g fill="#ffe08a" font-size="15" font-style="italic">
+    <text x="30" y="246">copy</text>
+    <text x="345" y="312">all batch</text>
+    <text x="210" y="430">mini batch</text>
+    <text x="120" y="548">value head</text>
+  </g>
+
+  <!-- ================= YELLOW MODEL RECTS ================= -->
+  <g fill="#fff4b8" stroke="#ffd24a" stroke-width="2.4">
+    <rect x="10" y="95" width="75" height="55"/>
+    <rect x="690" y="95" width="90" height="55"/>
+    <rect x="95" y="350" width="105" height="55"/>
+    <rect x="100" y="455" width="95" height="55"/>
+    <rect x="100" y="573" width="95" height="55"/>
+  </g>
+  <g fill="#3a2e00" font-size="15" text-anchor="middle">
+    <text x="47" y="128">LM</text>
+    <text x="735" y="128">RM</text>
+    <text x="147" y="373">Ref_model</text>
+    <text x="147" y="391" font-size="11">(fixed all time)</text>
+    <text x="147" y="487">Actor</text>
+    <text x="147" y="605">Critic</text>
+  </g>
+
+  <!-- ================= PINK ELLIPSES ================= -->
+  <g fill="#ffc9c6" stroke="#ff7b75" stroke-width="2.4">
+    <ellipse cx="47" cy="33" rx="47" ry="27"/>
+    <ellipse cx="237" cy="254" rx="75" ry="27"/>
+    <ellipse cx="536" cy="254" rx="55" ry="27"/>
+    <ellipse cx="745" cy="254" rx="60" ry="27"/>
+    <ellipse cx="996" cy="254" rx="60" ry="27"/>
+    <ellipse cx="745" cy="375" rx="60" ry="27"/>
+    <ellipse cx="745" cy="480" rx="55" ry="27"/>
+    <ellipse cx="1315" cy="480" rx="55" ry="27"/>
+    <ellipse cx="745" cy="595" rx="60" ry="27"/>
+    <ellipse cx="996" cy="595" rx="55" ry="27"/>
+    <ellipse cx="745" cy="693" rx="55" ry="27"/>
+    <ellipse cx="745" cy="793" rx="50" ry="27"/>
+  </g>
+  <g fill="#3a0a08" font-size="14" text-anchor="middle">
+    <text x="47" y="38">Batch Prompt</text>
+    <text x="237" y="259">Prompt+Response</text>
+    <text x="536" y="259">Reward</text>
+    <text x="745" y="259">Ref Logprobs</text>
+    <text x="996" y="259">Token Reward</text>
+    <text x="745" y="380">Old Logprobs</text>
+    <text x="745" y="485">Old Values</text>
+    <text x="1315" y="485">Advantages</text>
+    <text x="745" y="600">New Logprobs</text>
+    <text x="996" y="600">Returns</text>
+    <text x="745" y="698">New Values</text>
+    <text x="745" y="798">Logits</text>
+  </g>
+
+  <!-- ================= GREEN PROCESS RECTS ================= -->
+  <g fill="#c9f0c0" stroke="#7fe06a" stroke-width="2.4">
+    <rect x="125" y="80" width="225" height="83" rx="12"/>
+    <rect x="430" y="80" width="215" height="83" rx="12"/>
+    <rect x="880" y="80" width="230" height="83" rx="12"/>
+    <rect x="425" y="335" width="220" height="85" rx="12"/>
+    <rect x="880" y="440" width="230" height="85" rx="12"/>
+    <rect x="425" y="553" width="220" height="85" rx="12"/>
+    <rect x="880" y="658" width="230" height="80" rx="12"/>
+    <rect x="1205" y="658" width="225" height="80" rx="12"/>
+    <rect x="880" y="808" width="230" height="80" rx="12"/>
+    <rect x="1200" y="270" width="230" height="85" rx="12"/>
+  </g>
+  <!-- process header dividers -->
+  <g stroke="#5fb84f" stroke-width="1.4">
+    <line x1="135" y1="105" x2="340" y2="105"/>
+    <line x1="440" y1="105" x2="635" y2="105"/>
+    <line x1="890" y1="105" x2="1100" y2="105"/>
+    <line x1="435" y1="360" x2="635" y2="360"/>
+    <line x1="890" y1="465" x2="1100" y2="465"/>
+    <line x1="435" y1="578" x2="635" y2="578"/>
+    <line x1="890" y1="683" x2="1100" y2="683"/>
+    <line x1="1215" y1="683" x2="1420" y2="683"/>
+    <line x1="890" y1="833" x2="1100" y2="833"/>
+    <line x1="1210" y1="295" x2="1420" y2="295"/>
+  </g>
+  <!-- process titles (bold) -->
+  <g fill="#10330a" text-anchor="middle">
+    <g font-weight="bold" font-size="14" text-decoration="underline">
+      <text x="237" y="100">Process 1</text>
+      <text x="537" y="100">Process 2</text>
+      <text x="995" y="100">Process 4</text>
+      <text x="535" y="355">Process 3</text>
+      <text x="995" y="460">Process 5</text>
+      <text x="535" y="573">Process 6</text>
+      <text x="995" y="678">Process 7</text>
+      <text x="1317" y="678">Process 8</text>
+      <text x="995" y="828">Process 9 (optional)</text>
+      <text x="1315" y="290">Process 10</text>
+    </g>
+    <g font-size="14">
+      <text x="237" y="140">Rollout</text>
+      <text x="537" y="140">Evaluate</text>
+      <text x="995" y="140">KL Penalty</text>
+      <text x="535" y="383">Old Policy Sampling</text>
+      <text x="535" y="400">(no grad)</text>
+      <text x="995" y="490">Generalized Advantage</text>
+      <text x="995" y="507">Estimation</text>
+      <text x="535" y="601">New Policy Sampling</text>
+      <text x="535" y="618">(with grad)</text>
+      <text x="995" y="713">Critic Loss</text>
+      <text x="1317" y="713">Actor Loss</text>
+      <text x="995" y="863">Entropy Loss</text>
+      <text x="1315" y="320">Policykl</text>
+      <text x="1315" y="338">(early stop)</text>
+    </g>
+  </g>
+
+  <!-- ================= LEGEND ================= -->
+  <g font-size="19" font-weight="bold">
+    <text x="55" y="676" fill="#ffe06a">Yellow means model</text>
+    <text x="55" y="706" fill="#ff8c86">Red means tensor or text</text>
+    <text x="55" y="736" fill="#8be87a">Green means Process</text>
+    <text x="55" y="766" fill="#f2f2f2">Process 1-5 Once Per Batch</text>
+    <text x="55" y="796" fill="#f2f2f2">Process 6-10 (Update Epoch*Batch/Mini Batch) times  Per Batch</text>
+  </g>
+</svg>

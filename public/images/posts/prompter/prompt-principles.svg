@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 560" font-family="Helvetica, Arial, sans-serif">
+  <path d="M389.1,82.0 A200,200 0 0 1 430.8,87.1 L420.7,130.9 A155,155 0 0 0 388.4,127.0 Z" fill="#b9bdf0"/>
+  <path d="M436.9,88.6 A200,200 0 0 1 476.2,103.5 L455.9,143.6 A155,155 0 0 0 425.5,132.1 Z" fill="#b9bdf0"/>
+  <path d="M481.7,106.4 A200,200 0 0 1 516.3,130.2 L486.9,164.4 A155,155 0 0 0 460.2,145.9 Z" fill="#b9bdf0"/>
+  <path d="M521.0,134.4 A200,200 0 0 1 548.8,165.8 L512.2,192.0 A155,155 0 0 0 490.6,167.6 Z" fill="#b9bdf0"/>
+  <path d="M552.4,171.0 A200,200 0 0 1 571.9,208.2 L530.0,224.8 A155,155 0 0 0 514.9,196.0 Z" fill="#b9bdf0"/>
+  <path d="M574.1,214.0 A200,200 0 0 1 584.1,254.8 L539.6,260.9 A155,155 0 0 0 531.8,229.3 Z" fill="#b9bdf0"/>
+  <path d="M584.9,261.0 A200,200 0 0 1 584.9,303.0 L540.1,298.3 A155,155 0 0 0 540.1,265.7 Z" fill="#b9bdf0"/>
+  <path d="M584.1,309.2 A200,200 0 0 1 574.1,350.0 L531.8,334.7 A155,155 0 0 0 539.6,303.1 Z" fill="#b9bdf0"/>
+  <path d="M571.9,355.8 A200,200 0 0 1 552.4,393.0 L514.9,368.0 A155,155 0 0 0 530.0,339.2 Z" fill="#f6a99e"/>
+  <path d="M548.8,398.2 A200,200 0 0 1 521.0,429.6 L490.6,396.4 A155,155 0 0 0 512.2,372.0 Z" fill="#f6a99e"/>
+  <path d="M516.3,433.8 A200,200 0 0 1 481.7,457.6 L460.2,418.1 A155,155 0 0 0 486.9,399.6 Z" fill="#f6a99e"/>
+  <path d="M476.2,460.5 A200,200 0 0 1 436.9,475.4 L425.5,431.9 A155,155 0 0 0 455.9,420.4 Z" fill="#f6a99e"/>
+  <path d="M430.8,476.9 A200,200 0 0 1 389.1,482.0 L388.4,437.0 A155,155 0 0 0 420.7,433.1 Z" fill="#f6a99e"/>
+  <path d="M382.9,482.0 A200,200 0 0 1 341.2,476.9 L351.3,433.1 A155,155 0 0 0 383.6,437.0 Z" fill="#f6a99e"/>
+  <path d="M335.1,475.4 A200,200 0 0 1 295.8,460.5 L316.1,420.4 A155,155 0 0 0 346.5,431.9 Z" fill="#f6a99e"/>
+  <path d="M290.3,457.6 A200,200 0 0 1 255.7,433.8 L285.1,399.6 A155,155 0 0 0 311.8,418.1 Z" fill="#9be0c4"/>
+  <path d="M251.0,429.6 A200,200 0 0 1 223.2,398.2 L259.8,372.0 A155,155 0 0 0 281.4,396.4 Z" fill="#9be0c4"/>
+  <path d="M219.6,393.0 A200,200 0 0 1 200.1,355.8 L242.0,339.2 A155,155 0 0 0 257.1,368.0 Z" fill="#9be0c4"/>
+  <path d="M197.9,350.0 A200,200 0 0 1 187.9,309.2 L232.4,303.1 A155,155 0 0 0 240.2,334.7 Z" fill="#9be0c4"/>
+  <path d="M187.1,303.0 A200,200 0 0 1 187.1,261.0 L231.9,265.7 A155,155 0 0 0 231.9,298.3 Z" fill="#9be0c4"/>
+  <path d="M187.9,254.8 A200,200 0 0 1 197.9,214.0 L240.2,229.3 A155,155 0 0 0 232.4,260.9 Z" fill="#d4b9f0"/>
+  <path d="M200.1,208.2 A200,200 0 0 1 219.6,171.0 L257.1,196.0 A155,155 0 0 0 242.0,224.8 Z" fill="#d4b9f0"/>
+  <path d="M223.2,165.8 A200,200 0 0 1 251.0,134.4 L281.4,167.6 A155,155 0 0 0 259.8,192.0 Z" fill="#d4b9f0"/>
+  <path d="M255.7,130.2 A200,200 0 0 1 290.3,106.4 L311.8,145.9 A155,155 0 0 0 285.1,164.4 Z" fill="#d4b9f0"/>
+  <path d="M295.8,103.5 A200,200 0 0 1 335.1,88.6 L346.5,132.1 A155,155 0 0 0 316.1,143.6 Z" fill="#eccfa8"/>
+  <path d="M341.2,87.1 A200,200 0 0 1 382.9,82.0 L383.6,127.0 A155,155 0 0 0 351.3,130.9 Z" fill="#eccfa8"/>
+  <path d="M387.6,132.0 A150,150 0 0 1 526.8,333.7 L466.7,311.7 A86,86 0 0 0 386.9,196.0 Z" fill="#6c74de"/>
+  <path d="M525.7,336.7 A150,150 0 0 1 317.7,415.5 L346.8,358.6 A86,86 0 0 0 466.1,313.3 Z" fill="#ef6657"/>
+  <path d="M314.9,414.1 A150,150 0 0 1 236.9,265.5 L300.5,272.5 A86,86 0 0 0 345.2,357.7 Z" fill="#3fb487"/>
+  <path d="M237.3,262.4 A150,150 0 0 1 314.9,149.9 L345.2,206.3 A86,86 0 0 0 300.7,270.7 Z" fill="#a877dd"/>
+  <path d="M317.7,148.5 A150,150 0 0 1 384.4,132.0 L385.1,196.0 A86,86 0 0 0 346.8,205.4 Z" fill="#d6a25f"/>
+  <circle cx="386" cy="282" r="82" fill="#0e1620"/>
+  <text x="386" y="280" text-anchor="middle" font-size="46" font-weight="bold" fill="#eef4f8">26</text>
+  <text x="386" y="308" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="2" fill="#aab8c4">PRINCIPLES</text>
+  <text x="672" y="86" font-family="ui-monospace, Menlo, monospace" font-size="14" letter-spacing="2" fill="#c2cedb">PROMPT ENGINEERING</text>
+  <rect x="672" y="120" width="28" height="28" rx="5" fill="#6c74de"/>
+  <text x="714" y="134" font-size="21" fill="#e2e9ef">Specificity and Information</text>
+  <text x="714" y="156" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="1" fill="#8a98a6">8 principles</text>
+  <rect x="672" y="190" width="28" height="28" rx="5" fill="#ef6657"/>
+  <text x="714" y="204" font-size="21" fill="#e2e9ef">Content and Language Style</text>
+  <text x="714" y="226" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="1" fill="#8a98a6">7 principles</text>
+  <rect x="672" y="260" width="28" height="28" rx="5" fill="#3fb487"/>
+  <text x="714" y="274" font-size="21" fill="#e2e9ef">Prompt Structure and Clarity</text>
+  <text x="714" y="296" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="1" fill="#8a98a6">5 principles</text>
+  <rect x="672" y="330" width="28" height="28" rx="5" fill="#a877dd"/>
+  <text x="714" y="344" font-size="21" fill="#e2e9ef">Complex Tasks &amp; Coding</text>
+  <text x="714" y="366" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="1" fill="#8a98a6">4 principles</text>
+  <rect x="672" y="400" width="28" height="28" rx="5" fill="#d6a25f"/>
+  <text x="714" y="414" font-size="21" fill="#e2e9ef">User Interaction &amp; Engagement</text>
+  <text x="714" y="436" font-family="ui-monospace, Menlo, monospace" font-size="13" letter-spacing="1" fill="#8a98a6">2 principles</text>
+</svg>

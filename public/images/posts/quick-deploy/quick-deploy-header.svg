@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="qd-top" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9ad62b"/><stop offset="1" stop-color="#6aa406"/>
+    </linearGradient>
+    <marker id="qd-teal" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5ec8ff"/></marker>
+    <marker id="qd-green" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9ad62b"/></marker>
+    <filter id="qd-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="qd-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="26"/></filter>
+  </defs>
+
+  <!-- glow behind the server cluster -->
+  <ellipse cx="636" cy="300" rx="200" ry="150" fill="#76b900" opacity="0.16" filter="url(#qd-glow)"/>
+
+  <!-- ===================== left: ML model frameworks ===================== -->
+  <g>
+    <g font-family="ui-monospace, Menlo, monospace" font-size="12" letter-spacing="0.5">
+      <g><rect x="96" y="196" width="150" height="38" rx="8" fill="#0e2233" stroke="#5ec8ff" stroke-width="1.6"/><circle cx="116" cy="215" r="5" fill="#ff8a3c"/><text x="132" y="220" fill="#bfe6ff">PyTorch</text></g>
+      <g><rect x="96" y="244" width="150" height="38" rx="8" fill="#0e2233" stroke="#5ec8ff" stroke-width="1.6"/><circle cx="116" cy="263" r="5" fill="#ffb14a"/><text x="132" y="268" fill="#bfe6ff">TensorFlow</text></g>
+      <g><rect x="96" y="292" width="150" height="38" rx="8" fill="#0e2233" stroke="#5ec8ff" stroke-width="1.6"/><circle cx="116" cy="311" r="5" fill="#9ad62b"/><text x="132" y="316" fill="#bfe6ff">ONNX</text></g>
+      <g><rect x="96" y="340" width="150" height="38" rx="8" fill="#0e2233" stroke="#5ec8ff" stroke-width="1.6"/><circle cx="116" cy="359" r="5" fill="#7fb3ff"/><text x="132" y="364" fill="#bfe6ff">XGBoost</text></g>
+    </g>
+    <!-- gather + feed into servers -->
+    <g fill="none" stroke="#5ec8ff" stroke-width="1.8" opacity="0.6">
+      <path d="M250,215 Q360,250 432,292"/>
+      <path d="M250,263 Q350,275 432,298"/>
+      <path d="M250,311 Q350,305 432,304"/>
+      <path d="M250,359 Q360,335 432,312"/>
+    </g>
+    <path d="M430,302 L474,302" fill="none" stroke="#5ec8ff" stroke-width="2.6" stroke-linecap="round" marker-end="url(#qd-teal)" filter="url(#qd-soft)"/>
+  </g>
+
+  <!-- ===================== center: isometric Triton servers ===================== -->
+  <g stroke="#1b440b" stroke-width="1.5" stroke-linejoin="round">
+    <!-- cabinet 3 (back) -->
+    <polygon points="686,170 738,200 738,360 686,330" fill="#2c6810"/>
+    <polygon points="738,200 790,170 790,330 738,360" fill="#1d4a0c"/>
+    <polygon points="738,200 790,170 738,140 686,170" fill="url(#qd-top)"/>
+    <!-- cabinet 2 (mid) -->
+    <polygon points="582,230 634,260 634,420 582,390" fill="#2c6810"/>
+    <polygon points="634,260 686,230 686,390 634,420" fill="#1d4a0c"/>
+    <polygon points="634,260 686,230 634,200 582,230" fill="url(#qd-top)"/>
+    <!-- cabinet 1 (front) -->
+    <polygon points="478,290 530,320 530,480 478,450" fill="#2c6810"/>
+    <polygon points="530,320 582,290 582,450 530,480" fill="#1d4a0c"/>
+    <polygon points="530,320 582,290 530,260 478,290" fill="url(#qd-top)"/>
+  </g>
+  <!-- slats on the front (left) faces -->
+  <g stroke="#aee35f" stroke-width="2" opacity="0.8" fill="none">
+    <path d="M686,188 L738,218 M686,206 L738,236 M686,224 L738,254 M686,242 L738,272 M686,260 L738,290 M686,278 L738,308 M686,296 L738,326 M686,314 L738,344"/>
+    <path d="M582,248 L634,278 M582,266 L634,296 M582,284 L634,314 M582,302 L634,332 M582,320 L634,350 M582,338 L634,368 M582,356 L634,386 M582,374 L634,404"/>
+    <path d="M478,308 L530,338 M478,326 L530,356 M478,344 L530,374 M478,362 L530,392 M478,380 L530,410 M478,398 L530,428 M478,416 L530,446 M478,434 L530,464"/>
+  </g>
+
+  <!-- servers -> API -->
+  <path d="M792,266 Q880,280 950,294" fill="none" stroke="#9ad62b" stroke-width="2.6" stroke-linecap="round" marker-end="url(#qd-green)" filter="url(#qd-soft)"/>
+
+  <!-- ===================== right: fast inference API ===================== -->
+  <g font-family="ui-monospace, Menlo, monospace">
+    <rect x="958" y="216" width="256" height="170" rx="12" fill="#0c1a10" stroke="#4f8c1c" stroke-width="2"/>
+    <rect x="958" y="216" width="256" height="32" rx="12" fill="#16301a"/>
+    <circle cx="980" cy="232" r="5" fill="#9ad62b"/>
+    <text x="996" y="237" font-size="13" letter-spacing="0.5" fill="#bdf07a">triton · inference api</text>
+    <text x="978" y="276" font-size="12" fill="#7fd0f0">POST /v2/models/infer</text>
+    <g fill="#9ad62b" opacity="0.55">
+      <rect x="978" y="292" width="150" height="6" rx="3"/>
+      <rect x="978" y="308" width="196" height="6" rx="3"/>
+      <rect x="978" y="324" width="120" height="6" rx="3"/>
+    </g>
+    <g font-size="12.5">
+      <rect x="978" y="344" width="98" height="28" rx="6" fill="#16301a" stroke="#4f8c1c" stroke-width="1.2"/>
+      <text x="990" y="362" fill="#bdf07a">p99 2.4ms</text>
+      <rect x="1086" y="344" width="118" height="28" rx="6" fill="#16301a" stroke="#4f8c1c" stroke-width="1.2"/>
+      <text x="1098" y="362" fill="#bdf07a">9.1k req/s</text>
+    </g>
+  </g>
+
+  <!-- ===================== zone labels ===================== -->
+  <g font-family="ui-monospace, Menlo, monospace" font-size="14" letter-spacing="2">
+    <text x="96"   y="430" fill="#7fd0f0" opacity="0.85">ML MODELS</text>
+    <text x="636"  y="500" fill="#9ad62b" opacity="0.9" text-anchor="middle">TRITON INFERENCE SERVER</text>
+    <text x="1214" y="430" fill="#8be05a" opacity="0.85" text-anchor="end">FAST INFERENCE API</text>
+  </g>
+</svg>

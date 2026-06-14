@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <radialGradient id="mc-agent" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#dce9ff"/><stop offset="0.55" stop-color="#7aa2ff"/><stop offset="1" stop-color="#3157cc"/>
+    </radialGradient>
+    <marker id="mc-blue" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6a9bff"/></marker>
+    <marker id="mc-violet" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#9b8cff"/></marker>
+    <marker id="mc-green" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6fae4e"/></marker>
+    <marker id="mc-teal" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#5ec8ff"/></marker>
+    <filter id="mc-soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="mc-strong" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+
+  <!-- ===== query -> agent ===== -->
+  <circle cx="104" cy="256" r="24" fill="#16314f" stroke="#5ec8ff" stroke-width="2" filter="url(#mc-soft)"/>
+  <g fill="#aee3ff"><circle cx="95" cy="256" r="2.6"/><circle cx="104" cy="256" r="2.6"/><circle cx="113" cy="256" r="2.6"/></g>
+  <text x="104" y="306" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="14" letter-spacing="2" fill="#7fd0f0" opacity="0.9">USER</text>
+  <path d="M132,256 L284,256" fill="none" stroke="#5ec8ff" stroke-width="3" stroke-linecap="round" marker-end="url(#mc-teal)"/>
+  <text x="205" y="246" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#9bdcff">query</text>
+
+  <!-- ===== agent core ===== -->
+  <g filter="url(#mc-strong)">
+    <polygon points="408,256 379,306 321,306 292,256 321,206 379,206" fill="url(#mc-agent)" stroke="#cfe0ff" stroke-width="2.5"/>
+  </g>
+  <text x="350" y="263" text-anchor="middle" font-size="22" font-weight="bold" fill="#0a1f3d">AGENT</text>
+
+  <!-- ===== agent <-> MCP loop ===== -->
+  <path d="M402,240 C462,204 512,204 572,240" fill="none" stroke="#6a9bff" stroke-width="2.6" stroke-linecap="round" marker-end="url(#mc-blue)" filter="url(#mc-soft)"/>
+  <path d="M572,272 C512,308 462,308 402,272" fill="none" stroke="#9b8cff" stroke-width="2.6" stroke-linecap="round" marker-end="url(#mc-violet)" filter="url(#mc-soft)"/>
+  <text x="487" y="200" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#9dbcff">tool call</text>
+  <text x="487" y="324" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#c7bdff">result</text>
+
+  <!-- ===== MCP hub ===== -->
+  <g filter="url(#mc-soft)">
+    <rect x="576" y="206" width="130" height="100" rx="16" fill="#17243a" stroke="#9b8cff" stroke-width="2.4"/>
+  </g>
+  <text x="641" y="252" text-anchor="middle" font-size="26" font-weight="bold" fill="#cbd5ff">MCP</text>
+  <text x="641" y="278" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" letter-spacing="1" fill="#8a93c4">protocol</text>
+
+  <!-- ===== MCP -> tool servers ===== -->
+  <g fill="none" stroke="#6fae4e" stroke-width="2.2" marker-end="url(#mc-green)" opacity="0.9">
+    <path d="M706,242 C800,170 860,120 950,118"/>
+    <path d="M706,250 C800,210 860,190 950,190"/>
+    <path d="M708,256 L950,256"/>
+    <path d="M706,262 C800,302 860,322 950,322"/>
+    <path d="M706,270 C800,342 860,392 950,394"/>
+  </g>
+
+  <!-- ===== tool servers ===== -->
+  <g>
+    <g fill="#0e1a24" stroke="#4f8c5c" stroke-width="1.8">
+      <rect x="952" y="94"  width="218" height="48" rx="10"/>
+      <rect x="952" y="166" width="218" height="48" rx="10"/>
+      <rect x="952" y="232" width="218" height="48" rx="10"/>
+      <rect x="952" y="298" width="218" height="48" rx="10"/>
+      <rect x="952" y="370" width="218" height="48" rx="10"/>
+    </g>
+    <g fill="#dfe9ef" font-size="18">
+      <text x="1018" y="124">Filesystem</text>
+      <text x="1018" y="196">Database</text>
+      <text x="1018" y="262">Web / API</text>
+      <text x="1018" y="328">Git</text>
+      <text x="1018" y="400">Search</text>
+    </g>
+    <!-- icons -->
+    <path d="M974,108 h10 l4,5 h10 v15 h-24 Z" fill="none" stroke="#f0c050" stroke-width="2"/>
+    <g transform="translate(985,190)"><path d="M-11,-8 a11,4 0 0 1 22,0 v14 a11,4 0 0 1 -22,0 Z" fill="none" stroke="#5ec8ff" stroke-width="2"/><ellipse cx="0" cy="-8" rx="11" ry="4" fill="none" stroke="#5ec8ff" stroke-width="2"/></g>
+    <g transform="translate(985,256)" fill="none" stroke="#4fb0a0" stroke-width="2"><circle cx="0" cy="0" r="12"/><ellipse cx="0" cy="0" rx="5" ry="12"/><line x1="-12" y1="0" x2="12" y2="0"/></g>
+    <g transform="translate(985,328)" stroke="#f0a040" stroke-width="2"><line x1="0" y1="-11" x2="0" y2="11"/><circle cx="0" cy="-11" r="3.5" fill="#f0a040"/><circle cx="0" cy="11" r="3.5" fill="#f0a040"/><path d="M0,2 C0,8 9,6 11,0" fill="none"/><circle cx="11" cy="0" r="3.5" fill="#f0a040"/></g>
+    <g transform="translate(985,394)" fill="none" stroke="#7fd06a" stroke-width="2"><circle cx="-3" cy="-3" r="9"/><line x1="4" y1="4" x2="12" y2="12"/></g>
+  </g>
+
+  <!-- ===== zone labels ===== -->
+  <g font-family="ui-monospace, Menlo, monospace" font-size="14" letter-spacing="2">
+    <text x="350"  y="356" text-anchor="middle" fill="#8fb3ff" opacity="0.9">LLM AGENT</text>
+    <text x="641"  y="356" text-anchor="middle" fill="#b3a9ff" opacity="0.9">CONTEXT PROTOCOL</text>
+    <text x="1170" y="470" text-anchor="end" fill="#8be06a" opacity="0.85">TOOL SERVERS</text>
+  </g>
+</svg>

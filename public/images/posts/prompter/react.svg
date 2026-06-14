@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="rx-ar" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto"><path d="M1,1 L8,5 L1,9" fill="none" stroke="#b9c6d2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></marker>
+  </defs>
+
+  <g fill="none" stroke="#b9c6d2" stroke-width="2">
+    <!-- ===== Panel 1: Reason Only (self-loop right of LM) ===== -->
+    <path d="M166,232 C235,194 320,196 352,238" marker-end="url(#rx-ar)"/>
+    <path d="M352,262 C320,306 235,308 166,270" marker-end="url(#rx-ar)"/>
+    <!-- divider -->
+    <path d="M392,124 L362,392" stroke="#5a6b78" stroke-width="1.5" opacity="0.55"/>
+    <!-- ===== Panel 2: Act Only ===== -->
+    <path d="M448,219 C490,154 590,154 632,219" marker-end="url(#rx-ar)"/>
+    <path d="M632,281 C590,346 490,346 448,281" marker-end="url(#rx-ar)"/>
+    <!-- ===== Panel 3: ReAct (reasoning self-loop left of LM + act loop right) ===== -->
+    <path d="M974,232 C905,194 820,196 788,238" marker-end="url(#rx-ar)"/>
+    <path d="M788,262 C820,306 905,308 974,270" marker-end="url(#rx-ar)"/>
+    <path d="M1046,219 C1088,154 1146,154 1188,219" marker-end="url(#rx-ar)"/>
+    <path d="M1188,281 C1146,346 1088,346 1046,281" marker-end="url(#rx-ar)"/>
+  </g>
+
+  <!-- ===== red transition arrow ===== -->
+  <g fill="#ff4d4d">
+    <rect x="678" y="238" width="56" height="24" rx="2"/>
+    <path d="M732,224 L768,250 L732,276 Z"/>
+  </g>
+
+  <!-- ===== boxes ===== -->
+  <g>
+    <g fill="#1b2733" stroke="#aebcc8" stroke-width="2">
+      <rect x="94"   y="219" width="72" height="62" rx="8"/>
+      <rect x="394"  y="219" width="72" height="62" rx="8"/>
+      <rect x="614"  y="219" width="72" height="62" rx="8"/>
+      <rect x="974"  y="219" width="72" height="62" rx="8"/>
+      <rect x="1188" y="219" width="72" height="62" rx="8"/>
+    </g>
+    <g fill="#eef4f8" font-size="22" text-anchor="middle">
+      <text x="130"  y="258">LM</text>
+      <text x="430"  y="258">LM</text>
+      <text x="650"  y="258">Env</text>
+      <text x="1010" y="258">LM</text>
+      <text x="1224" y="258">Env</text>
+    </g>
+  </g>
+
+  <!-- ===== arc / loop labels ===== -->
+  <g fill="#cdd9e3" font-size="19" text-anchor="middle">
+    <text x="262" y="244">Reasoning</text>
+    <text x="262" y="268">Traces</text>
+    <text x="540" y="150">Actions</text>
+    <text x="540" y="372">Observations</text>
+    <text x="884" y="244">Reasoning</text>
+    <text x="884" y="268">Traces</text>
+    <text x="1117" y="150">Actions</text>
+    <text x="1117" y="372">Observations</text>
+  </g>
+
+  <!-- ===== captions ===== -->
+  <g text-anchor="middle">
+    <text x="220" y="452"><tspan font-size="19" fill="#c2cedb">Reason Only </tspan><tspan font-size="13" fill="#8595a2">(e.g. Chain-of-thought)</tspan></text>
+    <text x="540" y="452"><tspan font-size="19" fill="#c2cedb">Act Only </tspan><tspan font-size="13" fill="#8595a2">(e.g. SayCan, WebGPT)</tspan></text>
+    <text x="1075" y="452"><tspan font-size="19" font-weight="bold" fill="#ff6a6a">ReAct </tspan><tspan font-size="13" font-weight="bold" fill="#ff9a9a">(Reason + Act)</tspan></text>
+  </g>
+</svg>

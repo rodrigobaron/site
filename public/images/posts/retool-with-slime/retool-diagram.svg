@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" fill="none"
+     font-family="JetBrains Mono, ui-monospace, monospace" font-size="5.5">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#B8BDC4"/>
+    </marker>
+    <marker id="arr-fb" viewBox="0 0 10 10" refX="9" refY="5"
+            markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#34A853"/>
+    </marker>
+  </defs>
+
+  <!-- Question (left, vertically centered) -->
+  <rect x="4" y="98" width="40" height="22" stroke="#EA4335" stroke-width="1"/>
+  <text x="24" y="112" fill="#E8EAED" text-anchor="middle">Question</text>
+  <!-- Branches from Question to both panels -->
+  <path d="M44 103 Q 56 75 70 50" stroke="#B8BDC4" stroke-width="0.7"
+        fill="none" marker-end="url(#arr)"/>
+  <path d="M44 115 Q 56 150 80 168" stroke="#B8BDC4" stroke-width="0.7"
+        fill="none" marker-end="url(#arr)"/>
+
+  <!-- ============ TOP PANEL — Text-based RL ============ -->
+  <rect x="62" y="10" width="290" height="86"
+        stroke="#C2C7CD" stroke-opacity="0.85" stroke-width="0.7" rx="2"/>
+  <text x="76" y="22" fill="#FBBC05" font-weight="700" letter-spacing="0.7">ROLLOUT</text>
+
+  <!-- Policy LLM -->
+  <rect x="76" y="42" width="46" height="26" stroke="#4285F4" stroke-width="1.4"/>
+  <text x="99" y="54" fill="#E8EAED" text-anchor="middle">Policy</text>
+  <text x="99" y="62" fill="#E8EAED" text-anchor="middle">LLM</text>
+
+  <path d="M122 55 L132 55" stroke="#B8BDC4" stroke-width="0.7" marker-end="url(#arr)"/>
+
+  <!-- Token sequence: 3 rows of 2 tokens, final highlighted -->
+  <g stroke="#B8BDC4" stroke-width="0.5">
+    <rect x="134" y="42" width="18" height="6"/>
+    <rect x="154" y="42" width="18" height="6"/>
+    <rect x="134" y="50" width="18" height="6"/>
+    <rect x="154" y="50" width="18" height="6"/>
+    <rect x="134" y="58" width="14" height="6"/>
+  </g>
+  <rect x="150" y="58" width="8" height="6" fill="#FBBC05"/>
+
+  <path d="M172 61 L186 61" stroke="#B8BDC4" stroke-width="0.7" marker-end="url(#arr)"/>
+
+  <!-- Reward -->
+  <rect x="188" y="54" width="32" height="14" stroke="#34A853" stroke-width="0.8"/>
+  <text x="204" y="63" fill="#E8EAED" text-anchor="middle">Reward</text>
+
+  <path d="M220 61 L232 61" stroke="#B8BDC4" stroke-width="0.7" marker-end="url(#arr)"/>
+
+  <!-- Advantage -->
+  <rect x="234" y="54" width="40" height="14" stroke="#FBBC05" stroke-width="0.8"/>
+  <text x="254" y="63" fill="#E8EAED" text-anchor="middle">Advantage</text>
+
+  <!-- Feedback loop: Advantage → up → Policy LLM (dashed) -->
+  <path d="M254 54 L254 30 L99 30 L99 42"
+        stroke="#34A853" stroke-width="0.6" stroke-dasharray="2 2"
+        fill="none" marker-end="url(#arr-fb)"/>
+
+  <text x="207" y="88" fill="#B8BDC4" text-anchor="middle"
+        font-size="5" font-style="italic" opacity="0.85">(a) Text-based RL</text>
+
+  <!-- Dashed divider -->
+  <line x1="62" y1="106" x2="352" y2="106"
+        stroke="#C2C7CD" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+  <!-- ============ BOTTOM PANEL — ReTool RL ============ -->
+  <rect x="62" y="116" width="290" height="92"
+        stroke="#C2C7CD" stroke-opacity="0.85" stroke-width="0.7" rx="2"/>
+  <text x="76" y="128" fill="#FBBC05" font-weight="700" letter-spacing="0.7">ROLLOUT WITH CODE EXEC</text>
+
+  <!-- Policy LLM (centered upper) -->
+  <rect x="142" y="134" width="52" height="18" stroke="#4285F4" stroke-width="1.4"/>
+  <text x="168" y="146" fill="#E8EAED" text-anchor="middle">Policy LLM</text>
+
+  <!-- Fan-out arrows: Policy LLM → top of each column -->
+  <path d="M148 152 L98 158" stroke="#B8BDC4" stroke-width="0.5" fill="none"/>
+  <path d="M158 152 L124 158" stroke="#B8BDC4" stroke-width="0.5" fill="none"/>
+  <path d="M178 152 L152 158" stroke="#B8BDC4" stroke-width="0.5" fill="none"/>
+  <path d="M188 152 L188 158" stroke="#B8BDC4" stroke-width="0.5" fill="none"/>
+
+  <!-- 4 turn-columns of T (text) / C (code) / I (interpreter) stripes -->
+  <g>
+    <rect x="86"  y="160" width="20" height="5" stroke="#B8BDC4" stroke-width="0.5"/>
+    <rect x="86"  y="166" width="20" height="5" stroke="#4285F4" stroke-width="0.5"/>
+    <rect x="86"  y="172" width="20" height="5" stroke="#34A853" stroke-width="0.5"/>
+    <rect x="114" y="160" width="20" height="5" stroke="#B8BDC4" stroke-width="0.5"/>
+    <rect x="114" y="166" width="20" height="5" stroke="#4285F4" stroke-width="0.5"/>
+    <rect x="114" y="172" width="20" height="5" stroke="#34A853" stroke-width="0.5"/>
+    <rect x="142" y="160" width="20" height="5" stroke="#B8BDC4" stroke-width="0.5"/>
+    <rect x="142" y="166" width="20" height="5" stroke="#4285F4" stroke-width="0.5"/>
+    <rect x="142" y="172" width="20" height="5" stroke="#34A853" stroke-width="0.5"/>
+  </g>
+  <text x="168" y="170" fill="#B8BDC4" font-size="8" font-weight="700">…</text>
+  <g>
+    <rect x="180" y="160" width="20" height="5" stroke="#B8BDC4" stroke-width="0.5"/>
+    <rect x="180" y="166" width="20" height="5" stroke="#4285F4" stroke-width="0.5"/>
+    <rect x="180" y="172" width="20" height="5" stroke="#34A853" stroke-width="0.5"/>
+  </g>
+
+  <!-- Final result block (highlight filled) -->
+  <rect x="204" y="166" width="7" height="5" fill="#FBBC05"/>
+
+  <!-- Final → Reward -->
+  <path d="M211 168 L221 168" stroke="#B8BDC4" stroke-width="0.7" marker-end="url(#arr)"/>
+  <rect x="223" y="161" width="32" height="14" stroke="#34A853" stroke-width="0.8"/>
+  <text x="239" y="170" fill="#E8EAED" text-anchor="middle">Reward</text>
+
+  <!-- Reward → Advantage (up) -->
+  <path d="M239 161 L239 152" stroke="#B8BDC4" stroke-width="0.7" marker-end="url(#arr)"/>
+  <rect x="219" y="138" width="40" height="14" stroke="#FBBC05" stroke-width="0.8"/>
+  <text x="239" y="147" fill="#E8EAED" text-anchor="middle">Advantage</text>
+
+  <!-- Advantage → Policy LLM (dashed feedback) -->
+  <path d="M219 145 L194 145" stroke="#34A853" stroke-width="0.6"
+        stroke-dasharray="2 2" fill="none" marker-end="url(#arr-fb)"/>
+
+  <!-- Code Sandbox -->
+  <rect x="100" y="184" width="100" height="16" stroke="#A142F4" stroke-width="1"/>
+  <text x="150" y="194" fill="#E8EAED" text-anchor="middle">Code Sandbox</text>
+
+  <!-- Up-arrows from sandbox to interpreter row of each column -->
+  <path d="M118 184 L 96 177" stroke="#B8BDC4" stroke-width="0.5" fill="none" marker-end="url(#arr)"/>
+  <path d="M138 184 L 124 177" stroke="#B8BDC4" stroke-width="0.5" fill="none" marker-end="url(#arr)"/>
+  <path d="M162 184 L 152 177" stroke="#B8BDC4" stroke-width="0.5" fill="none" marker-end="url(#arr)"/>
+  <path d="M186 184 L 190 177" stroke="#B8BDC4" stroke-width="0.5" fill="none" marker-end="url(#arr)"/>
+
+  <text x="207" y="206" fill="#B8BDC4" text-anchor="middle"
+        font-size="5" font-style="italic" opacity="0.85">(b) ReTool RL</text>
+
+  <!-- ============ Legend (right) ============ -->
+  <g font-size="4.5">
+    <rect x="305" y="118" width="6" height="3.5" stroke="#B8BDC4" stroke-width="0.5"/>
+    <text x="313" y="121" fill="#BDC1C6">Text</text>
+    <rect x="305" y="125" width="6" height="3.5" stroke="#4285F4" stroke-width="0.5"/>
+    <text x="313" y="128" fill="#BDC1C6">Code</text>
+    <rect x="305" y="132" width="6" height="3.5" stroke="#34A853" stroke-width="0.5"/>
+    <text x="313" y="135" fill="#BDC1C6">Feedback</text>
+    <rect x="305" y="139" width="6" height="3.5" fill="#FBBC05"/>
+    <text x="313" y="142" fill="#BDC1C6">Final</text>
+  </g>
+</svg>
