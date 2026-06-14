@@ -2257,10 +2257,18 @@ article.nextra-body-typesetting-article img {
 }
 
 /* keep intrinsic aspect ratio when the column cap shrinks an image
-   (fill-mode images are excluded — they size off their container) */
+   (fill-mode images are excluded — they size off their container).
+   max-height keeps tall images (e.g. a square infographic) within the
+   viewport so they never scroll past the screen; click-to-zoom still
+   exposes full detail. object-fit preserves the aspect ratio when the
+   height cap engages. We deliberately don't set `width: auto` here — that
+   would override next/image's width attribute and make the layout follow
+   the density-corrected resource size (halving images on retina). */
 article.nextra-body-typesetting-article main img:not([data-nimg="fill"]) {
   height: auto;
   max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
 }
 
 /* Opt-in cyan-monochrome treatment via <ThemedImage>. */
