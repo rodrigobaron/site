@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="ff-line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"   stop-color="#5ec8ff"/>
+      <stop offset="0.5" stop-color="#9bd6e8"/>
+      <stop offset="0.72" stop-color="#ffb14a"/>
+      <stop offset="1"   stop-color="#ff8a1e"/>
+    </linearGradient>
+    <radialGradient id="ff-node" cx="0.5" cy="0.38" r="0.62">
+      <stop offset="0" stop-color="#ffd98a"/>
+      <stop offset="1" stop-color="#ff7a18"/>
+    </radialGradient>
+    <radialGradient id="ff-core" cx="0.5" cy="0.38" r="0.7">
+      <stop offset="0" stop-color="#fff0c8"/>
+      <stop offset="0.55" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff6a13"/>
+    </radialGradient>
+    <filter id="g-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="g-strong" x="-70%" y="-70%" width="240%" height="240%">
+      <feGaussianBlur stdDeviation="10" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ===================== raw-data constellation (top-left) ===================== -->
+  <g opacity="0.6">
+    <g stroke="#5ec8ff" stroke-width="1.2" opacity="0.45">
+      <line x1="70" y1="110" x2="125" y2="72"/>
+      <line x1="125" y1="72" x2="185" y2="108"/>
+      <line x1="185" y1="108" x2="110" y2="140"/>
+      <line x1="110" y1="140" x2="70" y2="110"/>
+    </g>
+    <g fill="#aee3ff">
+      <circle cx="70" cy="110" r="3"/><circle cx="125" cy="72" r="3.5"/>
+      <circle cx="185" cy="108" r="3"/><circle cx="110" cy="140" r="3"/>
+    </g>
+  </g>
+
+  <!-- ===================== secondary series (top-right) ===================== -->
+  <g opacity="0.55">
+    <path d="M858,100 L905,72 L952,90 L999,60 L1046,82 L1093,56 L1140,76 L1187,58"
+          fill="none" stroke="#ff9a3c" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <g fill="#ffd98a">
+      <circle cx="905" cy="72" r="2.8"/><circle cx="999" cy="60" r="2.8"/><circle cx="1093" cy="56" r="2.8"/>
+    </g>
+  </g>
+
+  <!-- ===================== candlesticks (statistical, left) ===================== -->
+  <g stroke-width="2.2">
+    <g stroke="#5ec8ff" fill="#2f6fd0" opacity="0.95">
+      <g><line x1="78" y1="376" x2="78" y2="418"/><rect x="68" y="390" width="20" height="22" rx="2"/></g>
+      <g><line x1="118" y1="352" x2="118" y2="402"/><rect x="108" y="366" width="20" height="28" rx="2"/></g>
+      <g><line x1="212" y1="308" x2="212" y2="368"/><rect x="202" y="322" width="20" height="38" rx="2"/></g>
+      <g><line x1="305" y1="264" x2="305" y2="324"/><rect x="295" y="278" width="20" height="38" rx="2"/></g>
+    </g>
+    <g stroke="#3f86c8" fill="#16314f" opacity="0.92">
+      <g><line x1="165" y1="332" x2="165" y2="390"/><rect x="155" y="346" width="20" height="36" rx="2"/></g>
+      <g><line x1="258" y1="286" x2="258" y2="346"/><rect x="248" y="300" width="20" height="38" rx="2"/></g>
+      <g><line x1="352" y1="248" x2="352" y2="306"/><rect x="342" y="262" width="20" height="36" rx="2"/></g>
+    </g>
+  </g>
+
+  <!-- historical line over candles -->
+  <path d="M62,400 L118,374 L165,352 L212,326 L258,302 L305,280 L352,262 L410,257 L482,255"
+        fill="none" stroke="url(#ff-line)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" filter="url(#g-soft)"/>
+  <g fill="#aee3ff">
+    <circle cx="165" cy="352" r="3.4"/><circle cx="258" cy="302" r="3.4"/><circle cx="352" cy="262" r="3.4"/>
+  </g>
+
+  <!-- ===================== probabilistic quantile fan (right) ===================== -->
+  <g>
+    <path d="M798,255 C920,205 1050,170 1245,135 L1245,375 C1050,340 920,305 798,255 Z" fill="#ff9a3c" opacity="0.10"/>
+    <path d="M798,255 C920,215 1050,188 1245,165 L1245,345 C1050,322 920,295 798,255 Z" fill="#ff9a3c" opacity="0.13"/>
+    <path d="M798,255 C930,222 1050,205 1245,192 L1245,318 C1050,305 930,288 798,255 Z" fill="#ff9a3c" opacity="0.18"/>
+    <path d="M798,255 C940,232 1060,222 1245,218 L1245,292 C1060,288 940,278 798,255 Z" fill="#ffac52" opacity="0.24"/>
+    <g stroke="#ffb14a" stroke-width="1" stroke-dasharray="3 7" opacity="0.4">
+      <line x1="920"  y1="208" x2="920"  y2="302"/>
+      <line x1="1060" y1="186" x2="1060" y2="324"/>
+      <line x1="1190" y1="158" x2="1190" y2="352"/>
+    </g>
+    <path d="M798,255 C870,238 920,270 990,256 C1060,244 1110,262 1245,255"
+          fill="none" stroke="#ff8a1e" stroke-width="4" stroke-linecap="round"
+          stroke-dasharray="2 11" filter="url(#g-soft)"/>
+    <g fill="#ffd98a">
+      <circle cx="920" cy="261" r="3.8"/><circle cx="1060" cy="252" r="3.8"/><circle cx="1190" cy="255" r="3.8"/>
+    </g>
+  </g>
+
+  <!-- ===================== foundation model mesh (center) ===================== -->
+  <g>
+    <g stroke="#ff9a3c" stroke-width="1.6" opacity="0.5">
+      <!-- core to inner -->
+      <line x1="640" y1="255" x2="728" y2="255"/><line x1="640" y1="255" x2="684" y2="179"/>
+      <line x1="640" y1="255" x2="596" y2="179"/><line x1="640" y1="255" x2="552" y2="255"/>
+      <line x1="640" y1="255" x2="596" y2="331"/><line x1="640" y1="255" x2="684" y2="331"/>
+      <!-- inner hexagon -->
+      <line x1="728" y1="255" x2="684" y2="179"/><line x1="684" y1="179" x2="596" y2="179"/>
+      <line x1="596" y1="179" x2="552" y2="255"/><line x1="552" y1="255" x2="596" y2="331"/>
+      <line x1="596" y1="331" x2="684" y2="331"/><line x1="684" y1="331" x2="728" y2="255"/>
+      <!-- inner to outer -->
+      <line x1="728" y1="255" x2="798" y2="255"/><line x1="684" y1="179" x2="752" y2="143"/>
+      <line x1="596" y1="179" x2="640" y2="97"/><line x1="596" y1="179" x2="528" y2="143"/>
+      <line x1="552" y1="255" x2="482" y2="255"/><line x1="596" y1="331" x2="528" y2="367"/>
+      <line x1="684" y1="331" x2="752" y2="367"/><line x1="684" y1="331" x2="640" y2="413"/>
+      <!-- outer ring -->
+      <line x1="798" y1="255" x2="752" y2="143"/><line x1="752" y1="143" x2="640" y2="97"/>
+      <line x1="640" y1="97" x2="528" y2="143"/><line x1="528" y1="143" x2="482" y2="255"/>
+      <line x1="482" y1="255" x2="528" y2="367"/><line x1="528" y1="367" x2="640" y2="413"/>
+      <line x1="640" y1="413" x2="752" y2="367"/><line x1="752" y1="367" x2="798" y2="255"/>
+    </g>
+    <!-- output stub -->
+    <line x1="798" y1="255" x2="846" y2="255" stroke="#ff8a1e" stroke-width="3" opacity="0.8" filter="url(#g-soft)"/>
+
+    <!-- outer nodes -->
+    <g filter="url(#g-soft)">
+      <circle cx="798" cy="255" r="12" fill="url(#ff-node)"/>
+      <circle cx="752" cy="143" r="11" fill="url(#ff-node)"/>
+      <circle cx="640" cy="97"  r="12" fill="url(#ff-node)"/>
+      <circle cx="528" cy="143" r="11" fill="url(#ff-node)"/>
+      <circle cx="482" cy="255" r="13" fill="url(#ff-node)"/>
+      <circle cx="528" cy="367" r="11" fill="url(#ff-node)"/>
+      <circle cx="640" cy="413" r="12" fill="url(#ff-node)"/>
+      <circle cx="752" cy="367" r="11" fill="url(#ff-node)"/>
+    </g>
+    <!-- inner nodes -->
+    <g filter="url(#g-soft)">
+      <circle cx="728" cy="255" r="9" fill="url(#ff-node)"/>
+      <circle cx="684" cy="179" r="9" fill="url(#ff-node)"/>
+      <circle cx="596" cy="179" r="9" fill="url(#ff-node)"/>
+      <circle cx="552" cy="255" r="9" fill="url(#ff-node)"/>
+      <circle cx="596" cy="331" r="9" fill="url(#ff-node)"/>
+      <circle cx="684" cy="331" r="9" fill="url(#ff-node)"/>
+    </g>
+
+    <!-- AI core -->
+    <g filter="url(#g-strong)">
+      <polygon points="686,255 663,295 617,295 594,255 617,215 663,215"
+               fill="url(#ff-core)" stroke="#ffe2a6" stroke-width="2.4"/>
+    </g>
+    <text x="640" y="269" text-anchor="middle" font-size="36" font-weight="bold" fill="#3a1500" letter-spacing="2">AI</text>
+  </g>
+
+  <!-- ===================== mono labels ===================== -->
+  <g font-family="ui-monospace, Menlo, monospace" font-size="14" letter-spacing="2">
+    <text x="62" y="462" fill="#7fd0f0" opacity="0.85">STATISTICAL BASELINES</text>
+    <text x="640" y="462" fill="#ffb14a" opacity="0.9" text-anchor="middle">FOUNDATION MODEL</text>
+    <text x="1245" y="462" fill="#ff8a1e" opacity="0.85" text-anchor="end">PROBABILISTIC FORECAST</text>
+  </g>
+  <text x="1245" y="408" font-family="ui-monospace, Menlo, monospace" font-size="12" letter-spacing="2" fill="#ffd98a" opacity="0.7" text-anchor="end">21 QUANTILES</text>
+</svg>

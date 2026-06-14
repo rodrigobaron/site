@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ts-ar" markerWidth="10" markerHeight="10" refX="6.5" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#e7eef3"/></marker>
+    <filter id="ts-soft" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- ===================== STAGE 1 card ===================== -->
+  <g>
+    <rect x="150" y="78" width="430" height="390" rx="22" fill="#0c1722" fill-opacity="0.55" stroke="#8fb6cf" stroke-width="2.5"/>
+    <path d="M150,100 a22,22 0 0 1 22,-22 H558 a22,22 0 0 1 22,22 V140 H150 Z" fill="#bcd9ec"/>
+    <text x="365" y="123" text-anchor="middle" font-size="27" font-weight="bold" letter-spacing="3" fill="#13303d">STAGE 1</text>
+
+    <!-- rocket -->
+    <g filter="url(#ts-soft)">
+      <path d="M365,158 C387,182 395,228 391,262 L339,262 C335,228 343,182 365,158 Z" fill="#d4dde4" stroke="#f2f6f8" stroke-width="2.6"/>
+      <path d="M339,260 L320,294 L346,278 Z" fill="#f4a261" stroke="#f2f6f8" stroke-width="2"/>
+      <path d="M391,260 L410,294 L384,278 Z" fill="#f4a261" stroke="#f2f6f8" stroke-width="2"/>
+      <circle cx="365" cy="210" r="14" fill="#16313f" stroke="#f2f6f8" stroke-width="2.6"/>
+      <path d="M352,266 L365,304 L378,266 Z" fill="#ff8a1e"/>
+    </g>
+
+    <text x="365" y="356" text-anchor="middle" font-size="28" font-weight="bold" letter-spacing="1" fill="#f2f6f8">FAST DELIVERY</text>
+    <text x="365" y="390" text-anchor="middle" font-size="16" letter-spacing="1.5" fill="#9fb6c4">QUICKLY SHIPPING</text>
+    <text x="365" y="412" text-anchor="middle" font-size="16" letter-spacing="1.5" fill="#9fb6c4">FEATURES</text>
+  </g>
+
+  <!-- ===================== arrow ===================== -->
+  <path d="M588,273 L686,273" fill="none" stroke="#e7eef3" stroke-width="3.4" stroke-linecap="round" marker-end="url(#ts-ar)"/>
+
+  <!-- ===================== STAGE 2 card ===================== -->
+  <g>
+    <rect x="700" y="78" width="430" height="390" rx="22" fill="#0c1722" fill-opacity="0.55" stroke="#cf9a6b" stroke-width="2.5"/>
+    <path d="M700,100 a22,22 0 0 1 22,-22 H1108 a22,22 0 0 1 22,22 V140 H700 Z" fill="#f8ad72"/>
+    <text x="915" y="123" text-anchor="middle" font-size="27" font-weight="bold" letter-spacing="3" fill="#3c1d0a">STAGE 2</text>
+
+    <!-- wrench + screwdriver, crossed -->
+    <g filter="url(#ts-soft)">
+      <!-- screwdriver (top-left to bottom-right) -->
+      <g transform="rotate(45 915 210)">
+        <rect x="905" y="156" width="20" height="44" rx="9" fill="#f4a261" stroke="#f2f6f8" stroke-width="2.2"/>
+        <rect x="910" y="198" width="10" height="56" fill="#c3ccd2" stroke="#f2f6f8" stroke-width="1.8"/>
+        <path d="M911,254 L919,254 L915,266 Z" fill="#c3ccd2" stroke="#f2f6f8" stroke-width="1.4"/>
+      </g>
+      <!-- wrench (top-right to bottom-left) -->
+      <g transform="rotate(-45 915 210)">
+        <rect x="910" y="196" width="11" height="66" rx="4" fill="#c3ccd2" stroke="#f2f6f8" stroke-width="2.2"/>
+        <path d="M903,170 a16,16 0 1 1 25,9 L919,196 L912,196 L905,179 a16,16 0 0 1 -2,-9 Z" fill="#c3ccd2" stroke="#f2f6f8" stroke-width="2.2"/>
+        <circle cx="915" cy="176" r="6" fill="#16313f"/>
+      </g>
+    </g>
+
+    <text x="915" y="342" text-anchor="middle" font-size="24" font-weight="bold" letter-spacing="0.5" fill="#f2f6f8">TECHNICAL DEBT</text>
+    <text x="915" y="370" text-anchor="middle" font-size="24" font-weight="bold" letter-spacing="0.5" fill="#f2f6f8">REPAYMENT</text>
+    <text x="915" y="402" text-anchor="middle" font-size="15" letter-spacing="1.2" fill="#c8a98f">REFACTORING, TESTING,</text>
+    <text x="915" y="424" text-anchor="middle" font-size="15" letter-spacing="1.2" fill="#c8a98f">CLEANING UP CODE</text>
+  </g>
+</svg>

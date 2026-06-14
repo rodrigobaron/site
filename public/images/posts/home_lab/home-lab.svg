@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 520" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <filter id="hl-glow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="5"/></filter>
+    <filter id="hl-soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.2"/></filter>
+  </defs>
+
+  <!-- ===== floor + wall hints ===== -->
+  <line x1="70" y1="452" x2="1230" y2="452" stroke="#3a4654" stroke-width="1.6" opacity="0.55"/>
+  <g stroke="#46545f" stroke-width="1.6" fill="none" opacity="0.5">
+    <rect x="150" y="60" width="170" height="118" rx="2"/><line x1="235" y1="60" x2="235" y2="178"/><line x1="150" y1="119" x2="320" y2="119"/>
+    <rect x="470" y="64" width="92" height="68" rx="2"/><rect x="482" y="76" width="68" height="44"/>
+    <circle cx="660" cy="92" r="24"/><line x1="660" y1="92" x2="660" y2="76"/><line x1="660" y1="92" x2="672" y2="98"/>
+  </g>
+
+  <!-- ===== bookshelf (stands on floor) ===== -->
+  <g stroke="#c2a06a" stroke-width="2.2" fill="none">
+    <rect x="950" y="96" width="282" height="356" rx="3"/>
+    <line x1="950" y1="182" x2="1232" y2="182"/><line x1="950" y1="268" x2="1232" y2="268"/><line x1="950" y1="356" x2="1232" y2="356"/>
+  </g>
+  <!-- books, sitting on shelf lines -->
+  <g>
+    <!-- shelf @182 (neon centered, books flank it) -->
+    <g><rect x="958" y="142" width="15" height="40" fill="#c96b5a"/><rect x="977" y="136" width="15" height="46" fill="#5e8ac0"/><rect x="996" y="146" width="15" height="36" fill="#5ea878"/></g>
+    <g><rect x="1176" y="138" width="15" height="44" fill="#d9a85a"/><rect x="1195" y="144" width="15" height="38" fill="#9b7fd0"/><rect x="1214" y="140" width="13" height="42" fill="#5ea878"/></g>
+    <!-- shelf @268 -->
+    <g><rect x="968" y="206" width="15" height="62" fill="#5e8ac0"/><rect x="987" y="214" width="15" height="54" fill="#d9a85a"/><rect x="1006" y="202" width="15" height="66" fill="#c96b5a"/><rect x="1025" y="210" width="15" height="58" fill="#5ea878"/><rect x="1044" y="206" width="15" height="62" fill="#c98aa0"/><rect x="1063" y="214" width="15" height="54" fill="#9b7fd0"/><rect x="1082" y="208" width="15" height="60" fill="#5e8ac0"/></g>
+    <g><rect x="1150" y="210" width="15" height="58" fill="#d9a85a"/><rect x="1169" y="204" width="15" height="64" fill="#5ea878"/><rect x="1188" y="212" width="15" height="56" fill="#c96b5a"/><rect x="1207" y="206" width="15" height="62" fill="#5e8ac0"/></g>
+    <!-- shelf @356 -->
+    <g><rect x="968" y="296" width="15" height="60" fill="#9b7fd0"/><rect x="987" y="302" width="15" height="54" fill="#c96b5a"/><rect x="1006" y="292" width="15" height="64" fill="#d9a85a"/><rect x="1025" y="298" width="15" height="58" fill="#5e8ac0"/><rect x="1044" y="294" width="15" height="62" fill="#5ea878"/></g>
+  </g>
+  <!-- shelf plant -->
+  <g transform="translate(1172,326)"><path d="M0,30 h26 l-4,-20 h-18 Z" fill="#b07a4e"/><g fill="#5ea860"><ellipse cx="5" cy="2" rx="7" ry="13" transform="rotate(-28 5 2)"/><ellipse cx="21" cy="2" rx="7" ry="13" transform="rotate(28 21 2)"/><ellipse cx="13" cy="-6" rx="7" ry="14"/></g></g>
+
+  <!-- AI LAB neon (top shelf) -->
+  <g filter="url(#hl-glow)"><rect x="1012" y="116" width="158" height="50" rx="25" fill="none" stroke="#5ee0ff" stroke-width="3"/></g>
+  <rect x="1012" y="116" width="158" height="50" rx="25" fill="none" stroke="#9af0ff" stroke-width="1.6"/>
+  <text x="1091" y="150" text-anchor="middle" font-size="26" font-weight="bold" fill="#bff3ff" filter="url(#hl-soft)">AI LAB</text>
+
+  <!-- ===== desk ===== -->
+  <g stroke="#c2a06a" stroke-width="2.2" fill="none">
+    <rect x="150" y="350" width="760" height="11" rx="3"/>
+    <line x1="188" y1="361" x2="188" y2="452"/>
+    <rect x="646" y="361" width="262" height="91"/>
+    <line x1="646" y1="406" x2="908" y2="406"/>
+    <rect x="666" y="372" width="222" height="24" rx="3"/><rect x="666" y="416" width="222" height="24" rx="3"/>
+    <line x1="760" y1="384" x2="794" y2="384"/><line x1="760" y1="428" x2="794" y2="428"/>
+  </g>
+
+  <!-- ===== PC tower ===== -->
+  <rect x="176" y="186" width="130" height="164" rx="6" fill="#0e1822" stroke="#aebccb" stroke-width="2.2"/>
+  <line x1="240" y1="186" x2="240" y2="350" stroke="#3a4a58" stroke-width="1.4"/>
+  <g filter="url(#hl-glow)" fill="none" stroke-width="3"><circle cx="274" cy="222" r="18" stroke="#5ec8ff"/><circle cx="274" cy="268" r="18" stroke="#d96ee0"/><circle cx="274" cy="314" r="18" stroke="#5ec8ff"/></g>
+  <g fill="none" stroke="#9fb0bc" stroke-width="1.4"><circle cx="274" cy="222" r="18"/><circle cx="274" cy="268" r="18"/><circle cx="274" cy="314" r="18"/><circle cx="274" cy="222" r="4.5"/><circle cx="274" cy="268" r="4.5"/><circle cx="274" cy="314" r="4.5"/></g>
+  <rect x="190" y="300" width="74" height="24" rx="3" fill="#16263a" stroke="#7fb3ff" stroke-width="1.8"/>
+  <circle cx="208" cy="312" r="7" fill="none" stroke="#7fb3ff" stroke-width="1.6"/>
+  <rect x="190" y="200" width="74" height="90" rx="3" fill="none" stroke="#43525f" stroke-width="1.3"/>
+
+  <!-- ===== monitor 1: code ===== -->
+  <g>
+    <rect x="356" y="166" width="196" height="134" rx="6" fill="#0c1620" stroke="#aebccb" stroke-width="2.2"/>
+    <line x1="454" y1="300" x2="454" y2="340" stroke="#aebccb" stroke-width="2.4"/><line x1="430" y1="350" x2="478" y2="350" stroke="#aebccb" stroke-width="2.4"/>
+    <g>
+      <rect x="372" y="184" width="56" height="6" rx="3" fill="#6fe06a"/><rect x="372" y="198" width="116" height="6" rx="3" fill="#5ec8ff"/>
+      <rect x="388" y="212" width="96" height="6" rx="3" fill="#cbd5e1"/><rect x="388" y="226" width="132" height="6" rx="3" fill="#ffd24a"/>
+      <rect x="372" y="240" width="76" height="6" rx="3" fill="#5ec8ff"/><rect x="388" y="254" width="116" height="6" rx="3" fill="#cbd5e1"/>
+      <rect x="388" y="268" width="86" height="6" rx="3" fill="#6fe06a"/><rect x="372" y="282" width="104" height="6" rx="3" fill="#cbd5e1"/>
+    </g>
+  </g>
+
+  <!-- ===== monitor 2: chart ===== -->
+  <g>
+    <rect x="570" y="166" width="196" height="134" rx="6" fill="#0c1620" stroke="#aebccb" stroke-width="2.2"/>
+    <line x1="668" y1="300" x2="668" y2="340" stroke="#aebccb" stroke-width="2.4"/><line x1="644" y1="350" x2="692" y2="350" stroke="#aebccb" stroke-width="2.4"/>
+    <line x1="588" y1="278" x2="748" y2="278" stroke="#33414f" stroke-width="1.4"/>
+    <g fill="#5ea878"><rect x="596" y="244" width="18" height="34"/><rect x="624" y="224" width="18" height="54"/><rect x="652" y="252" width="18" height="26"/><rect x="680" y="212" width="18" height="66"/><rect x="708" y="232" width="18" height="46"/><rect x="736" y="220" width="16" height="58"/></g>
+    <path d="M596,236 L633,214 L661,228 L689,196 L717,182 L744,176" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+  </g>
+
+  <!-- ===== keyboard + mouse + cables ===== -->
+  <rect x="392" y="322" width="236" height="24" rx="4" fill="#0e1822" stroke="#aebccb" stroke-width="1.8"/>
+  <g stroke="#46545f" stroke-width="1" opacity="0.85"><line x1="404" y1="330" x2="616" y2="330"/><line x1="404" y1="339" x2="616" y2="339"/><line x1="434" y1="322" x2="434" y2="346"/><line x1="476" y1="322" x2="476" y2="346"/><line x1="518" y1="322" x2="518" y2="346"/><line x1="560" y1="322" x2="560" y2="346"/></g>
+  <ellipse cx="664" cy="336" rx="15" ry="11" fill="#0e1822" stroke="#aebccb" stroke-width="1.8"/>
+  <g fill="none" stroke="#e0685a" stroke-width="2" opacity="0.8"><path d="M392,338 C360,326 332,348 308,344"/><path d="M392,344 C362,338 334,354 308,350"/></g>
+
+  <!-- ===== coffee mug (line-art, matches electronics) ===== -->
+  <g fill="none" stroke="#8a96a2" stroke-width="2" stroke-linecap="round" opacity="0.55">
+    <path d="M851,312 C847,304 855,300 851,291"/>
+    <path d="M868,312 C864,304 872,300 868,291"/>
+  </g>
+  <path d="M884,322 C904,322 904,346 884,346" fill="none" stroke="#aebccb" stroke-width="2.4"/>
+  <path d="M840,320 L840,344 C840,351 845,354 852,354 L870,354 C877,354 882,351 882,344 L882,320 Z" fill="#0e1822" stroke="#aebccb" stroke-width="2"/>
+  <ellipse cx="861" cy="320" rx="21" ry="5.5" fill="#16222e" stroke="#aebccb" stroke-width="2"/>
+  <ellipse cx="861" cy="320" rx="14" ry="3.2" fill="#5a3a22"/>
+
+  <!-- ===== desk plant ===== -->
+  <g transform="translate(322,322)"><path d="M0,28 h28 l-4,-20 h-20 Z" fill="#b07a4e"/><g fill="#5ea860"><ellipse cx="5" cy="0" rx="8" ry="15" transform="rotate(-30 5 0)"/><ellipse cx="23" cy="0" rx="8" ry="15" transform="rotate(30 23 0)"/><ellipse cx="14" cy="-9" rx="8" ry="17"/></g></g>
+</svg>

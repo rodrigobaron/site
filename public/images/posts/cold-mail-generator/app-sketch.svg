@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 540" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="cm-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M1,1 L9,5 L1,9 Z" fill="#ffb14a"/></marker>
+  </defs>
+
+  <!-- ===== app window ===== -->
+  <rect x="36" y="28" width="1208" height="486" rx="14" fill="#0c131b" stroke="#2b3a48" stroke-width="2"/>
+  <g><circle cx="64" cy="50" r="5.5" fill="#ff5f57"/><circle cx="83" cy="50" r="5.5" fill="#febc2e"/><circle cx="102" cy="50" r="5.5" fill="#28c840"/></g>
+  <line x1="36" y1="72" x2="1244" y2="72" stroke="#1f2b36" stroke-width="1.4"/>
+
+  <!-- ===== heading ===== -->
+  <text x="72" y="116" font-size="27" font-weight="bold" fill="#f0f4f8">📧 Cold Mail Generator</text>
+
+  <!-- ===== input form (left) ===== -->
+  <g font-size="13" fill="#8a98a6">
+    <text x="74" y="158">Company</text><text x="346" y="158">Person</text><text x="74" y="222">Enter a URL:</text>
+  </g>
+  <g fill="#1a2531" stroke="#2c3a48" stroke-width="1.4">
+    <rect x="72" y="166" width="256" height="36" rx="7"/>
+    <rect x="344" y="166" width="256" height="36" rx="7"/>
+    <rect x="72" y="230" width="528" height="36" rx="7"/>
+  </g>
+  <g fill="#e2e9ef" font-size="15">
+    <text x="88" y="189">BARON IA</text>
+    <text x="360" y="189">Rodrigo</text>
+  </g>
+  <text x="88" y="252" font-size="12" fill="#9aa6b2" font-family="ui-monospace, Menlo, monospace">https://jobs.apple.com/en-us/details/200503445/aiml-ml-engineer…</text>
+  <rect x="72" y="290" width="108" height="40" rx="8" fill="#2563eb"/>
+  <text x="126" y="315" text-anchor="middle" font-size="15" fill="#ffffff">Submit</text>
+
+  <!-- pipeline steps -->
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12" fill="#7e8c98">
+    <text x="74" y="372">1 · load portfolio → vector db</text>
+    <text x="74" y="396">2 · scrape job page</text>
+    <text x="74" y="420">3 · extract attributes</text>
+    <text x="74" y="444">4 · generate cold mail</text>
+  </g>
+
+  <!-- ===== generate arrow (Llama 3.1) ===== -->
+  <path d="M612,308 L664,308" fill="none" stroke="#ffb14a" stroke-width="2.4" marker-end="url(#cm-ar)"/>
+  <text x="636" y="296" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="11" fill="#ffd49a">Llama 3.1</text>
+  <text x="636" y="332" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="10" fill="#9aa6b2">generate</text>
+
+  <!-- ===== generated email (right) ===== -->
+  <rect x="672" y="150" width="540" height="330" rx="10" fill="#0f1822" stroke="#223040" stroke-width="1.6"/>
+  <text x="694" y="142" font-family="ui-monospace, Menlo, monospace" font-size="12" letter-spacing="1.5" fill="#6fae6a">✓ GENERATED EMAIL</text>
+
+  <text x="694" y="186" font-size="14" font-weight="bold" fill="#eef4f8">SUBJECT: Expert AI Solutions for Apple…</text>
+  <text x="694" y="214" font-size="13" fill="#b6c2cc">Dear Hiring Manager,</text>
+  <g fill="#33414f">
+    <rect x="694" y="232" width="496" height="7" rx="3.5"/>
+    <rect x="694" y="248" width="516" height="7" rx="3.5"/>
+    <rect x="694" y="264" width="452" height="7" rx="3.5"/>
+    <rect x="694" y="292" width="508" height="7" rx="3.5"/>
+    <rect x="694" y="308" width="486" height="7" rx="3.5"/>
+    <rect x="694" y="324" width="430" height="7" rx="3.5"/>
+  </g>
+  <text x="694" y="364" font-size="13" fill="#b6c2cc">Portfolio:</text>
+  <text x="694" y="390" font-size="13" fill="#4a9eff" text-decoration="underline">Rodrigo (Machine Learning Engineer)</text>
+  <text x="694" y="424" font-size="13" fill="#b6c2cc">Best Regards, Rodrigo</text>
+</svg>

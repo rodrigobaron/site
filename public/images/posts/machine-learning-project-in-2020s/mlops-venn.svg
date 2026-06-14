@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 512" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <radialGradient id="mv-core" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#5eead4" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#5eead4" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="mv-soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="3"/></filter>
+  </defs>
+
+  <!-- ===================== three discipline circles ===================== -->
+  <g>
+    <circle cx="560" cy="244" r="150" fill="#3b82f6" fill-opacity="0.22"/>
+    <circle cx="720" cy="244" r="150" fill="#22c55e" fill-opacity="0.20"/>
+    <circle cx="640" cy="360" r="150" fill="#eab308" fill-opacity="0.18"/>
+    <!-- MLOps triple-intersection glow -->
+    <circle cx="640" cy="288" r="58" fill="url(#mv-core)"/>
+    <!-- outlines on top for crisp boundaries -->
+    <g fill="none" stroke-width="2.4">
+      <circle cx="560" cy="244" r="150" stroke="#7fb3ff"/>
+      <circle cx="720" cy="244" r="150" stroke="#5ee08a"/>
+      <circle cx="640" cy="360" r="150" stroke="#f4cf52"/>
+    </g>
+  </g>
+
+  <!-- ===================== labels ===================== -->
+  <g fill="#eef4f8" text-anchor="middle">
+    <text x="470" y="222" font-size="23" font-weight="500">Machine</text>
+    <text x="470" y="250" font-size="23" font-weight="500">Learning</text>
+    <text x="812" y="240" font-size="23" font-weight="500">DevOps</text>
+    <text x="640" y="430" font-size="22" font-weight="500">Data</text>
+    <text x="640" y="458" font-size="22" font-weight="500">Engineering</text>
+  </g>
+
+  <!-- ===================== MLOps callout ===================== -->
+  <text x="640" y="78" text-anchor="middle" font-size="38" font-weight="bold" fill="#ffffff" letter-spacing="0.5">MLOps</text>
+  <line x1="640" y1="102" x2="640" y2="288" stroke="#cdd9e3" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="640" cy="288" r="26" fill="none" stroke="#7af0dd" stroke-width="2" opacity="0.7"/>
+  <circle cx="640" cy="288" r="6" fill="#bafff2"/>
+</svg>

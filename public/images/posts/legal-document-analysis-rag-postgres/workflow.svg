@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1080" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="wf-ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto"><path d="M1,1 L9,5 L1,9 Z" fill="#c2cedb"/></marker>
+  </defs>
+
+  <!-- ===== divider + section labels ===== -->
+  <line x1="40" y1="540" x2="1160" y2="540" stroke="#5a6b78" stroke-width="2"/>
+  <text x="40" y="524" text-anchor="start" font-size="22" font-weight="bold" letter-spacing="2" fill="#c2cedb">PREPROCESSING</text>
+  <text x="40" y="570" text-anchor="start" font-size="22" font-weight="bold" letter-spacing="2" fill="#c2cedb">RUNTIME</text>
+
+  <!-- ===== arrows ===== -->
+  <g fill="none" stroke="#c2cedb" stroke-width="2.2" marker-end="url(#wf-ar)">
+    <!-- preprocessing -->
+    <line x1="206" y1="135" x2="296" y2="135"/>
+    <path d="M165,176 L165,331 L296,331"/>
+    <path d="M450,135 L1030,135 L1030,236"/>
+    <line x1="450" y1="331" x2="946" y2="324"/>
+    <!-- runtime -->
+    <line x1="206" y1="650" x2="286" y2="650"/>
+    <line x1="440" y1="650" x2="556" y2="650"/>
+    <line x1="710" y1="650" x2="964" y2="650"/>
+    <path d="M365,693 L365,750 L948,750 L948,668"/>
+    <!-- postgres -> rank fusion (crosses divider) -->
+    <path d="M1030,336 L1030,586"/>
+    <!-- vertical chain -->
+    <line x1="1030" y1="712" x2="1030" y2="796"/>
+    <line x1="1030" y1="886" x2="1030" y2="946"/>
+  </g>
+
+  <!-- ===== preprocessing nodes ===== -->
+  <circle cx="165" cy="135" r="40" fill="#eef1f3" stroke="#5a6670" stroke-width="1.8"/>
+  <text x="165" y="142" text-anchor="middle" font-size="20" fill="#2a2f34">CSV</text>
+
+  <g stroke-width="1.6">
+    <rect x="300" y="92"  width="150" height="86" rx="8" fill="#9c4a2a" stroke="#7c3a20"/>
+    <rect x="300" y="288" width="150" height="86" rx="8" fill="#5f8a5a" stroke="#4a7045"/>
+    <rect x="950" y="236" width="160" height="100" rx="8" fill="#62788a" stroke="#4e6070"/>
+  </g>
+  <g fill="#ffffff" text-anchor="middle" font-size="19">
+    <text x="375" y="128">Embedding</text><text x="375" y="152">model</text>
+    <text x="375" y="324">TF-IDF</text><text x="375" y="348">index</text>
+    <text x="1030" y="293">PostgreSQL</text>
+  </g>
+
+  <!-- ===== runtime nodes ===== -->
+  <circle cx="165" cy="650" r="40" fill="#eef1f3" stroke="#5a6670" stroke-width="1.8"/>
+  <text x="165" y="657" text-anchor="middle" font-size="20" fill="#2a2f34">Query</text>
+
+  <g stroke-width="1.6">
+    <rect x="290" y="607" width="150" height="86" rx="8" fill="#1f5cff" stroke="#1846c8"/>
+    <rect x="560" y="607" width="150" height="86" rx="8" fill="#9c4a2a" stroke="#7c3a20"/>
+    <polygon points="1030,584 1100,650 1030,716 960,650" fill="#e6c100" stroke="#bb9d00"/>
+    <rect x="950" y="800" width="160" height="86" rx="8" fill="#e6c100" stroke="#bb9d00"/>
+    <rect x="950" y="950" width="160" height="86" rx="8" fill="#1f5cff" stroke="#1846c8"/>
+  </g>
+  <g text-anchor="middle" font-size="19">
+    <g fill="#ffffff">
+      <text x="365" y="643">Query</text><text x="365" y="667">rephasing</text>
+      <text x="635" y="643">Embedding</text><text x="635" y="667">model</text>
+      <text x="1030" y="987">Generative</text><text x="1030" y="1011">model</text>
+    </g>
+    <g fill="#3a3000">
+      <text x="1030" y="645">Rank</text><text x="1030" y="668">fusion</text>
+      <text x="1030" y="850">Reranker</text>
+    </g>
+  </g>
+</svg>

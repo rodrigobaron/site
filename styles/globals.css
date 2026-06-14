@@ -1600,9 +1600,9 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
 .post-hero-cover {
   position: relative;
   width: 100%;
-  max-width: 980px;
+  max-width: 1180px;
   margin: 0 auto 26px;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 5 / 2;
   background: transparent;
   border: none;
   overflow: hidden;
