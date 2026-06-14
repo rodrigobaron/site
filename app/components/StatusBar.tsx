@@ -4,10 +4,6 @@ import { usePathname } from 'next/navigation'
 
 const YEAR = new Date().getFullYear()
 
-function pad(n: number): string {
-  return String(n).padStart(2, '0')
-}
-
 function formatPath(pathname: string): string {
   const trimmed = pathname.replace(/^\/+|\/+$/g, '')
   return trimmed || 'home'
@@ -15,20 +11,9 @@ function formatPath(pathname: string): string {
 
 export function StatusBar() {
   const pathname = usePathname() || '/'
-  const [clock, setClock] = useState<string>('')
   const [progress, setProgress] = useState<number>(0)
   const lastPct = useRef<number>(-1)
   const isPost = pathname.startsWith('/posts/') && pathname !== '/posts'
-
-  useEffect(() => {
-    const tick = () => {
-      const d = new Date()
-      setClock(`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`)
-    }
-    tick()
-    const id = setInterval(tick, 1000)
-    return () => clearInterval(id)
-  }, [])
 
   useEffect(() => {
     if (!isPost) return
@@ -75,7 +60,6 @@ export function StatusBar() {
       <div className='sb-cell'>
         <span className='sb-key'>©</span>
         <span className='sb-val'>baron · {YEAR}</span>
-        <span className='sb-key'>· {clock}</span>
       </div>
     </>
   )

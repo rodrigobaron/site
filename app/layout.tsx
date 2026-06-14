@@ -42,7 +42,7 @@ export default async function RootLayout({children}) {
             <link rel="preconnect" href="https://fonts.googleapis.com" />
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-            <link rel="shortcut icon" href="/images/general/icon.svg"/>
+            <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
             {/* always load at the top — no browser scroll restoration on refresh */}
             <script dangerouslySetInnerHTML={{ __html: `if ('scrollRestoration' in history) history.scrollRestoration = 'manual'` }} />
         </Head>

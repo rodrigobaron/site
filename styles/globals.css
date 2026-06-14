@@ -1098,9 +1098,13 @@ main {
   white-space: nowrap;
 }
 
-.featured-chrome .chrome-meta {
+/* decorative square at the right of the chrome bar — matches the 2nd
+   window-chrome dot (the date already appears in the card body/footer) */
+.featured-chrome .chrome-square {
   margin-left: auto;
-  color: var(--banner-dim);
+  width: 7px;
+  height: 7px;
+  background: var(--session-border);
   flex-shrink: 0;
 }
 
@@ -1176,28 +1180,6 @@ main {
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
-}
-
-.featured-corner {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 3;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ui-label);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.featured-corner .dot {
-  width: 8px;
-  height: 8px;
-  background: var(--ui-ok);
-  box-shadow: 0 0 8px var(--ui-ok);
 }
 
 .featured-body {
@@ -1428,10 +1410,34 @@ html body article.nextra-body-typesetting-article p.featured-excerpt {
   overflow: hidden;
 }
 
+/* same backdrop as the featured visual: cyan glow (top-right) + dotted
+   texture masked to the edges, so contained SVG thumbs sit on a matching
+   background instead of flat black */
+.entry-thumb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 75% 25%, rgba(0, 255, 255, 0.14) 0%, transparent 60%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.entry-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(0, 204, 204, 0.08) 1px, transparent 1.5px);
+  background-size: 14px 14px;
+  z-index: 1;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at center, transparent 30%, black 100%);
+  mask-image: radial-gradient(ellipse 75% 70% at center, transparent 30%, black 100%);
+}
+
 .grid-thumb-img {
   object-fit: cover !important;
   object-position: center !important;
-  z-index: 0 !important;
+  z-index: 2 !important;
   transition: transform 450ms ease;
 }
 
@@ -2300,7 +2306,7 @@ img[src*=".svg"],
   object-fit: contain !important;
   box-sizing: border-box !important;
   padding: 14px !important;
-  z-index: 1 !important;
+  z-index: 2 !important;
 }
 
 .post-hero-cover-img[src*=".svg"] {

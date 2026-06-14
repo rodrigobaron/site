@@ -23,7 +23,6 @@ export async function PostsPage() {
 
   const featured = allposts[0]
   const rest = allposts.slice(1)
-  const featuredTag = featured.frontMatter.tags?.[0] ?? 'note'
   const featuredDate = featured.frontMatter.date
     ? new Date(featured.frontMatter.date).toISOString().slice(0, 10)
     : ''
@@ -42,14 +41,10 @@ export async function PostsPage() {
           <div className='featured-chrome'>
             <span className='chrome-dots'><i /><i /><i /></span>
             <span className='chrome-title'>~/posts/{featuredSlug}.mdx</span>
-            <span className='chrome-meta'>{featuredDate}</span>
+            <span className='chrome-square' aria-hidden='true' />
           </div>
           <div className='featured-inner'>
             <div className='featured-visual'>
-              <span className='featured-corner'>
-                <span className='dot' />
-                {String(featuredTag).toUpperCase()}
-              </span>
               {featured.frontMatter.thumbnail ? (
                 <Image
                   src={featured.frontMatter.thumbnail}
