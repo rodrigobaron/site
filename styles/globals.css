@@ -1744,6 +1744,17 @@ html body article.nextra-body-typesetting-article p.entry-excerpt {
   border-radius: 0;
 }
 
+/* On phones the hero artwork goes edge-to-edge: break the cover out of the
+   hero's side padding so the SVG header uses the full screen width. */
+@media (max-width: 640px) {
+  .post-hero-cover {
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+  }
+}
+
 /* ============================================
    POST NAVIGATION (prev/next)
    ============================================ */
@@ -2259,11 +2270,14 @@ html body article.nextra-body-typesetting-article main > *:not(.post-hero):not(.
   margin-right: auto !important;
 }
 
-/* blocks that contain an image — or bare images — get a wider column */
+/* blocks that contain an image — or bare images — get a wider column.
+   `min(1120px, 100%)` lets images break out beyond the text column on wide
+   screens, but never exceed their containing block — so narrow viewports
+   (phones/tablets) clamp the image to the screen instead of overflowing it. */
 html body article.nextra-body-typesetting-article main > :is(p, div, figure):has(img):not(.post-hero):not(.nextra-bleed),
 html body article.nextra-body-typesetting-article main > img:not(.post-hero):not(.nextra-bleed),
 html body article.nextra-body-typesetting-article main > picture:not(.post-hero):not(.nextra-bleed) {
-  max-width: 1120px;
+  max-width: min(1120px, 100%);
 }
 
 /* ============================================
