@@ -2290,17 +2290,9 @@ article.nextra-body-typesetting-article main img:not([data-nimg="fill"]) {
   object-fit: contain;
 }
 
-/* Opt-in cyan-monochrome treatment via <ThemedImage>. */
-.themed-image {
-  filter: grayscale(100%) sepia(1) hue-rotate(150deg) saturate(4.2) brightness(0.92) contrast(1.5);
-  border: 1px solid var(--banner-border) !important;
-  border-radius: 0 !important;
-}
-
 /* SVGs are already palette-locked — no filter/border for any consumer.
    Next/Image rewrites src to /_next/image?url=...svg&w=...&q=..., so match by `contains`. */
-img[src*=".svg"],
-.themed-image[src*=".svg"] {
+img[src*=".svg"] {
   filter: none !important;
   border: none !important;
 }
