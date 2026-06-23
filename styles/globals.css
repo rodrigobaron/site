@@ -883,12 +883,17 @@ a.btn-ghost:hover {
   width: 100%;
   max-width: 380px;
   margin-left: auto;
-  background: rgba(0, 8, 10, 0.82);
-  box-shadow: 0 0 32px rgba(0, 255, 255, 0.08);
 }
 
 @media (max-width: 860px) {
   .hero-visual { margin-left: 0; max-width: 420px; }
+}
+
+/* photo box the reticle frames; the nameplate flows below it */
+.hv-frame {
+  position: relative;
+  background: rgba(0, 8, 10, 0.82);
+  box-shadow: 0 0 32px rgba(0, 255, 255, 0.08);
 }
 
 .hv-photo {
@@ -898,10 +903,17 @@ a.btn-ghost:hover {
   overflow: hidden;
 }
 
+.hv-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
 .hv-photo-img {
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(1) contrast(1.04);
+  filter: url(#hv-duotone);
 }
 
 .hv-reticle {
@@ -917,20 +929,18 @@ a.btn-ghost:hover {
 
 /* target ID nameplate — cyan tag, black text, bottom-left of the photo */
 .hv-tag {
-  position: absolute;
-  left: 10px;
-  bottom: 10px;
-  z-index: 3;
-  padding: 5px 9px;
+  display: block;
+  width: fit-content;
+  margin-top: 10px;
+  padding: 6px 11px;
   background: var(--banner-accent);
   color: #000;
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   letter-spacing: 0.05em;
   line-height: 1;
   white-space: nowrap;
-  pointer-events: none;
   box-shadow: 0 0 12px rgba(0, 255, 255, 0.45);
 }
 
