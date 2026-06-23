@@ -927,7 +927,7 @@ a.btn-ghost:hover {
   filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.5));
 }
 
-/* target ID nameplate — cyan tag, black text, bottom-left of the photo */
+/* target ID nameplate — cyan tag, black text, below the photo, left-aligned */
 .hv-tag {
   display: block;
   width: fit-content;
