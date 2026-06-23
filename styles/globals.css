@@ -883,7 +883,6 @@ a.btn-ghost:hover {
   width: 100%;
   max-width: 380px;
   margin-left: auto;
-  border: 1px solid var(--banner-border);
   background: rgba(0, 8, 10, 0.82);
   box-shadow: 0 0 32px rgba(0, 255, 255, 0.08);
 }
@@ -892,60 +891,52 @@ a.btn-ghost:hover {
   .hero-visual { margin-left: 0; max-width: 420px; }
 }
 
-.hv-chrome {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--session-border);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ui-label);
-}
-
-.hero-visual svg.hv-net {
-  display: block;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  height: auto;
-}
-
-.hv-foot {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-top: 1px solid var(--session-border);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--banner-dim);
-}
-
-.hv-bar {
-  flex: 1;
-  height: 5px;
-  background: var(--bg);
-  border: 1px solid var(--session-border);
+.hv-photo {
   position: relative;
+  width: 100%;
+  aspect-ratio: 750 / 950;
   overflow: hidden;
 }
 
-.hv-bar i {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background: var(--banner-accent);
-  transition: width 600ms ease;
+.hv-photo-img {
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(1) contrast(1.04);
 }
 
-.hv-pct { color: var(--ui-ok); }
+.hv-reticle {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  color: var(--banner-accent);
+  pointer-events: none;
+  filter: drop-shadow(0 0 3px rgba(0, 255, 255, 0.5));
+}
+
+/* target ID nameplate — cyan tag, black text, bottom-left of the photo */
+.hv-tag {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  z-index: 3;
+  padding: 5px 9px;
+  background: var(--banner-accent);
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 0 12px rgba(0, 255, 255, 0.45);
+}
+
+.hv-tag-key {
+  font-weight: 700;
+}
 
 /* Legacy class used by HeroBlock wrapper (now empty) */
 .hero-block { display: flex; }
@@ -2333,9 +2324,10 @@ img[src*=".svg"] {
   z-index: 1 !important;
 }
 
-/* Home thumbs already styled — don't double-border */
+/* Component images already styled — strip inherited prose margins/border */
 article.nextra-body-typesetting-article .featured-thumb-img,
-article.nextra-body-typesetting-article .grid-thumb-img {
+article.nextra-body-typesetting-article .grid-thumb-img,
+article.nextra-body-typesetting-article .hv-photo-img {
   border: none !important;
   border-radius: 0 !important;
   margin: 0 !important;
