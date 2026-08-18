@@ -40,14 +40,6 @@ export function StatusBar() {
         <span className='sb-key'>file</span>
         <span className='sb-val'>{formatPath(pathname)}</span>
       </div>
-      <div className='sb-cell hide-sm'>
-        <span className='sb-key'>build</span>
-        <span className='sb-val'>v0.4.0</span>
-      </div>
-      <div className='sb-cell hide-sm'>
-        <span className='sb-key'>load</span>
-        <span className='sb-warn'>0.42 / 0.51 / 0.38</span>
-      </div>
       {isPost && (
         <div className='sb-cell hide-sm'>
           <span className='sb-key'>read</span>

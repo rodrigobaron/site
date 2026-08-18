@@ -19,7 +19,7 @@ async function getStats() {
   return {
     postsCount: posts.length,
     topicsCount: topics.size,
-    lastSync: lastDate ? fmt(lastDate) : '—',
+    lastSync: lastDate ? fmt(lastDate) : '--',
   }
 }
 

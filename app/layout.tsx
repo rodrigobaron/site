@@ -15,7 +15,6 @@ const navbar = (
                 <span className='logo-name'>baron</span>
                 <span className='logo-slash'>/</span>
                 <span className='logo-name'>notes</span>
-                <span className='logo-version'>v0.4</span>
             </div>
         )}
         projectLink='https://github.com/rodrigobaron'
@@ -43,6 +42,8 @@ export default async function RootLayout({children}) {
             <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
             <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
             <link rel="icon" type="image/svg+xml" href="/images/general/favicon.svg"/>
+            <meta name="color-scheme" content="dark" />
+            <meta name="theme-color" content="#000000" />
             {/* always load at the top — no browser scroll restoration on refresh */}
             <script dangerouslySetInnerHTML={{ __html: `if ('scrollRestoration' in history) history.scrollRestoration = 'manual'` }} />
         </Head>
