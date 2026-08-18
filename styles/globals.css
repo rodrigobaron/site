@@ -7,6 +7,7 @@
   --nextra-primary-saturation: 100% !important;
   --nextra-primary-lightness: 50% !important;
   --nextra-bg: 0, 0, 0;
+  color-scheme: dark;
 
   --default-font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --default-mono-font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -16,7 +17,7 @@
   --banner-border:   #00CCCC;
   --banner-title:    #FFFFFF;
   --banner-accent:   #00FFFF;
-  --banner-dim:      #0088BB;
+  --banner-dim:      #1EA7C6;
   --banner-text:     #CCCCCC;
 
   /* ui */
@@ -30,14 +31,8 @@
   --response-border: #00CCCC;
 
   /* status bar */
-  --sb-bg:           #007070;
   --sb-text:         #CCCCCC;
   --sb-strong:       #FFFFFF;
-  --sb-dim:          #0088BB;
-  --sb-good:         #00FF88;
-  --sb-warn:         #FFCC00;
-  --sb-bad:          #00FFFF;
-  --sb-critical:     #FF4444;
 
   /* menus / sessions */
   --menu-bg:         #005F5F;
@@ -117,6 +112,53 @@ body::after {
 }
 
 /* ============================================
+   ACCESSIBILITY & INPUT POLISH
+   ============================================ */
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* kill the grey tap flash on touch devices */
+a, button, input, [role='button'], summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
+}
+
+/* visible keyboard focus, themed to the cyan accent */
+:focus-visible {
+  outline: 2px solid var(--banner-accent) !important;
+  outline-offset: 2px;
+}
+
+/* press feedback so buttons feel physical */
+a.btn-terminal:active,
+a.btn-ghost:active,
+.tag:active,
+button.nextra-hamburger:active,
+nav.nextra-toc button:active,
+.nextra-code button:active {
+  transform: translateY(1px);
+}
+
+/* Nextra "Skip to Content" link — restyled to the theme */
+a.nextra-skip-nav {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bg) !important;
+  background: var(--banner-accent) !important;
+  border: 1px solid var(--banner-accent) !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================
    SCROLLBAR — transparent until hover/scroll
    ============================================ */
 html {
@@ -175,19 +217,42 @@ header.nextra-navbar .nextra-navbar-blur {
   box-shadow: none !important;
 }
 
-/* Hide the mobile hamburger + drawer (no mobile menu in this theme) */
-header.nextra-navbar button.nextra-hamburger,
-header.nextra-navbar .nextra-hamburger,
-button[aria-label="Menu"],
-.nextra-hamburger,
-.nextra-mobile-nav,
-aside.nextra-mobile-nav {
-  display: none !important;
-  visibility: hidden !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
+/* Mobile menu — kept available (hiding it dropped search + Home on phones) */
+button.nextra-hamburger {
+  color: var(--banner-accent) !important;
+  border: 1px solid var(--session-border) !important;
+  background: var(--bg-elev) !important;
+  border-radius: 0 !important;
+  transition: color 120ms, border-color 120ms, background 120ms !important;
+}
+
+button.nextra-hamburger:hover,
+button.nextra-hamburger[data-active] {
+  color: var(--bg) !important;
+  border-color: var(--banner-accent) !important;
+  background: var(--banner-accent) !important;
+}
+
+button.nextra-hamburger svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+/* full-screen drawer that slides in below the navbar */
+.nextra-mobile-nav {
+  background: var(--bg) !important;
+  border-top: 1px solid var(--banner-border) !important;
+}
+
+@media (max-width: 767px) {
+  button.nextra-hamburger {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+  }
 }
 
 header.nextra-navbar > div,
@@ -419,6 +484,11 @@ header.nextra-navbar a[href^="http"] svg {
   outline: none !important;
 }
 
+.nextra-search input:focus-visible {
+  outline: 2px solid var(--banner-accent) !important;
+  outline-offset: 1px;
+}
+
 .nextra-search kbd {
   font-family: var(--font-mono) !important;
   font-size: 10px !important;
@@ -463,14 +533,6 @@ header.nextra-navbar a[href^="http"] svg {
 
 .logo-slash {
   color: var(--banner-dim);
-  font-weight: 400;
-}
-
-.logo-version {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--banner-dim);
-  margin-left: 4px;
   font-weight: 400;
 }
 
@@ -538,21 +600,6 @@ hr.nextra-border {
 .sb-val {
   color: var(--sb-strong);
   font-weight: 600;
-}
-
-.sb-good  { color: var(--sb-good);     font-weight: 700; }
-.sb-warn  { color: var(--sb-warn);     font-weight: 700; }
-.sb-bad   { color: var(--sb-bad);      font-weight: 700; }
-.sb-crit  { color: var(--sb-critical); font-weight: 700; animation: blink 1s steps(2, end) infinite; }
-
-.sb-block {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-}
-.sb-block.good {
-  background: var(--sb-good);
-  box-shadow: 0 0 6px var(--sb-good);
 }
 
 .sb-progress {
@@ -957,10 +1004,17 @@ a.btn-ghost:hover {
   .hero-bg-grid,
   .hero-bg-glow,
   .hero-eyebrow .typed,
+  .hero-eyebrow .caret,
+  .featured-card::after,
   .entry-row {
     animation: none !important;
   }
   .entry-row { opacity: 1 !important; }
+  .featured-thumb-img,
+  .grid-thumb-img {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* ============================================

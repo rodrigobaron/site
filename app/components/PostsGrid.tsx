@@ -104,7 +104,7 @@ export function PostsGrid({ posts, allTags }) {
         })}
         {filtered.length === 0 && (
           <div className='grid-empty'>
-            <span className='prompt-sign'>$</span> grep: no entries match this topic — try another filter
+            <span className='prompt-sign'>$</span> grep: no entries match this topic. try another filter
           </div>
         )}
       </div>
