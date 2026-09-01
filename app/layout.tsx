@@ -1,11 +1,12 @@
 import {Footer, Layout, Navbar} from 'nextra-theme-docs'
 
-import {Head, Search} from 'nextra/components'
+import {Head} from 'nextra/components'
 import {getPageMap} from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 import '../styles/globals.css'
 import { StatusBar } from './components/StatusBar'
 import { ScrollToTop } from './components/ScrollToTop'
+import { SiteSearch } from './components/SiteSearch'
 
 const navbar = (
     <Navbar
@@ -54,7 +55,7 @@ export default async function RootLayout({children}) {
             footer={footer}
             editLink=''
             feedback={{content: ''}}
-            search={<Search placeholder='Search content...' />}
+            search={<SiteSearch />}
             nextThemes={{ defaultTheme: 'dark', forcedTheme: 'dark' }}
             darkMode={false}
         >

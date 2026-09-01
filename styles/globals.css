@@ -64,7 +64,24 @@ body {
   background-color: var(--bg) !important;
   color: var(--banner-text) !important;
   padding-bottom: 36px;
-  overflow-x: hidden;
+}
+
+/* The full-bleed blocks (.hero, .posts-page, .post-hero, .post-nav-wrap::before) are
+   `width: 100vw`, which overhangs the content box by the scrollbar width. Clip that on
+   <html>, never on <body>: `overflow-x: hidden` on <body> computes to `hidden auto`, so
+   as soon as Headless UI's combobox scroll lock sets `overflow: hidden` on <html>, the
+   viewport stops taking its overflow from <body> and <body> becomes its own scroll box —
+   which unsticks the navbar and re-anchors the portalled search panel to document y 0.
+   `clip` clips the same overhang without ever creating a scroll box.
+
+   `overflow-x: clip` needs Chrome 90 / Firefox 81 / Safari 16. Below those the
+   declaration is dropped and those blocks overhang by the scrollbar width (7px
+   measured at both 1440x900 and 390x844). That is accepted: the alternative
+   fallback, `body { overflow-x: hidden }`, is exactly the rule that causes the
+   navbar and the search panel to jump off-screen, so it would trade a 7px
+   overhang for the bug this rule exists to remove. */
+html {
+  overflow-x: clip;
 }
 
 /* CRT scanlines */
