@@ -1,0 +1,266 @@
+/* ============================================
+   SEARCH RESULTS PANEL
+
+   Imported once, by app/components/SiteSearch.tsx.
+
+   Nextra renders its results listbox through a Headless UI portal, so the
+   panel is a sibling of the whole app tree — not a descendant of
+   .nextra-search. Its only stable hook is .nextra-search-results, and every
+   style Nextra ships on it is a Tailwind `x:` utility, several of which
+   already carry !important. So every override below is !important and also
+   outranks a single class on specificity.
+
+   Selector shape: rules are written  <element>:is(.nextra-search-results …).
+   That keeps the panel's class hook inside the RIGHTMOST compound selector of
+   every rule, which makes it checkable by reading that nothing in this file
+   can match anything outside the search panel.
+
+   Colours: no literals. Everything resolves through the seven --search-*
+   properties below to the TELEMATE PALETTE in globals.css.
+   ============================================ */
+
+:root {
+  --search-panel-bg:          var(--bg);
+  /* --ui-accent, not --input-rule: the panel is only ever on screen while the
+     input above it has focus, and globals.css turns that input's border
+     --ui-accent on focus. Matching it is what makes the seam disappear —
+     --input-rule leaves two visibly different blues meeting on one line. */
+  --search-panel-border:      var(--ui-accent);
+  --search-option-bg-focus:   var(--menu-bg);
+  --search-option-text-focus: var(--banner-title);
+  --search-meta:              var(--banner-dim);
+  --search-mark-bg:           var(--menu-current);
+  --search-mark-text:         var(--bg);
+}
+
+/* ============================================
+   PANEL — a continuation of the navbar input
+   ============================================ */
+
+[data-headlessui-portal] .nextra-search-results {
+  font-family: var(--font-mono) !important;
+  font-size: 11.5px !important;
+  line-height: 1.45 !important;
+  color: var(--banner-text) !important;
+
+  background: var(--search-panel-bg) !important;
+  border: 1px solid var(--search-panel-border) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: 0 !important;
+
+  /* StatusBar is z-index 60 (globals.css:552); Nextra ships x:z-30. */
+  z-index: 70 !important;
+
+  overflow-y: auto !important;
+  overscroll-behavior: contain !important;
+}
+
+/* Headless UI anchors the panel with a hard-coded 10px gap (Nextra passes
+   `gap: 10` as a literal, so --anchor-gap is never consulted). Pull it back up
+   by 11px so the panel's top border lands exactly on the input's bottom border
+   and the two read as one object.
+
+   Desktop only. Below md the panel is anchored against Headless UI's 16px
+   collision padding instead of against the input, so the same -11px puts the
+   top border 1px off-screen and the panel covers the input. */
+@media (min-width: 768px) {
+  [data-headlessui-portal] .nextra-search-results {
+    margin-top: -11px !important;
+  }
+}
+
+/* How tall the panel gets — the one override that has to live in a layer.
+ *
+ * Nextra caps the results list with x:md:max-h-[min(calc(100vh-5rem),400px)]!
+ * which already carries !important AND sits in @layer utilities. For
+ * !important declarations the cascade reverses: any layered !important beats
+ * an unlayered one, and an earlier layer beats a later one. So no selector
+ * written outside a layer can win this property, at any specificity. `theme`
+ * is the first layer Nextra's stylesheet declares
+ * (@layer theme, base, components, utilities), which makes it the only place
+ * this cap can be set — and it works whichever order the two files load in.
+ *
+ * Worth overriding because Nextra's floor, 100vh - 5rem, leaves the panel
+ * 3px above the fixed 28px StatusBar on a short viewport. calc(100vh - 100px)
+ * keeps 23px of clearance at every height: 49px above the panel + 28px of
+ * StatusBar + 23px of air. It also guarantees the panel always fits below the
+ * input (49 + height + 16px of Headless UI collision padding < 100vh), so it
+ * can never flip above the navbar. 480px is about seven result rows.
+ *
+ * height:auto cancels Nextra's x:max-md:h-full, which below 768px otherwise
+ * stretches a two-result panel to the full height of the viewport.
+ */
+@layer theme {
+  [data-headlessui-portal] .nextra-search-results {
+    height: auto !important;
+    max-height: min(calc(100vh - 100px), 480px) !important;
+  }
+}
+
+/* ============================================
+   STATUS STATES — loading, empty, error
+   Nextra swaps the panel into a flex row for all three and centres it.
+   Terminals do not centre: every state starts at the same 14px left edge as
+   a result row, so the panel has one left margin in all four states.
+   ============================================ */
+
+[data-headlessui-portal] .nextra-search-results.x\:justify-center {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: flex-start !important;
+  gap: 9px !important;
+  /* Nextra reserves 7rem; two short lines do not need a 112px void. */
+  min-height: 0 !important;
+  padding: 11px 14px !important;
+  font-size: 11.5px !important;
+}
+
+/* Nextra's spinner and information-circle icons, sized to 11.5px text. */
+svg:is(.nextra-search-results svg) {
+  width: 13px !important;
+  height: 13px !important;
+  margin-top: 1px !important;
+  flex-shrink: 0 !important;
+  color: var(--search-meta) !important;
+}
+
+/* x:items-start is only ever on the error panel. */
+svg:is(.nextra-search-results.x\:items-start svg) {
+  color: var(--ui-error) !important;
+}
+
+/* The raw browser message Nextra prints under errorText — kept, because on
+   this site the person most likely to see it is the one who can fix it. */
+div:is(.nextra-search-results div.x\:grid) {
+  gap: 0 !important;
+  color: var(--search-meta) !important;
+  font-size: 10.5px !important;
+  line-height: 1.5 !important;
+  overflow-wrap: anywhere !important;
+}
+
+/* Status copy rendered by SiteSearch.tsx. */
+.site-search-note {
+  display: block;
+  color: var(--banner-text);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.site-search-note-error {
+  color: var(--ui-error);
+}
+
+.site-search-hint {
+  display: block;
+  margin-top: 3px;
+  color: var(--search-meta);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* ============================================
+   RESULTS
+   ============================================ */
+
+/* Group header: the page a run of results came from. Sticky, so during an
+   internal scroll you never lose track of which note you are looking at.
+   Same 10px uppercase label idiom as "ON THIS PAGE" and the StatusBar keys. */
+div:is(.nextra-search-results div.x\:uppercase) {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1 !important;
+  margin: 0 !important;
+  padding: 6px 14px !important;
+  background: var(--bg-elev) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--session-border) !important;
+  color: var(--search-meta) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+}
+
+/* Result row. Edge to edge, square, no gutter — the row IS the hit target,
+   so the selection bar can fill it completely. */
+a:is(.nextra-search-results a[role='option']) {
+  display: block !important;
+  margin: 0 !important;
+  padding: 7px 14px 8px 12px !important;
+  border: 0 !important;
+  border-left: 2px solid transparent !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  color: var(--banner-text) !important;
+  text-decoration: none !important;
+}
+
+/* The keyboard selection: a solid terminal bar, filled edge to edge, with the
+   brighter --menu-current as the current-item marker on its leading edge.
+   Not a rounded tinted pill — this is the StatusBar/menu idiom. */
+a:is(.nextra-search-results a[role='option'][data-focus]) {
+  background: var(--search-option-bg-focus) !important;
+  border-left-color: var(--menu-current) !important;
+  color: var(--search-option-text-focus) !important;
+}
+
+/* Row line 1 — the heading inside the note. */
+div:is(.nextra-search-results a[role='option'] > div:first-child) {
+  font-family: var(--font-mono) !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--banner-title) !important;
+}
+
+/* Row line 2 — the Pagefind excerpt. Clamped to two lines so every row is the
+   same height and the list scans like a file listing. */
+div:is(.nextra-search-results a[role='option'] > div:last-child) {
+  margin-top: 3px !important;
+  font-family: var(--font-mono) !important;
+  font-size: 11.5px !important;
+  line-height: 1.45 !important;
+  color: var(--banner-text) !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
+  overflow: hidden !important;
+}
+
+/* On the selected row the whole content brightens with the bar — reverse
+   video. Declared after the two rules above; it ties with them on specificity
+   and wins on source order. */
+div:is(.nextra-search-results a[role='option'][data-focus] > div) {
+  color: var(--search-option-text-focus) !important;
+}
+
+/* Matched terms, as a terminal highlights them: reverse video, no rounding.
+   --menu-current stays clearly brighter than the --menu-bg selection bar, so
+   a mark is legible on a normal row and on the selected row alike. */
+mark:is(.nextra-search-results mark) {
+  background: var(--search-mark-bg) !important;
+  color: var(--search-mark-text) !important;
+  padding: 0 1px !important;
+  border-radius: 0 !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================
+   MOBILE (below Nextra's md breakpoint)
+   ============================================ */
+
+@media (max-width: 767px) {
+  [data-headlessui-portal] .nextra-search-results {
+    /* Nextra sets h-full below md, which leaves a mostly empty panel when a
+       query returns two results. */
+    height: auto !important;
+    /* Never wider than the viewport minus Headless UI's 16px collision
+       padding on each side — no horizontal overflow at 390px. */
+    max-width: calc(100vw - 32px) !important;
+  }
+}
